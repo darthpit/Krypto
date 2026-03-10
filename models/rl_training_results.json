@@ -1,0 +1,20 @@
+{
+  "timestamp": "2026-01-26T23:33:52.416716",
+  "ticker": "BTC/USDT",
+  "data_days": 30,
+  "data_months": 1,
+  "total_timesteps": 200000,
+  "train_candles": 34502,
+  "val_candles": 8633,
+  "validation_results": {
+    "initial_balance": 1000.0,
+    "final_balance": 25.209554267467468,
+    "total_return_pct": -97.47904457325326,
+    "total_trades": 4,
+    "winning_trades": 1,
+    "win_rate": 25.0,
+    "total_pnl": -964.371390865341,
+    "max_drawdown_pct": 80.94830671112021,
+    "total_reward": -14758.850000001361
+  }
+}

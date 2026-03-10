@@ -1,0 +1,1068 @@
+[2026-01-27 13:01:19] [INFO] 📊 PPO Trainer Configuration:
+[2026-01-27 13:01:29] [SUCCESS] 🚀 RL Trainer initialized for BTC/USDT
+[2026-01-27 13:01:29] [SUCCESS] 🚀 STARTING RL AGENT TRAINING PIPELINE (with OOM protection)
+[2026-01-27 13:01:30] [SUCCESS] ✅ Using database data for PPO training: 43,199 candles (29/30 days)
+[2026-01-27 13:14:00] [INFO] 📊 PPO Trainer Configuration:
+[2026-01-27 13:14:07] [SUCCESS] 🚀 RL Trainer initialized for BTC/USDT
+[2026-01-27 13:14:07] [SUCCESS] 🚀 STARTING RL AGENT TRAINING PIPELINE (with OOM protection)
+[2026-01-27 13:51:27] [INFO] 📊 PPO Trainer Configuration:
+[2026-01-27 13:51:35] [WARNING] ⏸️ PAUZA: Trening PPO Agent w toku - LSTM update postponed (memory protection)
+[2026-01-27 13:51:36] [SUCCESS] 🚀 RL Trainer initialized for BTC/USDT
+[2026-01-27 13:51:36] [SUCCESS] 🚀 STARTING RL AGENT TRAINING PIPELINE (with OOM protection)
+[2026-01-27 13:53:16] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 13:54:18] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 13:55:20] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 13:56:28] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 13:57:50] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 13:59:13] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:00:18] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:01:22] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:02:25] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:03:50] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:04:50] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:05:54] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:06:58] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:08:20] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:09:39] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:10:44] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:11:50] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:12:53] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:14:17] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:15:30] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:16:36] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:17:41] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:19:03] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:20:23] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:21:29] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:21:34] [WARNING] ⏸️ PAUZA: Trening PPO Agent w toku - LSTM update postponed (memory protection)
+[2026-01-27 14:22:36] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:23:42] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:24:44] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:25:43] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:27:08] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:28:13] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:29:36] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:30:37] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:31:34] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:32:53] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:33:55] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:35:19] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:36:26] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:37:32] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:38:35] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:40:01] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:41:00] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:42:02] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:43:05] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:44:09] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:44:36] [INFO] ℹ️ No RL model found. Train first with: python3.12 src/process_rl_trainer.py
+[2026-01-27 14:45:57] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:48:00] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:49:50] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:51:30] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:53:25] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:53:25] [WARNING] ⏸️ PAUZA: Trening PPO Agent w toku - LSTM update postponed (memory protection)
+[2026-01-27 14:55:10] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:56:51] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 14:58:46] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 15:00:30] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 15:02:14] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 15:03:08] [INFO] 🎯 Episode Length: 8192 steps (5.7 days)
+[2026-01-27 15:03:09] [INFO] 🎯 PPO Training Target: 200000 timesteps
+[2026-01-27 15:03:09] [INFO] 💾 Auto-checkpoint enabled: Every 10000 steps → ./models/checkpoints
+[2026-01-27 15:03:09] [INFO] 🚀 Starting PPO Training for 200000 timesteps...
+[2026-01-27 15:03:09] [INFO]    - PPO.log file: ./logs/PPO.log
+[2026-01-27 15:03:09] [INFO] 🚀 Starting PPO training for 200000 timesteps...
+[2026-01-27 15:03:28] [SUCCESS] 🎯 PPO Progress: 2048/200000 steps (1.0%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 345 (W:161, L:184, WR:46.7%) | Cumulative Reward: 0.00
+[2026-01-27 15:03:49] [SUCCESS] 🎯 PPO Progress: 4096/200000 steps (2.0%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 689 (W:333, L:356, WR:48.3%) | Cumulative Reward: 0.00
+[2026-01-27 15:04:07] [SUCCESS] 🎯 PPO Progress: 6144/200000 steps (3.1%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 1000 (W:469, L:531, WR:46.9%) | Cumulative Reward: 0.00
+[2026-01-27 15:04:10] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 15:04:17] [ERROR] 💀 RL Episode TERMINATED: Bankructwo! Balance=-2.05
+[2026-01-27 15:04:28] [SUCCESS] 🎯 PPO Progress: 8192/200000 steps (4.1%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 166 (W:73, L:93, WR:44.0%) | Cumulative Reward: 0.00
+[2026-01-27 15:04:44] [SUCCESS] 💾 Checkpoint saved: ppo_checkpoint_10000.zip | Steps: 10000/200000 (5.0%) | Win Rate: 0.0%
+[2026-01-27 15:04:46] [SUCCESS] 🎯 PPO Progress: 10240/200000 steps (5.1%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 432 (W:196, L:236, WR:45.4%) | Cumulative Reward: 0.00
+[2026-01-27 15:05:07] [SUCCESS] 🎯 PPO Progress: 12288/200000 steps (6.1%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 722 (W:337, L:385, WR:46.7%) | Cumulative Reward: 0.00
+[2026-01-27 15:05:27] [SUCCESS] 🎯 PPO Progress: 14336/200000 steps (7.2%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 941 (W:452, L:489, WR:48.0%) | Cumulative Reward: 0.00
+[2026-01-27 15:05:46] [SUCCESS] 🎯 PPO Progress: 16384/200000 steps (8.2%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 170 (W:78, L:92, WR:45.9%) | Cumulative Reward: 0.00
+[2026-01-27 15:05:49] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 15:06:06] [SUCCESS] 🎯 PPO Progress: 18432/200000 steps (9.2%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 437 (W:202, L:235, WR:46.2%) | Cumulative Reward: 0.00
+[2026-01-27 15:06:21] [SUCCESS] 💾 Checkpoint saved: ppo_checkpoint_20000.zip | Steps: 20000/200000 (10.0%) | Win Rate: 0.0%
+[2026-01-27 15:06:24] [SUCCESS] 🎯 PPO Progress: 20480/200000 steps (10.2%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 648 (W:300, L:348, WR:46.3%) | Cumulative Reward: 0.00
+[2026-01-27 15:06:24] [WARNING] 🔍 DEBUG: ep_info_buffer size = 0 (should be >0 if episodes completed)
+[2026-01-27 15:06:24] [ERROR] ⚠️ PROBLEM DETECTED: No episodes completed in this rollout!
+[2026-01-27 15:06:24] [WARNING]    Possible causes:
+[2026-01-27 15:06:24] [INFO]    1. max_episode_steps might be too large (current: 8192)
+[2026-01-27 15:06:24] [INFO]    2. Dataset might be too small
+[2026-01-27 15:06:24] [INFO]    3. Episodes taking longer than 2048 steps (n_steps)
+[2026-01-27 15:06:45] [SUCCESS] 🎯 PPO Progress: 22528/200000 steps (11.3%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 811 (W:382, L:429, WR:47.1%) | Cumulative Reward: 0.00
+[2026-01-27 15:07:06] [SUCCESS] 🎯 PPO Progress: 24576/200000 steps (12.3%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 163 (W:81, L:82, WR:49.7%) | Cumulative Reward: 0.00
+[2026-01-27 15:07:24] [SUCCESS] 🎯 PPO Progress: 26624/200000 steps (13.3%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 350 (W:166, L:184, WR:47.4%) | Cumulative Reward: 0.00
+[2026-01-27 15:07:25] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 15:07:45] [SUCCESS] 🎯 PPO Progress: 28672/200000 steps (14.3%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 505 (W:240, L:265, WR:47.5%) | Cumulative Reward: 0.00
+[2026-01-27 15:07:57] [SUCCESS] 💾 Checkpoint saved: ppo_checkpoint_30000.zip | Steps: 30000/200000 (15.0%) | Win Rate: 0.0%
+[2026-01-27 15:08:03] [SUCCESS] 🎯 PPO Progress: 30720/200000 steps (15.4%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 634 (W:299, L:335, WR:47.2%) | Cumulative Reward: 0.00
+[2026-01-27 15:08:24] [SUCCESS] 🎯 PPO Progress: 32768/200000 steps (16.4%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 150 (W:69, L:81, WR:46.0%) | Cumulative Reward: 0.00
+[2026-01-27 15:08:44] [SUCCESS] 🎯 PPO Progress: 34816/200000 steps (17.4%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 294 (W:138, L:156, WR:46.9%) | Cumulative Reward: 0.00
+[2026-01-27 15:09:02] [SUCCESS] 🎯 PPO Progress: 36864/200000 steps (18.4%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 385 (W:179, L:206, WR:46.5%) | Cumulative Reward: 0.00
+[2026-01-27 15:09:23] [SUCCESS] 🎯 PPO Progress: 38912/200000 steps (19.5%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 505 (W:245, L:260, WR:48.5%) | Cumulative Reward: 0.00
+[2026-01-27 15:09:25] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 15:09:34] [SUCCESS] 💾 Checkpoint saved: ppo_checkpoint_40000.zip | Steps: 40000/200000 (20.0%) | Win Rate: 0.0%
+[2026-01-27 15:09:41] [SUCCESS] 🎯 PPO Progress: 40960/200000 steps (20.5%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 134 (W:59, L:75, WR:44.0%) | Cumulative Reward: 0.00
+[2026-01-27 15:09:41] [WARNING] 🔍 DEBUG: ep_info_buffer size = 0 (should be >0 if episodes completed)
+[2026-01-27 15:09:41] [ERROR] ⚠️ PROBLEM DETECTED: No episodes completed in this rollout!
+[2026-01-27 15:09:41] [WARNING]    Possible causes:
+[2026-01-27 15:09:41] [INFO]    1. max_episode_steps might be too large (current: 8192)
+[2026-01-27 15:09:41] [INFO]    2. Dataset might be too small
+[2026-01-27 15:09:41] [INFO]    3. Episodes taking longer than 2048 steps (n_steps)
+[2026-01-27 15:10:02] [SUCCESS] 🎯 PPO Progress: 43008/200000 steps (21.5%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 267 (W:129, L:138, WR:48.3%) | Cumulative Reward: 0.00
+[2026-01-27 15:10:23] [SUCCESS] 🎯 PPO Progress: 45056/200000 steps (22.5%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 348 (W:166, L:182, WR:47.7%) | Cumulative Reward: 0.00
+[2026-01-27 15:10:41] [SUCCESS] 🎯 PPO Progress: 47104/200000 steps (23.6%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 445 (W:220, L:225, WR:49.4%) | Cumulative Reward: 0.00
+[2026-01-27 15:11:02] [SUCCESS] 🎯 PPO Progress: 49152/200000 steps (24.6%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 154 (W:79, L:75, WR:51.3%) | Cumulative Reward: 0.00
+[2026-01-27 15:11:10] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 15:11:11] [SUCCESS] 💾 Checkpoint saved: ppo_checkpoint_50000.zip | Steps: 50000/200000 (25.0%) | Win Rate: 0.0%
+[2026-01-27 15:11:20] [SUCCESS] 🎯 PPO Progress: 51200/200000 steps (25.6%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 326 (W:152, L:174, WR:46.6%) | Cumulative Reward: 0.00
+[2026-01-27 15:11:41] [SUCCESS] 🎯 PPO Progress: 53248/200000 steps (26.6%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 448 (W:207, L:241, WR:46.2%) | Cumulative Reward: 0.00
+[2026-01-27 15:12:02] [SUCCESS] 🎯 PPO Progress: 55296/200000 steps (27.6%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 557 (W:262, L:295, WR:47.0%) | Cumulative Reward: 0.00
+[2026-01-27 15:12:20] [SUCCESS] 🎯 PPO Progress: 57344/200000 steps (28.7%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 97 (W:52, L:45, WR:53.6%) | Cumulative Reward: 0.00
+[2026-01-27 15:12:41] [SUCCESS] 🎯 PPO Progress: 59392/200000 steps (29.7%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 222 (W:102, L:120, WR:45.9%) | Cumulative Reward: 0.00
+[2026-01-27 15:12:47] [SUCCESS] 💾 Checkpoint saved: ppo_checkpoint_60000.zip | Steps: 60000/200000 (30.0%) | Win Rate: 0.0%
+[2026-01-27 15:12:55] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 15:13:02] [SUCCESS] 🎯 PPO Progress: 61440/200000 steps (30.7%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 381 (W:194, L:187, WR:50.9%) | Cumulative Reward: 0.00
+[2026-01-27 15:13:02] [WARNING] 🔍 DEBUG: ep_info_buffer size = 0 (should be >0 if episodes completed)
+[2026-01-27 15:13:02] [ERROR] ⚠️ PROBLEM DETECTED: No episodes completed in this rollout!
+[2026-01-27 15:13:02] [WARNING]    Possible causes:
+[2026-01-27 15:13:02] [INFO]    1. max_episode_steps might be too large (current: 8192)
+[2026-01-27 15:13:02] [INFO]    2. Dataset might be too small
+[2026-01-27 15:13:02] [INFO]    3. Episodes taking longer than 2048 steps (n_steps)
+[2026-01-27 15:13:20] [SUCCESS] 🎯 PPO Progress: 63488/200000 steps (31.7%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 510 (W:263, L:247, WR:51.6%) | Cumulative Reward: 0.00
+[2026-01-27 15:13:40] [SUCCESS] 🎯 PPO Progress: 65536/200000 steps (32.8%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 99 (W:42, L:57, WR:42.4%) | Cumulative Reward: 0.00
+[2026-01-27 15:13:59] [SUCCESS] 🎯 PPO Progress: 67584/200000 steps (33.8%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 213 (W:101, L:112, WR:47.4%) | Cumulative Reward: 0.00
+[2026-01-27 15:14:20] [SUCCESS] 🎯 PPO Progress: 69632/200000 steps (34.8%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 331 (W:159, L:172, WR:48.0%) | Cumulative Reward: 0.00
+[2026-01-27 15:14:24] [SUCCESS] 💾 Checkpoint saved: ppo_checkpoint_70000.zip | Steps: 70000/200000 (35.0%) | Win Rate: 0.0%
+[2026-01-27 15:14:40] [SUCCESS] 🎯 PPO Progress: 71680/200000 steps (35.8%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 460 (W:224, L:236, WR:48.7%) | Cumulative Reward: 0.00
+[2026-01-27 15:14:53] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 15:14:58] [SUCCESS] 🎯 PPO Progress: 73728/200000 steps (36.9%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 102 (W:56, L:46, WR:54.9%) | Cumulative Reward: 0.00
+[2026-01-27 15:15:04] [ERROR] 💀 RL Episode TERMINATED: Bankructwo! Balance=-156.89
+[2026-01-27 15:15:19] [SUCCESS] 🎯 PPO Progress: 75776/200000 steps (37.9%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 174 (W:90, L:84, WR:51.7%) | Cumulative Reward: 0.00
+[2026-01-27 15:15:37] [SUCCESS] 🎯 PPO Progress: 77824/200000 steps (38.9%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 344 (W:177, L:167, WR:51.5%) | Cumulative Reward: 0.00
+[2026-01-27 15:15:58] [SUCCESS] 🎯 PPO Progress: 79872/200000 steps (39.9%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 528 (W:270, L:258, WR:51.1%) | Cumulative Reward: 0.00
+[2026-01-27 15:16:00] [SUCCESS] 💾 Checkpoint saved: ppo_checkpoint_80000.zip | Steps: 80000/200000 (40.0%) | Win Rate: 0.0%
+[2026-01-27 15:16:19] [SUCCESS] 🎯 PPO Progress: 81920/200000 steps (41.0%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 668 (W:342, L:326, WR:51.2%) | Cumulative Reward: 0.00
+[2026-01-27 15:16:19] [WARNING] 🔍 DEBUG: ep_info_buffer size = 0 (should be >0 if episodes completed)
+[2026-01-27 15:16:19] [ERROR] ⚠️ PROBLEM DETECTED: No episodes completed in this rollout!
+[2026-01-27 15:16:19] [WARNING]    Possible causes:
+[2026-01-27 15:16:19] [INFO]    1. max_episode_steps might be too large (current: 8192)
+[2026-01-27 15:16:19] [INFO]    2. Dataset might be too small
+[2026-01-27 15:16:19] [INFO]    3. Episodes taking longer than 2048 steps (n_steps)
+[2026-01-27 15:16:37] [SUCCESS] 🎯 PPO Progress: 83968/200000 steps (42.0%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 120 (W:59, L:61, WR:49.2%) | Cumulative Reward: 0.00
+[2026-01-27 15:16:37] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 15:16:58] [SUCCESS] 🎯 PPO Progress: 86016/200000 steps (43.0%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 187 (W:89, L:98, WR:47.6%) | Cumulative Reward: 0.00
+[2026-01-27 15:17:16] [SUCCESS] 🎯 PPO Progress: 88064/200000 steps (44.0%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 249 (W:128, L:121, WR:51.4%) | Cumulative Reward: 0.00
+[2026-01-27 15:17:36] [SUCCESS] 💾 Checkpoint saved: ppo_checkpoint_90000.zip | Steps: 90000/200000 (45.0%) | Win Rate: 0.0%
+[2026-01-27 15:17:37] [SUCCESS] 🎯 PPO Progress: 90112/200000 steps (45.1%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 283 (W:147, L:136, WR:51.9%) | Cumulative Reward: 0.00
+[2026-01-27 15:17:58] [SUCCESS] 🎯 PPO Progress: 92160/200000 steps (46.1%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 111 (W:53, L:58, WR:47.7%) | Cumulative Reward: 0.00
+[2026-01-27 15:18:03] [ERROR] 💀 RL Episode TERMINATED: Bankructwo! Balance=-38.96
+[2026-01-27 15:18:16] [SUCCESS] 🎯 PPO Progress: 94208/200000 steps (47.1%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 98 (W:46, L:52, WR:46.9%) | Cumulative Reward: 0.00
+[2026-01-27 15:18:18] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 15:18:37] [SUCCESS] 🎯 PPO Progress: 96256/200000 steps (48.1%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 211 (W:115, L:96, WR:54.5%) | Cumulative Reward: 0.00
+[2026-01-27 15:18:55] [SUCCESS] 🎯 PPO Progress: 98304/200000 steps (49.2%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 264 (W:143, L:121, WR:54.2%) | Cumulative Reward: 0.00
+[2026-01-27 15:19:13] [SUCCESS] 💾 Checkpoint saved: ppo_checkpoint_100000.zip | Steps: 100000/200000 (50.0%) | Win Rate: 0.0%
+[2026-01-27 15:19:16] [SUCCESS] 🎯 PPO Progress: 100352/200000 steps (50.2%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 375 (W:202, L:173, WR:53.9%) | Cumulative Reward: 0.00
+[2026-01-27 15:19:37] [SUCCESS] 🎯 PPO Progress: 102400/200000 steps (51.2%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 89 (W:48, L:41, WR:53.9%) | Cumulative Reward: 0.00
+[2026-01-27 15:19:37] [WARNING] 🔍 DEBUG: ep_info_buffer size = 0 (should be >0 if episodes completed)
+[2026-01-27 15:19:37] [ERROR] ⚠️ PROBLEM DETECTED: No episodes completed in this rollout!
+[2026-01-27 15:19:37] [WARNING]    Possible causes:
+[2026-01-27 15:19:37] [INFO]    1. max_episode_steps might be too large (current: 8192)
+[2026-01-27 15:19:37] [INFO]    2. Dataset might be too small
+[2026-01-27 15:19:37] [INFO]    3. Episodes taking longer than 2048 steps (n_steps)
+[2026-01-27 15:19:55] [SUCCESS] 🎯 PPO Progress: 104448/200000 steps (52.2%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 140 (W:81, L:59, WR:57.9%) | Cumulative Reward: 0.00
+[2026-01-27 15:20:11] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 15:20:13] [ERROR] 💀 RL Episode TERMINATED: Bankructwo! Balance=-10.51
+[2026-01-27 15:20:16] [SUCCESS] 🎯 PPO Progress: 106496/200000 steps (53.2%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 8 (W:4, L:4, WR:50.0%) | Cumulative Reward: 0.00
+[2026-01-27 15:20:36] [SUCCESS] 🎯 PPO Progress: 108544/200000 steps (54.3%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 40 (W:25, L:15, WR:62.5%) | Cumulative Reward: 0.00
+[2026-01-27 15:20:42] [ERROR] 💀 RL Episode TERMINATED: Bankructwo! Balance=-196.95
+[2026-01-27 15:20:50] [SUCCESS] 💾 Checkpoint saved: ppo_checkpoint_110000.zip | Steps: 110000/200000 (55.0%) | Win Rate: 0.0%
+[2026-01-27 15:20:55] [SUCCESS] 🎯 PPO Progress: 110592/200000 steps (55.3%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 45 (W:22, L:23, WR:48.9%) | Cumulative Reward: 0.00
+[2026-01-27 15:21:15] [SUCCESS] 🎯 PPO Progress: 112640/200000 steps (56.3%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 97 (W:46, L:51, WR:47.4%) | Cumulative Reward: 0.00
+[2026-01-27 15:21:51] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 15:23:35] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 15:23:35] [WARNING] ⏸️ PAUZA: Trening PPO Agent w toku - LSTM update postponed (memory protection)
+[2026-01-27 15:25:33] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 15:27:12] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 15:28:50] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 15:30:44] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 15:32:26] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 15:34:07] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 15:36:08] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 15:37:43] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 15:39:16] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 15:41:06] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 15:42:44] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 15:44:21] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 15:46:17] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 15:47:56] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 15:49:34] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 15:51:35] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 15:53:16] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 15:54:59] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 15:54:59] [WARNING] ⏸️ PAUZA: Trening PPO Agent w toku - LSTM update postponed (memory protection)
+[2026-01-27 15:56:53] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 15:58:32] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 16:00:12] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 16:02:12] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 16:03:48] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 16:05:28] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 16:07:31] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 16:09:06] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 16:10:49] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 16:12:50] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 16:14:32] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 16:16:12] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 16:18:02] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 16:19:40] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 16:21:19] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 16:23:14] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 16:24:56] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 16:26:35] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 16:26:35] [WARNING] ⏸️ PAUZA: Trening PPO Agent w toku - LSTM update postponed (memory protection)
+[2026-01-27 16:28:25] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 16:29:59] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 16:31:39] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 16:33:41] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 16:35:21] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 16:37:02] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 16:39:05] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 16:40:44] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 16:44:40] [INFO] 📊 PPO Trainer Configuration:
+[2026-01-27 16:44:51] [SUCCESS] 🚀 RL Trainer initialized for BTC/USDT
+[2026-01-27 16:44:51] [SUCCESS] 🚀 STARTING RL AGENT TRAINING PIPELINE (with OOM protection)
+[2026-01-27 16:44:53] [SUCCESS] ✅ Using database data for PPO training: 259,199 candles (179/180 days)
+[2026-01-27 17:14:18] [WARNING] ⏸️ PAUZA: Trening PPO Agent w toku - LSTM update postponed (memory protection)
+[2026-01-27 17:15:23] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 17:16:26] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 17:17:45] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 17:18:48] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 17:19:56] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 17:21:03] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 17:22:26] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 17:23:46] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 17:24:47] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 17:25:51] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 17:26:56] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 17:27:54] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 17:29:14] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 17:29:41] [INFO] 🎯 Episode Length: 8192 steps (5.7 days)
+[2026-01-27 17:29:44] [INFO] 🎯 PPO Training Target: 200000 timesteps
+[2026-01-27 17:29:44] [INFO] 💾 Auto-checkpoint enabled: Every 10000 steps → ./models/checkpoints
+[2026-01-27 17:29:44] [INFO] 🚀 Starting PPO Training for 200000 timesteps...
+[2026-01-27 17:29:44] [INFO]    - PPO.log file: ./logs/PPO.log
+[2026-01-27 17:29:44] [INFO] 🚀 Starting PPO training for 200000 timesteps...
+[2026-01-27 17:30:03] [SUCCESS] 🎯 PPO Progress: 2048/200000 steps (1.0%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 332 (W:149, L:183, WR:44.9%) | Cumulative Reward: 0.00
+[2026-01-27 17:30:17] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 17:30:23] [SUCCESS] 🎯 PPO Progress: 4096/200000 steps (2.0%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 694 (W:325, L:369, WR:46.8%) | Cumulative Reward: 0.00
+[2026-01-27 17:30:42] [SUCCESS] 🎯 PPO Progress: 6144/200000 steps (3.1%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 1077 (W:524, L:553, WR:48.7%) | Cumulative Reward: 0.00
+[2026-01-27 17:31:03] [SUCCESS] 🎯 PPO Progress: 8192/200000 steps (4.1%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 0 (W:0, L:0, WR:0.0%) | Cumulative Reward: 0.00
+[2026-01-27 17:31:22] [SUCCESS] 💾 Checkpoint saved: ppo_checkpoint_10000.zip | Steps: 10000/200000 (5.0%) | Win Rate: 0.0%
+[2026-01-27 17:31:22] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 17:31:24] [SUCCESS] 🎯 PPO Progress: 10240/200000 steps (5.1%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 322 (W:156, L:166, WR:48.4%) | Cumulative Reward: 0.00
+[2026-01-27 17:31:29] [INFO] ℹ️ No RL model found. Train first with: python3.12 src/process_rl_trainer.py
+[2026-01-27 17:31:41] [SUCCESS] 🎯 PPO Progress: 12288/200000 steps (6.1%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 645 (W:310, L:335, WR:48.1%) | Cumulative Reward: 0.00
+[2026-01-27 17:32:03] [SUCCESS] 🎯 PPO Progress: 14336/200000 steps (7.2%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 973 (W:471, L:502, WR:48.4%) | Cumulative Reward: 0.00
+[2026-01-27 17:32:22] [SUCCESS] 🎯 PPO Progress: 16384/200000 steps (8.2%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 0 (W:0, L:0, WR:0.0%) | Cumulative Reward: 0.00
+[2026-01-27 17:32:43] [SUCCESS] 🎯 PPO Progress: 18432/200000 steps (9.2%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 331 (W:167, L:164, WR:50.5%) | Cumulative Reward: 0.00
+[2026-01-27 17:33:00] [SUCCESS] 💾 Checkpoint saved: ppo_checkpoint_20000.zip | Steps: 20000/200000 (10.0%) | Win Rate: 0.0%
+[2026-01-27 17:33:05] [SUCCESS] 🎯 PPO Progress: 20480/200000 steps (10.2%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 647 (W:324, L:323, WR:50.1%) | Cumulative Reward: 0.00
+[2026-01-27 17:33:05] [WARNING] 🔍 DEBUG: ep_info_buffer size = 0 (should be >0 if episodes completed)
+[2026-01-27 17:33:05] [ERROR] ⚠️ PROBLEM DETECTED: No episodes completed in this rollout!
+[2026-01-27 17:33:05] [WARNING]    Possible causes:
+[2026-01-27 17:33:05] [INFO]    1. max_episode_steps might be too large (current: 8192)
+[2026-01-27 17:33:05] [INFO]    2. Dataset might be too small
+[2026-01-27 17:33:05] [INFO]    3. Episodes taking longer than 2048 steps (n_steps)
+[2026-01-27 17:33:22] [SUCCESS] 🎯 PPO Progress: 22528/200000 steps (11.3%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 927 (W:476, L:451, WR:51.3%) | Cumulative Reward: 0.00
+[2026-01-27 17:33:28] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 17:33:45] [SUCCESS] 🎯 PPO Progress: 24576/200000 steps (12.3%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 0 (W:0, L:0, WR:0.0%) | Cumulative Reward: 0.00
+[2026-01-27 17:34:08] [SUCCESS] 🎯 PPO Progress: 26624/200000 steps (13.3%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 270 (W:105, L:165, WR:38.9%) | Cumulative Reward: 0.00
+[2026-01-27 17:34:26] [SUCCESS] 🎯 PPO Progress: 28672/200000 steps (14.3%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 539 (W:235, L:304, WR:43.6%) | Cumulative Reward: 0.00
+[2026-01-27 17:34:42] [SUCCESS] 💾 Checkpoint saved: ppo_checkpoint_30000.zip | Steps: 30000/200000 (15.0%) | Win Rate: 0.0%
+[2026-01-27 17:34:48] [SUCCESS] 🎯 PPO Progress: 30720/200000 steps (15.4%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 805 (W:362, L:443, WR:45.0%) | Cumulative Reward: 0.00
+[2026-01-27 17:35:11] [SUCCESS] 🎯 PPO Progress: 32768/200000 steps (16.4%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 0 (W:0, L:0, WR:0.0%) | Cumulative Reward: 0.00
+[2026-01-27 17:35:12] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 17:35:31] [SUCCESS] 🎯 PPO Progress: 34816/200000 steps (17.4%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 271 (W:113, L:158, WR:41.7%) | Cumulative Reward: 0.00
+[2026-01-27 17:35:53] [SUCCESS] 🎯 PPO Progress: 36864/200000 steps (18.4%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 579 (W:267, L:312, WR:46.1%) | Cumulative Reward: 0.00
+[2026-01-27 17:36:15] [SUCCESS] 🎯 PPO Progress: 38912/200000 steps (19.5%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 860 (W:412, L:448, WR:47.9%) | Cumulative Reward: 0.00
+[2026-01-27 17:36:24] [SUCCESS] 💾 Checkpoint saved: ppo_checkpoint_40000.zip | Steps: 40000/200000 (20.0%) | Win Rate: 0.0%
+[2026-01-27 17:36:32] [SUCCESS] 🎯 PPO Progress: 40960/200000 steps (20.5%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 0 (W:0, L:0, WR:0.0%) | Cumulative Reward: 0.00
+[2026-01-27 17:36:32] [WARNING] 🔍 DEBUG: ep_info_buffer size = 0 (should be >0 if episodes completed)
+[2026-01-27 17:36:32] [ERROR] ⚠️ PROBLEM DETECTED: No episodes completed in this rollout!
+[2026-01-27 17:36:32] [WARNING]    Possible causes:
+[2026-01-27 17:36:32] [INFO]    1. max_episode_steps might be too large (current: 8192)
+[2026-01-27 17:36:32] [INFO]    2. Dataset might be too small
+[2026-01-27 17:36:32] [INFO]    3. Episodes taking longer than 2048 steps (n_steps)
+[2026-01-27 17:36:55] [SUCCESS] 🎯 PPO Progress: 43008/200000 steps (21.5%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 297 (W:151, L:146, WR:50.8%) | Cumulative Reward: 0.00
+[2026-01-27 17:36:55] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 17:37:16] [SUCCESS] 🎯 PPO Progress: 45056/200000 steps (22.5%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 605 (W:313, L:292, WR:51.7%) | Cumulative Reward: 0.00
+[2026-01-27 17:37:36] [SUCCESS] 🎯 PPO Progress: 47104/200000 steps (23.6%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 834 (W:414, L:420, WR:49.6%) | Cumulative Reward: 0.00
+[2026-01-27 17:37:57] [SUCCESS] 🎯 PPO Progress: 49152/200000 steps (24.6%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 0 (W:0, L:0, WR:0.0%) | Cumulative Reward: 0.00
+[2026-01-27 17:38:05] [SUCCESS] 💾 Checkpoint saved: ppo_checkpoint_50000.zip | Steps: 50000/200000 (25.0%) | Win Rate: 0.0%
+[2026-01-27 17:38:15] [SUCCESS] 🎯 PPO Progress: 51200/200000 steps (25.6%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 261 (W:113, L:148, WR:43.3%) | Cumulative Reward: 0.00
+[2026-01-27 17:38:36] [SUCCESS] 🎯 PPO Progress: 53248/200000 steps (26.6%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 488 (W:221, L:267, WR:45.3%) | Cumulative Reward: 0.00
+[2026-01-27 17:38:38] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 17:38:57] [SUCCESS] 🎯 PPO Progress: 55296/200000 steps (27.6%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 686 (W:316, L:370, WR:46.1%) | Cumulative Reward: 0.00
+[2026-01-27 17:39:16] [SUCCESS] 🎯 PPO Progress: 57344/200000 steps (28.7%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 0 (W:0, L:0, WR:0.0%) | Cumulative Reward: 0.00
+[2026-01-27 17:39:37] [SUCCESS] 🎯 PPO Progress: 59392/200000 steps (29.7%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 290 (W:149, L:141, WR:51.4%) | Cumulative Reward: 0.00
+[2026-01-27 17:39:44] [SUCCESS] 💾 Checkpoint saved: ppo_checkpoint_60000.zip | Steps: 60000/200000 (30.0%) | Win Rate: 0.0%
+[2026-01-27 17:39:56] [SUCCESS] 🎯 PPO Progress: 61440/200000 steps (30.7%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 502 (W:257, L:245, WR:51.2%) | Cumulative Reward: 0.00
+[2026-01-27 17:39:56] [WARNING] 🔍 DEBUG: ep_info_buffer size = 0 (should be >0 if episodes completed)
+[2026-01-27 17:39:56] [ERROR] ⚠️ PROBLEM DETECTED: No episodes completed in this rollout!
+[2026-01-27 17:39:56] [WARNING]    Possible causes:
+[2026-01-27 17:39:56] [INFO]    1. max_episode_steps might be too large (current: 8192)
+[2026-01-27 17:39:56] [INFO]    2. Dataset might be too small
+[2026-01-27 17:39:56] [INFO]    3. Episodes taking longer than 2048 steps (n_steps)
+[2026-01-27 17:40:18] [SUCCESS] 🎯 PPO Progress: 63488/200000 steps (31.7%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 724 (W:384, L:340, WR:53.0%) | Cumulative Reward: 0.00
+[2026-01-27 17:40:38] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 17:40:39] [SUCCESS] 🎯 PPO Progress: 65536/200000 steps (32.8%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 0 (W:0, L:0, WR:0.0%) | Cumulative Reward: 0.00
+[2026-01-27 17:40:57] [SUCCESS] 🎯 PPO Progress: 67584/200000 steps (33.8%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 229 (W:106, L:123, WR:46.3%) | Cumulative Reward: 0.00
+[2026-01-27 17:41:18] [SUCCESS] 🎯 PPO Progress: 69632/200000 steps (34.8%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 449 (W:213, L:236, WR:47.4%) | Cumulative Reward: 0.00
+[2026-01-27 17:41:22] [SUCCESS] 💾 Checkpoint saved: ppo_checkpoint_70000.zip | Steps: 70000/200000 (35.0%) | Win Rate: 0.0%
+[2026-01-27 17:41:38] [SUCCESS] 🎯 PPO Progress: 71680/200000 steps (35.8%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 687 (W:337, L:350, WR:49.1%) | Cumulative Reward: 0.00
+[2026-01-27 17:41:57] [SUCCESS] 🎯 PPO Progress: 73728/200000 steps (36.9%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 0 (W:0, L:0, WR:0.0%) | Cumulative Reward: 0.00
+[2026-01-27 17:42:17] [SUCCESS] 🎯 PPO Progress: 75776/200000 steps (37.9%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 267 (W:139, L:128, WR:52.1%) | Cumulative Reward: 0.00
+[2026-01-27 17:42:18] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 17:42:35] [SUCCESS] 🎯 PPO Progress: 77824/200000 steps (38.9%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 557 (W:288, L:269, WR:51.7%) | Cumulative Reward: 0.00
+[2026-01-27 17:42:55] [SUCCESS] 🎯 PPO Progress: 79872/200000 steps (39.9%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 857 (W:440, L:417, WR:51.3%) | Cumulative Reward: 0.00
+[2026-01-27 17:42:58] [SUCCESS] 💾 Checkpoint saved: ppo_checkpoint_80000.zip | Steps: 80000/200000 (40.0%) | Win Rate: 0.0%
+[2026-01-27 17:43:15] [SUCCESS] 🎯 PPO Progress: 81920/200000 steps (41.0%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 0 (W:0, L:0, WR:0.0%) | Cumulative Reward: 0.00
+[2026-01-27 17:43:15] [WARNING] 🔍 DEBUG: ep_info_buffer size = 0 (should be >0 if episodes completed)
+[2026-01-27 17:43:15] [ERROR] ⚠️ PROBLEM DETECTED: No episodes completed in this rollout!
+[2026-01-27 17:43:15] [WARNING]    Possible causes:
+[2026-01-27 17:43:15] [INFO]    1. max_episode_steps might be too large (current: 8192)
+[2026-01-27 17:43:15] [INFO]    2. Dataset might be too small
+[2026-01-27 17:43:15] [INFO]    3. Episodes taking longer than 2048 steps (n_steps)
+[2026-01-27 17:43:33] [SUCCESS] 🎯 PPO Progress: 83968/200000 steps (42.0%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 281 (W:146, L:135, WR:52.0%) | Cumulative Reward: 0.00
+[2026-01-27 17:43:54] [SUCCESS] 🎯 PPO Progress: 86016/200000 steps (43.0%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 603 (W:316, L:287, WR:52.4%) | Cumulative Reward: 0.00
+[2026-01-27 17:44:03] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 17:44:11] [SUCCESS] 🎯 PPO Progress: 88064/200000 steps (44.0%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 869 (W:458, L:411, WR:52.7%) | Cumulative Reward: 0.00
+[2026-01-27 17:44:31] [SUCCESS] 💾 Checkpoint saved: ppo_checkpoint_90000.zip | Steps: 90000/200000 (45.0%) | Win Rate: 0.0%
+[2026-01-27 17:44:32] [SUCCESS] 🎯 PPO Progress: 90112/200000 steps (45.1%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 0 (W:0, L:0, WR:0.0%) | Cumulative Reward: 0.00
+[2026-01-27 17:44:52] [SUCCESS] 🎯 PPO Progress: 92160/200000 steps (46.1%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 256 (W:117, L:139, WR:45.7%) | Cumulative Reward: 0.00
+[2026-01-27 17:45:11] [SUCCESS] 🎯 PPO Progress: 94208/200000 steps (47.1%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 486 (W:237, L:249, WR:48.8%) | Cumulative Reward: 0.00
+[2026-01-27 17:45:35] [SUCCESS] 🎯 PPO Progress: 96256/200000 steps (48.1%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 663 (W:336, L:327, WR:50.7%) | Cumulative Reward: 0.00
+[2026-01-27 17:45:53] [SUCCESS] 🎯 PPO Progress: 98304/200000 steps (49.2%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 0 (W:0, L:0, WR:0.0%) | Cumulative Reward: 0.00
+[2026-01-27 17:46:07] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 17:46:07] [WARNING] ⏸️ PAUZA: Trening PPO Agent w toku - LSTM update postponed (memory protection)
+[2026-01-27 17:46:10] [SUCCESS] 💾 Checkpoint saved: ppo_checkpoint_100000.zip | Steps: 100000/200000 (50.0%) | Win Rate: 0.0%
+[2026-01-27 17:46:13] [SUCCESS] 🎯 PPO Progress: 100352/200000 steps (50.2%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 209 (W:118, L:91, WR:56.5%) | Cumulative Reward: 0.00
+[2026-01-27 17:46:34] [SUCCESS] 🎯 PPO Progress: 102400/200000 steps (51.2%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 403 (W:223, L:180, WR:55.3%) | Cumulative Reward: 0.00
+[2026-01-27 17:46:34] [WARNING] 🔍 DEBUG: ep_info_buffer size = 0 (should be >0 if episodes completed)
+[2026-01-27 17:46:34] [ERROR] ⚠️ PROBLEM DETECTED: No episodes completed in this rollout!
+[2026-01-27 17:46:34] [WARNING]    Possible causes:
+[2026-01-27 17:46:34] [INFO]    1. max_episode_steps might be too large (current: 8192)
+[2026-01-27 17:46:34] [INFO]    2. Dataset might be too small
+[2026-01-27 17:46:34] [INFO]    3. Episodes taking longer than 2048 steps (n_steps)
+[2026-01-27 17:46:53] [SUCCESS] 🎯 PPO Progress: 104448/200000 steps (52.2%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 561 (W:307, L:254, WR:54.7%) | Cumulative Reward: 0.00
+[2026-01-27 17:47:13] [SUCCESS] 🎯 PPO Progress: 106496/200000 steps (53.2%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 0 (W:0, L:0, WR:0.0%) | Cumulative Reward: 0.00
+[2026-01-27 17:47:36] [SUCCESS] 🎯 PPO Progress: 108544/200000 steps (54.3%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 204 (W:114, L:90, WR:55.9%) | Cumulative Reward: 0.00
+[2026-01-27 17:47:49] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 17:47:50] [SUCCESS] 💾 Checkpoint saved: ppo_checkpoint_110000.zip | Steps: 110000/200000 (55.0%) | Win Rate: 0.0%
+[2026-01-27 17:47:55] [SUCCESS] 🎯 PPO Progress: 110592/200000 steps (55.3%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 446 (W:249, L:197, WR:55.8%) | Cumulative Reward: 0.00
+[2026-01-27 17:48:17] [SUCCESS] 🎯 PPO Progress: 112640/200000 steps (56.3%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 753 (W:419, L:334, WR:55.6%) | Cumulative Reward: 0.00
+[2026-01-27 17:48:36] [SUCCESS] 🎯 PPO Progress: 114688/200000 steps (57.3%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 0 (W:0, L:0, WR:0.0%) | Cumulative Reward: 0.00
+[2026-01-27 17:48:58] [SUCCESS] 🎯 PPO Progress: 116736/200000 steps (58.4%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 215 (W:108, L:107, WR:50.2%) | Cumulative Reward: 0.00
+[2026-01-27 17:49:29] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 17:51:34] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 17:53:18] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 17:54:55] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 17:56:56] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 17:58:46] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 18:00:31] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 18:02:29] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 18:04:10] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 18:05:52] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 18:07:48] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 18:09:27] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 18:11:06] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 18:12:55] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 18:14:30] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 18:16:04] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 18:16:04] [WARNING] ⏸️ PAUZA: Trening PPO Agent w toku - LSTM update postponed (memory protection)
+[2026-01-27 18:17:53] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 18:19:31] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 18:21:09] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 18:23:13] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 18:24:49] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 18:26:27] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 18:28:18] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 18:29:57] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 18:31:35] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 18:33:32] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 18:35:10] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 18:36:42] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 18:38:43] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 18:40:17] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 18:41:52] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 18:48:57] [INFO] 📋 LSTM Ensemble v3.4 ma pierwszeństwo - PPO będzie czekać jeśli potrzebny update
+[2026-01-27 18:49:06] [INFO] 🔒 LSTM Training Lock created (Priority 2 - HIGH). PPO will pause if active.
+[2026-01-27 18:49:06] [INFO] ℹ️ No RL model found. Train first with: python3.12 src/process_rl_trainer.py
+[2026-01-27 18:49:30] [WARNING] ⏸️ PAUZA: Trening PPO Agent w toku - LSTM update postponed (memory protection)
+[2026-01-27 18:51:25] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 18:53:01] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 18:54:38] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 18:56:14] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 18:58:06] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 18:59:42] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 19:01:19] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 19:03:13] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 19:04:43] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 19:06:18] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 19:08:11] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 19:09:41] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 19:11:17] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 19:12:52] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 19:14:40] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 19:16:16] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 19:17:57] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 19:19:32] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 19:21:32] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 19:21:32] [WARNING] ⏸️ PAUZA: Trening PPO Agent w toku - LSTM update postponed (memory protection)
+[2026-01-27 19:23:07] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 19:24:43] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 19:26:10] [INFO] 🔓 LSTM Training Lock removed. PPO can resume.
+[2026-01-27 19:26:27] [INFO] 📋 LSTM Ensemble v3.4 ma pierwszeństwo - PPO będzie czekać jeśli potrzebny update
+[2026-01-27 19:26:36] [INFO] 🔒 LSTM Training Lock created (Priority 2 - HIGH). PPO will pause if active.
+[2026-01-27 19:26:37] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 19:28:11] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 19:29:44] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 19:31:34] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 19:33:06] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 19:34:42] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 19:36:22] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 19:38:14] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 19:39:50] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 19:41:29] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 19:43:16] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 19:44:53] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 19:46:30] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 19:48:30] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 19:50:04] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 19:51:42] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 20:06:58] [INFO] 🔓 LSTM Training Lock removed. PPO can resume.
+[2026-01-27 20:06:59] [INFO] 📋 LSTM Ensemble v3.4 ma pierwszeństwo - PPO będzie czekać jeśli potrzebny update
+[2026-01-27 20:07:12] [INFO] 🔒 LSTM Training Lock created (Priority 2 - HIGH). PPO will pause if active.
+[2026-01-27 20:07:18] [INFO] 📊 PPO Trainer Configuration:
+[2026-01-27 20:07:25] [SUCCESS] 🚀 RL Trainer initialized for BTC/USDT
+[2026-01-27 20:07:25] [SUCCESS] 🚀 STARTING RL AGENT TRAINING PIPELINE (with OOM protection)
+[2026-01-27 20:07:25] [WARNING]    PPO Agent training postponed. LSTM must complete first.
+[2026-01-27 20:21:39] [WARNING] ⏸️ PAUZA: Trening PPO Agent w toku - LSTM update postponed (memory protection)
+[2026-01-27 20:23:16] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 20:24:52] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 20:26:43] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 20:28:14] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 20:29:41] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 20:30:40] [INFO] 🔓 LSTM Training Lock removed. PPO can resume.
+[2026-01-27 20:31:17] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 20:31:43] [SUCCESS] ✅ LSTM training complete. Proceeding with PPO Agent training...
+[2026-01-27 20:31:44] [SUCCESS] ✅ Using database data for PPO training: 259,199 candles (179/180 days)
+[2026-01-27 20:33:07] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 20:34:39] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 20:36:16] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 20:37:55] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 20:39:47] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 20:41:24] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 20:42:53] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 20:44:47] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 20:46:17] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 20:47:52] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 20:49:26] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 20:51:20] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 20:52:49] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 20:52:49] [WARNING] ⏸️ PAUZA: Trening PPO Agent w toku - LSTM update postponed (memory protection)
+[2026-01-27 20:54:21] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 20:55:55] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 20:57:43] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 20:57:51] [INFO] 🎯 Episode Length: 8192 steps (5.7 days)
+[2026-01-27 20:57:52] [INFO] 🎯 PPO Training Target: 200000 timesteps
+[2026-01-27 20:57:52] [INFO] 💾 Auto-checkpoint enabled: Every 10000 steps → ./models/checkpoints
+[2026-01-27 20:57:52] [INFO] 🚀 Starting PPO Training for 200000 timesteps...
+[2026-01-27 20:57:52] [INFO]    - PPO.log file: ./logs/PPO.log
+[2026-01-27 20:57:52] [INFO] 🚀 Starting PPO training for 200000 timesteps...
+[2026-01-27 20:58:12] [SUCCESS] 🎯 PPO Progress: 2048/200000 steps (1.0%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 337 (W:139, L:198, WR:41.2%) | Cumulative Reward: 0.00
+[2026-01-27 20:58:33] [SUCCESS] 🎯 PPO Progress: 4096/200000 steps (2.0%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 645 (W:294, L:351, WR:45.6%) | Cumulative Reward: 0.00
+[2026-01-27 20:58:51] [SUCCESS] 🎯 PPO Progress: 6144/200000 steps (3.1%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 944 (W:430, L:514, WR:45.6%) | Cumulative Reward: 0.00
+[2026-01-27 20:59:11] [SUCCESS] 🎯 PPO Progress: 8192/200000 steps (4.1%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 0 (W:0, L:0, WR:0.0%) | Cumulative Reward: 0.00
+[2026-01-27 20:59:19] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 20:59:27] [SUCCESS] 💾 Checkpoint saved: ppo_checkpoint_10000.zip | Steps: 10000/200000 (5.0%) | Win Rate: 0.0%
+[2026-01-27 20:59:29] [SUCCESS] 🎯 PPO Progress: 10240/200000 steps (5.1%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 321 (W:157, L:164, WR:48.9%) | Cumulative Reward: 0.00
+[2026-01-27 20:59:50] [SUCCESS] 🎯 PPO Progress: 12288/200000 steps (6.1%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 656 (W:316, L:340, WR:48.2%) | Cumulative Reward: 0.00
+[2026-01-27 21:00:11] [SUCCESS] 🎯 PPO Progress: 14336/200000 steps (7.2%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 994 (W:477, L:517, WR:48.0%) | Cumulative Reward: 0.00
+[2026-01-27 21:00:28] [SUCCESS] 🎯 PPO Progress: 16384/200000 steps (8.2%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 0 (W:0, L:0, WR:0.0%) | Cumulative Reward: 0.00
+[2026-01-27 21:00:49] [SUCCESS] 🎯 PPO Progress: 18432/200000 steps (9.2%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 339 (W:137, L:202, WR:40.4%) | Cumulative Reward: 0.00
+[2026-01-27 21:00:55] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 21:01:03] [SUCCESS] 💾 Checkpoint saved: ppo_checkpoint_20000.zip | Steps: 20000/200000 (10.0%) | Win Rate: 0.0%
+[2026-01-27 21:01:07] [SUCCESS] 🎯 PPO Progress: 20480/200000 steps (10.2%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 690 (W:285, L:405, WR:41.3%) | Cumulative Reward: 0.00
+[2026-01-27 21:01:07] [WARNING] 🔍 DEBUG: ep_info_buffer size = 0 (should be >0 if episodes completed)
+[2026-01-27 21:01:07] [ERROR] ⚠️ PROBLEM DETECTED: No episodes completed in this rollout!
+[2026-01-27 21:01:07] [WARNING]    Possible causes:
+[2026-01-27 21:01:07] [INFO]    1. max_episode_steps might be too large (current: 8192)
+[2026-01-27 21:01:07] [INFO]    2. Dataset might be too small
+[2026-01-27 21:01:07] [INFO]    3. Episodes taking longer than 2048 steps (n_steps)
+[2026-01-27 21:01:27] [SUCCESS] 🎯 PPO Progress: 22528/200000 steps (11.3%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 1005 (W:435, L:570, WR:43.3%) | Cumulative Reward: 0.00
+[2026-01-27 21:01:45] [SUCCESS] 🎯 PPO Progress: 24576/200000 steps (12.3%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 0 (W:0, L:0, WR:0.0%) | Cumulative Reward: 0.00
+[2026-01-27 21:02:06] [SUCCESS] 🎯 PPO Progress: 26624/200000 steps (13.3%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 312 (W:168, L:144, WR:53.8%) | Cumulative Reward: 0.00
+[2026-01-27 21:02:27] [SUCCESS] 🎯 PPO Progress: 28672/200000 steps (14.3%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 590 (W:297, L:293, WR:50.3%) | Cumulative Reward: 0.00
+[2026-01-27 21:02:31] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 21:02:39] [SUCCESS] 💾 Checkpoint saved: ppo_checkpoint_30000.zip | Steps: 30000/200000 (15.0%) | Win Rate: 0.0%
+[2026-01-27 21:02:44] [SUCCESS] 🎯 PPO Progress: 30720/200000 steps (15.4%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 863 (W:431, L:432, WR:49.9%) | Cumulative Reward: 0.00
+[2026-01-27 21:03:07] [SUCCESS] 🎯 PPO Progress: 32768/200000 steps (16.4%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 0 (W:0, L:0, WR:0.0%) | Cumulative Reward: 0.00
+[2026-01-27 21:03:31] [SUCCESS] 🎯 PPO Progress: 34816/200000 steps (17.4%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 318 (W:166, L:152, WR:52.2%) | Cumulative Reward: 0.00
+[2026-01-27 21:03:53] [SUCCESS] 🎯 PPO Progress: 36864/200000 steps (18.4%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 646 (W:341, L:305, WR:52.8%) | Cumulative Reward: 0.00
+[2026-01-27 21:04:17] [SUCCESS] 🎯 PPO Progress: 38912/200000 steps (19.5%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 964 (W:487, L:477, WR:50.5%) | Cumulative Reward: 0.00
+[2026-01-27 21:04:22] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 21:04:28] [SUCCESS] 💾 Checkpoint saved: ppo_checkpoint_40000.zip | Steps: 40000/200000 (20.0%) | Win Rate: 0.0%
+[2026-01-27 21:04:39] [SUCCESS] 🎯 PPO Progress: 40960/200000 steps (20.5%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 0 (W:0, L:0, WR:0.0%) | Cumulative Reward: 0.00
+[2026-01-27 21:04:39] [WARNING] 🔍 DEBUG: ep_info_buffer size = 0 (should be >0 if episodes completed)
+[2026-01-27 21:04:39] [ERROR] ⚠️ PROBLEM DETECTED: No episodes completed in this rollout!
+[2026-01-27 21:04:39] [WARNING]    Possible causes:
+[2026-01-27 21:04:40] [INFO]    1. max_episode_steps might be too large (current: 8192)
+[2026-01-27 21:04:40] [INFO]    2. Dataset might be too small
+[2026-01-27 21:04:40] [INFO]    3. Episodes taking longer than 2048 steps (n_steps)
+[2026-01-27 21:05:00] [SUCCESS] 🎯 PPO Progress: 43008/200000 steps (21.5%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 291 (W:127, L:164, WR:43.6%) | Cumulative Reward: 0.00
+[2026-01-27 21:05:23] [SUCCESS] 🎯 PPO Progress: 45056/200000 steps (22.5%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 576 (W:267, L:309, WR:46.4%) | Cumulative Reward: 0.00
+[2026-01-27 21:05:47] [SUCCESS] 🎯 PPO Progress: 47104/200000 steps (23.6%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 811 (W:377, L:434, WR:46.5%) | Cumulative Reward: 0.00
+[2026-01-27 21:05:57] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 21:06:08] [SUCCESS] 🎯 PPO Progress: 49152/200000 steps (24.6%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 0 (W:0, L:0, WR:0.0%) | Cumulative Reward: 0.00
+[2026-01-27 21:06:21] [SUCCESS] 💾 Checkpoint saved: ppo_checkpoint_50000.zip | Steps: 50000/200000 (25.0%) | Win Rate: 0.0%
+[2026-01-27 21:06:32] [SUCCESS] 🎯 PPO Progress: 51200/200000 steps (25.6%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 313 (W:153, L:160, WR:48.9%) | Cumulative Reward: 0.00
+[2026-01-27 21:06:57] [SUCCESS] 🎯 PPO Progress: 53248/200000 steps (26.6%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 521 (W:250, L:271, WR:48.0%) | Cumulative Reward: 0.00
+[2026-01-27 21:07:21] [SUCCESS] 🎯 PPO Progress: 55296/200000 steps (27.6%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 696 (W:340, L:356, WR:48.9%) | Cumulative Reward: 0.00
+[2026-01-27 21:07:32] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 21:07:42] [SUCCESS] 🎯 PPO Progress: 57344/200000 steps (28.7%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 0 (W:0, L:0, WR:0.0%) | Cumulative Reward: 0.00
+[2026-01-27 21:08:07] [SUCCESS] 🎯 PPO Progress: 59392/200000 steps (29.7%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 295 (W:145, L:150, WR:49.2%) | Cumulative Reward: 0.00
+[2026-01-27 21:08:14] [SUCCESS] 💾 Checkpoint saved: ppo_checkpoint_60000.zip | Steps: 60000/200000 (30.0%) | Win Rate: 0.0%
+[2026-01-27 21:08:29] [SUCCESS] 🎯 PPO Progress: 61440/200000 steps (30.7%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 489 (W:258, L:231, WR:52.8%) | Cumulative Reward: 0.00
+[2026-01-27 21:08:29] [WARNING] 🔍 DEBUG: ep_info_buffer size = 0 (should be >0 if episodes completed)
+[2026-01-27 21:08:29] [ERROR] ⚠️ PROBLEM DETECTED: No episodes completed in this rollout!
+[2026-01-27 21:08:29] [WARNING]    Possible causes:
+[2026-01-27 21:08:30] [INFO]    1. max_episode_steps might be too large (current: 8192)
+[2026-01-27 21:08:30] [INFO]    2. Dataset might be too small
+[2026-01-27 21:08:30] [INFO]    3. Episodes taking longer than 2048 steps (n_steps)
+[2026-01-27 21:08:49] [SUCCESS] 🎯 PPO Progress: 63488/200000 steps (31.7%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 720 (W:380, L:340, WR:52.8%) | Cumulative Reward: 0.00
+[2026-01-27 21:09:14] [SUCCESS] 🎯 PPO Progress: 65536/200000 steps (32.8%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 0 (W:0, L:0, WR:0.0%) | Cumulative Reward: 0.00
+[2026-01-27 21:09:24] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 21:09:38] [SUCCESS] 🎯 PPO Progress: 67584/200000 steps (33.8%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 284 (W:141, L:143, WR:49.6%) | Cumulative Reward: 0.00
+[2026-01-27 21:09:59] [SUCCESS] 🎯 PPO Progress: 69632/200000 steps (34.8%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 520 (W:254, L:266, WR:48.8%) | Cumulative Reward: 0.00
+[2026-01-27 21:10:07] [SUCCESS] 💾 Checkpoint saved: ppo_checkpoint_70000.zip | Steps: 70000/200000 (35.0%) | Win Rate: 0.0%
+[2026-01-27 21:10:23] [SUCCESS] 🎯 PPO Progress: 71680/200000 steps (35.8%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 691 (W:348, L:343, WR:50.4%) | Cumulative Reward: 0.00
+[2026-01-27 21:10:47] [SUCCESS] 🎯 PPO Progress: 73728/200000 steps (36.9%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 0 (W:0, L:0, WR:0.0%) | Cumulative Reward: 0.00
+[2026-01-27 21:11:07] [SUCCESS] 🎯 PPO Progress: 75776/200000 steps (37.9%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 202 (W:95, L:107, WR:47.0%) | Cumulative Reward: 0.00
+[2026-01-27 21:11:07] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 21:11:32] [SUCCESS] 🎯 PPO Progress: 77824/200000 steps (38.9%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 364 (W:180, L:184, WR:49.5%) | Cumulative Reward: 0.00
+[2026-01-27 21:11:56] [SUCCESS] 🎯 PPO Progress: 79872/200000 steps (39.9%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 529 (W:268, L:261, WR:50.7%) | Cumulative Reward: 0.00
+[2026-01-27 21:11:59] [SUCCESS] 💾 Checkpoint saved: ppo_checkpoint_80000.zip | Steps: 80000/200000 (40.0%) | Win Rate: 0.0%
+[2026-01-27 21:12:20] [SUCCESS] 🎯 PPO Progress: 81920/200000 steps (41.0%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 0 (W:0, L:0, WR:0.0%) | Cumulative Reward: 0.00
+[2026-01-27 21:12:20] [WARNING] 🔍 DEBUG: ep_info_buffer size = 0 (should be >0 if episodes completed)
+[2026-01-27 21:12:20] [ERROR] ⚠️ PROBLEM DETECTED: No episodes completed in this rollout!
+[2026-01-27 21:12:20] [WARNING]    Possible causes:
+[2026-01-27 21:12:20] [INFO]    1. max_episode_steps might be too large (current: 8192)
+[2026-01-27 21:12:20] [INFO]    2. Dataset might be too small
+[2026-01-27 21:12:20] [INFO]    3. Episodes taking longer than 2048 steps (n_steps)
+[2026-01-27 21:12:41] [SUCCESS] 🎯 PPO Progress: 83968/200000 steps (42.0%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 218 (W:108, L:110, WR:49.5%) | Cumulative Reward: 0.00
+[2026-01-27 21:12:55] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 21:13:05] [SUCCESS] 🎯 PPO Progress: 86016/200000 steps (43.0%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 396 (W:192, L:204, WR:48.5%) | Cumulative Reward: 0.00
+[2026-01-27 21:13:28] [SUCCESS] 🎯 PPO Progress: 88064/200000 steps (44.0%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 516 (W:254, L:262, WR:49.2%) | Cumulative Reward: 0.00
+[2026-01-27 21:13:48] [SUCCESS] 💾 Checkpoint saved: ppo_checkpoint_90000.zip | Steps: 90000/200000 (45.0%) | Win Rate: 0.0%
+[2026-01-27 21:13:49] [SUCCESS] 🎯 PPO Progress: 90112/200000 steps (45.1%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 0 (W:0, L:0, WR:0.0%) | Cumulative Reward: 0.00
+[2026-01-27 21:14:13] [SUCCESS] 🎯 PPO Progress: 92160/200000 steps (46.1%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 280 (W:121, L:159, WR:43.2%) | Cumulative Reward: 0.00
+[2026-01-27 21:14:39] [SUCCESS] 🎯 PPO Progress: 94208/200000 steps (47.1%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 508 (W:235, L:273, WR:46.3%) | Cumulative Reward: 0.00
+[2026-01-27 21:14:48] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 21:14:59] [SUCCESS] 🎯 PPO Progress: 96256/200000 steps (48.1%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 651 (W:316, L:335, WR:48.5%) | Cumulative Reward: 0.00
+[2026-01-27 21:15:22] [SUCCESS] 🎯 PPO Progress: 98304/200000 steps (49.2%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 0 (W:0, L:0, WR:0.0%) | Cumulative Reward: 0.00
+[2026-01-27 21:15:41] [ERROR] 💀 RL Episode TERMINATED: Bankructwo! Balance=-69.64
+[2026-01-27 21:15:42] [SUCCESS] 💾 Checkpoint saved: ppo_checkpoint_100000.zip | Steps: 100000/200000 (50.0%) | Win Rate: 0.0%
+[2026-01-27 21:15:45] [SUCCESS] 🎯 PPO Progress: 100352/200000 steps (50.2%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 46 (W:20, L:26, WR:43.5%) | Cumulative Reward: 0.00
+[2026-01-27 21:16:15] [SUCCESS] 🎯 PPO Progress: 102400/200000 steps (51.2%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 266 (W:147, L:119, WR:55.3%) | Cumulative Reward: 0.00
+[2026-01-27 21:16:15] [WARNING] 🔍 DEBUG: ep_info_buffer size = 0 (should be >0 if episodes completed)
+[2026-01-27 21:16:15] [ERROR] ⚠️ PROBLEM DETECTED: No episodes completed in this rollout!
+[2026-01-27 21:16:15] [WARNING]    Possible causes:
+[2026-01-27 21:16:15] [INFO]    1. max_episode_steps might be too large (current: 8192)
+[2026-01-27 21:16:15] [INFO]    2. Dataset might be too small
+[2026-01-27 21:16:15] [INFO]    3. Episodes taking longer than 2048 steps (n_steps)
+[2026-01-27 21:16:24] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 21:16:41] [SUCCESS] 🎯 PPO Progress: 104448/200000 steps (52.2%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 398 (W:226, L:172, WR:56.8%) | Cumulative Reward: 0.00
+[2026-01-27 21:17:05] [SUCCESS] 🎯 PPO Progress: 106496/200000 steps (53.2%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 546 (W:308, L:238, WR:56.4%) | Cumulative Reward: 0.00
+[2026-01-27 21:17:30] [SUCCESS] 🎯 PPO Progress: 108544/200000 steps (54.3%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 26 (W:14, L:12, WR:53.8%) | Cumulative Reward: 0.00
+[2026-01-27 21:17:47] [SUCCESS] 💾 Checkpoint saved: ppo_checkpoint_110000.zip | Steps: 110000/200000 (55.0%) | Win Rate: 0.0%
+[2026-01-27 21:17:56] [SUCCESS] 🎯 PPO Progress: 110592/200000 steps (55.3%) | Episodes: 0 (W:0, L:0) | Episode Win Rate: 0.0% | Accuracy: 0.0% | Trades: 132 (W:69, L:63, WR:52.3%) | Cumulative Reward: 0.00
+[2026-01-27 21:18:00] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 21:18:11] [ERROR] 💀 RL Episode TERMINATED: Bankructwo! Balance=-43.38
+[2026-01-27 21:19:53] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 21:21:30] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 21:23:04] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 21:23:04] [WARNING] ⏸️ PAUZA: Trening PPO Agent w toku - LSTM update postponed (memory protection)
+[2026-01-27 21:24:55] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 21:26:29] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 21:28:04] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 21:29:38] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 21:31:27] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 21:32:59] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 21:34:32] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 21:36:14] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 21:38:02] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 21:39:35] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 21:41:08] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 21:42:53] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 21:44:21] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 21:45:51] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 21:47:23] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 21:49:09] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 21:50:41] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 21:52:12] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 21:53:40] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 21:53:40] [WARNING] ⏸️ PAUZA: Trening PPO Agent w toku - LSTM update postponed (memory protection)
+[2026-01-27 21:55:31] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 21:56:58] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 21:58:34] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:00:08] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:02:01] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:03:35] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:05:09] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:06:56] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:08:25] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:09:52] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:11:24] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:13:09] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:14:39] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:16:10] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:17:44] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:19:33] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:21:04] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:22:34] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:24:06] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:24:06] [WARNING] ⏸️ PAUZA: Trening PPO Agent w toku - LSTM update postponed (memory protection)
+[2026-01-27 22:25:48] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:27:21] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:28:55] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:30:29] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:32:27] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:33:57] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:35:26] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:37:10] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:38:39] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:40:15] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:41:47] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:43:36] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:45:11] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:46:46] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:48:24] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:50:19] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:51:54] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:53:34] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:55:28] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:55:28] [WARNING] ⏸️ PAUZA: Trening PPO Agent w toku - LSTM update postponed (memory protection)
+[2026-01-27 22:57:04] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 22:58:44] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:00:36] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:02:10] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:03:46] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:05:30] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:07:00] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:08:32] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:09:59] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:11:45] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:13:13] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:14:41] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:16:13] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:17:56] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:19:26] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:20:57] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:22:28] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:24:17] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:25:48] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:25:49] [WARNING] ⏸️ PAUZA: Trening PPO Agent w toku - LSTM update postponed (memory protection)
+[2026-01-27 23:27:20] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:29:12] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:31:05] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:32:38] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:34:14] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:36:03] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:37:38] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:39:14] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:41:04] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:42:35] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:44:10] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:45:44] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:47:36] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:49:05] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:50:33] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:52:06] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:53:59] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:55:31] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:57:03] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-27 23:57:03] [WARNING] ⏸️ PAUZA: Trening PPO Agent w toku - LSTM update postponed (memory protection)
+[2026-01-27 23:58:39] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 00:00:27] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 00:01:57] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 00:03:25] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 00:04:58] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 00:06:49] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 00:08:25] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 00:09:58] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 00:11:31] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 00:13:20] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 00:14:49] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 00:16:18] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 00:17:48] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 00:19:35] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 00:21:07] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 00:22:42] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 00:24:14] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 00:26:03] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 00:27:31] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 00:27:31] [WARNING] ⏸️ PAUZA: Trening PPO Agent w toku - LSTM update postponed (memory protection)
+[2026-01-28 00:29:00] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 00:30:31] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 00:32:21] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 00:36:56] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 00:38:46] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 00:40:19] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 00:41:49] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 00:43:21] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 00:45:14] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 00:46:49] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 00:48:23] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 00:50:07] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 00:51:34] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 00:53:01] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 00:54:30] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 00:56:15] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 00:57:42] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 00:57:42] [WARNING] ⏸️ PAUZA: Trening PPO Agent w toku - LSTM update postponed (memory protection)
+[2026-01-28 00:59:10] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:00:44] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:02:31] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:04:12] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:06:02] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:07:57] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:09:37] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:11:15] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:13:06] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:14:44] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:16:15] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:17:57] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:19:26] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:20:53] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:22:21] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:24:10] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:25:37] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:27:07] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:28:35] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:28:35] [WARNING] ⏸️ PAUZA: Trening PPO Agent w toku - LSTM update postponed (memory protection)
+[2026-01-28 01:30:22] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:31:53] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:33:24] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:34:55] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:36:42] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:38:12] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:39:41] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:41:12] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:42:59] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:44:31] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:46:01] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:47:35] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:49:19] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:50:47] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:52:19] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:53:53] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:55:43] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:57:10] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:58:36] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 01:58:36] [WARNING] ⏸️ PAUZA: Trening PPO Agent w toku - LSTM update postponed (memory protection)
+[2026-01-28 02:00:05] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:01:49] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:03:18] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:04:46] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:06:14] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:07:55] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:09:21] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:10:46] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:12:12] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:13:51] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:15:16] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:16:41] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:18:09] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:19:51] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:21:23] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:22:52] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:24:26] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:26:10] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:27:38] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:29:07] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:29:07] [WARNING] ⏸️ PAUZA: Trening PPO Agent w toku - LSTM update postponed (memory protection)
+[2026-01-28 02:30:38] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:32:25] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:33:59] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:35:28] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:36:55] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:38:40] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:40:06] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:41:35] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:43:07] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:44:54] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:46:28] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:48:04] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:49:38] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:51:29] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:53:02] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:54:32] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:56:03] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:57:52] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:59:25] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 02:59:25] [WARNING] ⏸️ PAUZA: Trening PPO Agent w toku - LSTM update postponed (memory protection)
+[2026-01-28 03:00:58] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:02:30] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:04:19] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:05:49] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:07:25] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:08:57] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:10:43] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:12:13] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:13:41] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:15:10] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:16:52] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:18:19] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:19:45] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:21:15] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:22:59] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:24:27] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:25:56] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:27:25] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:29:08] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:30:39] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:30:39] [WARNING] ⏸️ PAUZA: Trening PPO Agent w toku - LSTM update postponed (memory protection)
+[2026-01-28 03:32:07] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:33:35] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:35:17] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:36:45] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:38:12] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:39:41] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:41:27] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:42:55] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:44:23] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:45:52] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:47:36] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:49:03] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:50:29] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:52:00] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:53:45] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:55:13] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:56:39] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:58:06] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 03:59:48] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:01:18] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:01:18] [WARNING] ⏸️ PAUZA: Trening PPO Agent w toku - LSTM update postponed (memory protection)
+[2026-01-28 04:02:50] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:04:21] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:06:06] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:07:37] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:09:09] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:10:44] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:12:31] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:14:02] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:15:34] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:17:07] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:18:57] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:20:27] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:22:00] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:23:36] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:25:22] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:26:52] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:28:23] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:29:57] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:31:46] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:31:46] [WARNING] ⏸️ PAUZA: Trening PPO Agent w toku - LSTM update postponed (memory protection)
+[2026-01-28 04:33:17] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:34:47] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:36:18] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:38:04] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:39:35] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:41:10] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:42:47] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:44:34] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:46:02] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:47:28] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:49:01] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:50:52] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:52:27] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:54:02] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:55:50] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:57:21] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 04:58:48] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:00:16] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:02:01] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:02:01] [WARNING] ⏸️ PAUZA: Trening PPO Agent w toku - LSTM update postponed (memory protection)
+[2026-01-28 05:03:32] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:05:05] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:06:40] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:08:30] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:10:01] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:11:33] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:13:07] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:14:57] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:16:28] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:18:00] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:19:33] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:21:22] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:22:55] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:24:28] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:25:59] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:27:47] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:29:15] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:30:46] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:32:16] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:32:16] [WARNING] ⏸️ PAUZA: Trening PPO Agent w toku - LSTM update postponed (memory protection)
+[2026-01-28 05:34:03] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:35:35] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:37:04] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:38:37] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:40:27] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:41:58] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:43:32] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:45:05] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:46:53] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:48:25] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:49:59] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:51:33] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:53:18] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:54:47] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:56:21] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:57:53] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 05:59:40] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 06:01:16] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 06:02:49] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 06:02:49] [WARNING] ⏸️ PAUZA: Trening PPO Agent w toku - LSTM update postponed (memory protection)
+[2026-01-28 06:04:22] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 06:06:18] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 06:07:52] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 06:09:27] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 06:11:18] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 06:12:54] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 06:14:29] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 06:16:21] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 06:17:52] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 06:19:23] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 06:20:59] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 06:22:46] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 06:24:17] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 06:25:53] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 06:27:29] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 06:29:21] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 06:30:57] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 06:32:30] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 06:34:25] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 06:34:25] [WARNING] ⏸️ PAUZA: Trening PPO Agent w toku - LSTM update postponed (memory protection)
+[2026-01-28 06:35:57] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 06:37:30] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 06:38:58] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 06:40:52] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 06:42:26] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 06:43:58] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 06:45:34] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 06:47:25] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 06:49:04] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 06:50:40] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 06:52:29] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 06:54:02] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 06:55:32] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 06:57:08] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 06:59:05] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 07:00:40] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 07:02:12] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 07:04:07] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 07:05:40] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 07:05:40] [WARNING] ⏸️ PAUZA: Trening PPO Agent w toku - LSTM update postponed (memory protection)
+[2026-01-28 07:07:14] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 07:08:48] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 07:10:36] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 07:12:08] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 07:13:39] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 07:15:13] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 07:16:59] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 07:18:33] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 07:20:06] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 07:21:42] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 07:23:36] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 07:25:08] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 07:26:38] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 07:28:15] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 07:30:09] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 07:31:50] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 07:33:25] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 07:35:10] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 07:36:39] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 07:36:39] [WARNING] ⏸️ PAUZA: Trening PPO Agent w toku - LSTM update postponed (memory protection)
+[2026-01-28 07:38:12] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 07:39:46] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 07:41:36] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 07:43:09] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 07:44:42] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 07:46:17] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 07:48:11] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 07:49:44] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 07:51:25] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 07:53:21] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 07:54:59] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 07:56:35] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 07:58:30] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 08:00:04] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 08:01:36] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 08:03:29] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 08:05:02] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 08:06:33] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 08:08:05] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 08:08:05] [WARNING] ⏸️ PAUZA: Trening PPO Agent w toku - LSTM update postponed (memory protection)
+[2026-01-28 08:08:45] [INFO] 📋 LSTM Ensemble v3.4 ma pierwszeństwo - PPO będzie czekać jeśli potrzebny update
+[2026-01-28 08:08:54] [INFO] 🔒 LSTM Training Lock created (Priority 2 - HIGH). PPO will pause if active.
+[2026-01-28 08:09:50] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 08:11:20] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 08:12:53] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 08:14:25] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 08:16:11] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 08:17:45] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 08:19:19] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 08:20:51] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 08:22:37] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 08:24:12] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 08:25:47] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 08:27:21] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 08:29:19] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 08:30:57] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 08:32:34] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 08:34:29] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 08:36:06] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 08:37:47] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 08:39:35] [INFO] ⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami
+[2026-01-28 08:51:17] [INFO] 🔓 LSTM Training Lock removed. PPO can resume.
+[2026-01-28 08:51:19] [INFO] 📋 LSTM Ensemble v3.4 ma pierwszeństwo - PPO będzie czekać jeśli potrzebny update
+[2026-01-28 08:51:28] [INFO] 🔒 LSTM Training Lock created (Priority 2 - HIGH). PPO will pause if active.
+[2026-01-28 09:18:53] [INFO] 🔓 LSTM Training Lock removed. PPO can resume.
+[2026-01-28 09:21:24] [INFO] 📋 LSTM Ensemble v3.4 ma pierwszeństwo - PPO będzie czekać jeśli potrzebny update
+[2026-01-28 09:21:33] [INFO] 🔒 LSTM Training Lock created (Priority 2 - HIGH). PPO will pause if active.
+[2026-01-28 10:03:15] [INFO] 🔓 LSTM Training Lock removed. PPO can resume.
+[2026-01-28 10:03:18] [INFO] 📋 LSTM Ensemble v3.4 ma pierwszeństwo - PPO będzie czekać jeśli potrzebny update
+[2026-01-28 10:03:26] [INFO] 🔒 LSTM Training Lock created (Priority 2 - HIGH). PPO will pause if active.
+[2026-01-28 10:44:30] [INFO] 🔓 LSTM Training Lock removed. PPO can resume.
+[2026-01-28 10:44:32] [INFO] 📋 LSTM Ensemble v3.4 ma pierwszeństwo - PPO będzie czekać jeśli potrzebny update
+[2026-01-28 10:44:40] [INFO] 🔒 LSTM Training Lock created (Priority 2 - HIGH). PPO will pause if active.
+[2026-03-10 10:02:39] [INFO] 📋 LSTM Ensemble v3.4 ma pierwszeństwo - PPO będzie czekać jeśli potrzebny update
+[2026-03-10 10:02:47] [INFO] 🔒 LSTM Training Lock created (Priority 2 - HIGH). PPO will pause if active.
+[2026-03-10 10:02:50] [INFO] ℹ️ No RL model found. Train first with: python3.12 src/process_rl_trainer.py
+[2026-03-10 10:32:10] [INFO] 🔓 LSTM Training Lock removed. PPO can resume.
+[2026-03-10 10:32:40] [INFO] 📋 LSTM Ensemble v3.4 ma pierwszeństwo - PPO będzie czekać jeśli potrzebny update
+[2026-03-10 10:32:49] [INFO] 🔒 LSTM Training Lock created (Priority 2 - HIGH). PPO will pause if active.
+[2026-03-10 11:13:02] [INFO] 🔓 LSTM Training Lock removed. PPO can resume.
+[2026-03-10 11:13:06] [INFO] 📋 LSTM Ensemble v3.4 ma pierwszeństwo - PPO będzie czekać jeśli potrzebny update
+[2026-03-10 11:13:39] [INFO] 🔒 LSTM Training Lock created (Priority 2 - HIGH). PPO will pause if active.
+[2026-03-10 11:39:26] [INFO] 🔓 LSTM Training Lock removed. PPO can resume.
+[2026-03-10 11:40:16] [INFO] 📊 PPO Trainer Configuration:
+[2026-03-10 11:40:25] [SUCCESS] 🚀 RL Trainer initialized for BTC/USDT
+[2026-03-10 11:40:25] [SUCCESS] 🚀 STARTING RL AGENT TRAINING PIPELINE (with OOM protection)
+[2026-03-10 11:40:27] [SUCCESS] ✅ Using database data for PPO training: 259,199 candles (179/180 days)

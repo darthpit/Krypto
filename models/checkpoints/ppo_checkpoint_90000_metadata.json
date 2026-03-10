@@ -1,0 +1,11 @@
+{
+  "timesteps": 90000,
+  "total_timesteps": 200000,
+  "progress_pct": 45.0,
+  "episodes": 0,
+  "winning_episodes": 0,
+  "win_rate": 0.0,
+  "cumulative_reward": 0.0,
+  "saved_at": "2026-01-27T21:13:48.120000",
+  "checkpoint_file": "ppo_checkpoint_90000.zip"
+}

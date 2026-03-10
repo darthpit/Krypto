@@ -1,0 +1,27 @@
+{
+    "lstm": {
+        "name": "LSTM Ensemble v3.4",
+        "status": "IDLE",
+        "progress": 100,
+        "last_trained": "2026-03-10 11:39:26",
+        "next_training": "2026-03-17 11:39:26",
+        "accuracy": 50.7,
+        "data_days": 180,
+        "message": "Model aktywny i gotowy",
+        "model_type": "predictor",
+        "training_duration_avg": "30-45 min"
+    },
+    "rl_agent": {
+        "name": "PPO Agent (Sniper Mode)",
+        "status": "TRAINING",
+        "progress": 25,
+        "last_trained": "2026-01-26 23:33:52",
+        "next_training": "2026-02-02 23:33:52",
+        "accuracy": 25.0,
+        "data_days": 30,
+        "message": "Trenowanie wewnętrznego modelu LSTM...",
+        "model_type": "decision_maker",
+        "training_duration_avg": "2-6 hours",
+        "training_started_at": "2026-03-10T11:40:26.284412"
+    }
+}
