@@ -1,0 +1,31 @@
+# --- CORE DATA PROCESSING ---
+pandas>=2.0.0
+numpy>=1.24.0
+requests>=2.31.0
+python-dotenv>=1.0.0
+python-dateutil>=2.8.2
+pytz>=2023.3
+scipy>=1.10.0
+
+# --- DATABASE & IPC ---
+redis>=5.0.0
+psycopg2-binary>=2.9.9
+
+# --- ASYNC & UTILS ---
+aiohttp>=3.9.0
+colorama>=0.4.6
+tqdm>=4.66.0
+joblib>=1.0.0
+
+# --- TRADING & TECHNICAL ANALYSIS ---
+ccxt>=4.0.0
+ta>=0.11.0
+pandas-ta>=0.3.14b0
+yfinance>=0.2.0
+
+# --- MACHINE LEARNING & RL SUPPORT ---
+scikit-learn>=1.0.0
+stable-baselines3>=2.0.0
+gymnasium>=0.29.0
+shimmy>=0.2.1
+psutil>=5.9.0  # Memory monitoring for OOM protection

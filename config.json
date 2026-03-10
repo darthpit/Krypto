@@ -1,0 +1,54 @@
+{
+  "assets": {
+    "blacklist": [
+      "FILECOIN",
+      "TRUMPOFFICIAL",
+      "SILVER",
+      "PUMPFUN"
+    ]
+  },
+  "database": {
+      "type": "postgres",
+      "host": "postgres",
+      "port": 5432,
+      "user": "postgres",
+      "password": "password",
+      "dbname": "mexc_futures_db"
+  },
+  "exchange": {
+      "id": "mexc",
+      "api_key": "mx0vglEbqQqS0YOe0P",
+      "secret_key": "fa640a60649242589f8831b31ec0f2a7",
+      "futures_enabled": true
+  },
+  "binance": {
+      "api_key": "oAoQJG25F7C8SF8RSnHsbyMxjMSh4IKdnaiGjMSh0gikPEEGgMwijcnqvfBgsL5Q",
+      "secret_key": "8Cvb394KSSaT1HC38MSbbfjxttOcqBqbznZMRPENbvpLNFBYkyRVgT8fJy3vMWpV"
+  },
+  "trading": {
+      "mode": "PAPER",
+      "target_symbol": "BTC/USDT",
+      "leverage": 20,
+      "trade_allocation_percent": 0.10,
+      "fee_percentage": 0.06
+  },
+  "timeframe": "1m",
+  "lookback_days": 180,
+  "training": {
+    "lstm_lookback": 180,
+    "prediction_horizon": 30
+  },
+  "risk_management": {
+      "sl_atr_mult": 2.0,
+      "tp_atr_mult": 4.0,
+      "max_open_positions": 1,
+      "recovery_mode": true,
+      "min_profit_to_lock": 6.0,
+      "trailing_activation": 3.0,
+      "hard_liquidation_buffer": 0.85,
+      "emergency_exit_threshold": -3.0,
+      "profit_snatcher_enabled": true,
+      "recovery_ai_confidence_threshold": 0.75,
+      "dual_leg_hedge_enabled": true
+  }
+}

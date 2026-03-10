@@ -1,0 +1,74 @@
+services:
+  redis:
+    image: redis:7.2-alpine
+    container_name: pilot_redis
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    networks:
+      - pilot_net
+
+  postgres:
+    image: postgres:15
+    container_name: pilot_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mexc_futures_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - pilot_net
+
+  bot:
+    build: .
+    container_name: pilot_bot
+    runtime: nvidia
+    environment:
+      - NVIDIA_VISIBLE_DEVICES=all
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - XLA_FLAGS=--xla_gpu_cuda_data_dir=/usr/local/cuda # Required for TensorFlow JIT on GPU
+      # MEMORY OPTIMIZATION for 180-day training (TensorFlow/PyTorch)
+      - TF_FORCE_GPU_ALLOW_GROWTH=true  # Prevent TensorFlow from allocating all GPU memory
+      - TF_GPU_THREAD_MODE=gpu_private  # Optimize GPU threading
+      - OMP_NUM_THREADS=8  # Limit CPU threads (adjust based on your CPU cores)
+    volumes:
+      - .:/app
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./models:/app/models
+    depends_on:
+      - redis
+      - postgres
+    restart: unless-stopped
+    networks:
+      - pilot_net
+    # MEMORY LIMITS for Docker container (64GB RAM available)
+    mem_limit: 48g  # Reserve 48GB for bot (leaves 16GB for OS + other services)
+    memswap_limit: 48g  # Disable swap (swap=mem_limit means no swap)
+    shm_size: 8g  # Shared memory for PyTorch DataLoader workers
+    deploy:
+      resources:
+        limits:
+          memory: 48G  # Hard limit
+        reservations:
+          memory: 16G  # Minimum reserved
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+networks:
+  pilot_net:
+    driver: bridge
+
+volumes:
+  redis_data:
+  postgres_data:
