@@ -1,27 +1,28 @@
 {
     "lstm": {
         "name": "LSTM Ensemble v3.4",
-        "status": "IDLE",
-        "progress": 100,
-        "last_trained": "2026-03-10 11:39:26",
-        "next_training": "2026-03-17 11:39:26",
-        "accuracy": 50.7,
+        "status": "TRAINING",
+        "progress": 10,
+        "last_trained": "2026-03-20 22:36:19",
+        "next_training": "2026-03-27 22:36:19",
+        "accuracy": 51.14,
         "data_days": 180,
-        "message": "Model aktywny i gotowy",
+        "message": "Pobieranie danych historycznych...",
         "model_type": "predictor",
-        "training_duration_avg": "30-45 min"
+        "training_duration_avg": "30-45 min",
+        "training_started_at": "2026-03-22T10:51:49.840091"
     },
     "rl_agent": {
         "name": "PPO Agent (Sniper Mode)",
-        "status": "TRAINING",
-        "progress": 25,
+        "status": "ERROR",
+        "progress": 0,
         "last_trained": "2026-01-26 23:33:52",
         "next_training": "2026-02-02 23:33:52",
         "accuracy": 25.0,
         "data_days": 30,
-        "message": "Trenowanie wewnętrznego modelu LSTM...",
+        "message": "❌ Błąd: CRITICAL: Trying to log data to tensorboard but tensorboard is not installed.",
         "model_type": "decision_maker",
         "training_duration_avg": "2-6 hours",
-        "training_started_at": "2026-03-10T11:40:26.284412"
+        "training_started_at": "2026-03-20T22:36:42.961584"
     }
 }

@@ -17,8 +17,8 @@
   },
   "exchange": {
       "id": "mexc",
-      "api_key": "mx0vglEbqQqS0YOe0P",
-      "secret_key": "fa640a60649242589f8831b31ec0f2a7",
+      "api_key": "ENV_MEXC_API_KEY",
+      "secret_key": "ENV_MEXC_API_SECRET",
       "futures_enabled": true
   },
   "binance": {
@@ -45,7 +45,7 @@
       "recovery_mode": true,
       "min_profit_to_lock": 6.0,
       "trailing_activation": 3.0,
-      "hard_liquidation_buffer": 0.85,
+      "hard_liquidation_buffer": 0.40,
       "emergency_exit_threshold": -3.0,
       "profit_snatcher_enabled": true,
       "recovery_ai_confidence_threshold": 0.75,

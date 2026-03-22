@@ -30,11 +30,14 @@ class MatrixScout:
         Fetches top assets by volume from the exchange to scale the matrix.
         Updates self.tickers with the new list.
         """
+        hardcoded_top_10 = [
+            'ETH/USDT', 'SOL/USDT', 'BNB/USDT', 'XRP/USDT', 'ADA/USDT',
+            'AVAX/USDT', 'LINK/USDT', 'MATIC/USDT', 'DOGE/USDT', 'DOT/USDT'
+        ]
         try:
             log(f"MatrixScout: Fetching top {limit} assets by volume...", "INFO")
             if not self.data_provider.exchange:
-                log("MatrixScout: Exchange not initialized.", "ERROR")
-                return
+                raise ValueError("Exchange not initialized")
 
             # Fetch all tickers
             tickers = self.data_provider.exchange.fetch_tickers()
@@ -61,10 +64,12 @@ class MatrixScout:
                 self.tickers = top_assets
                 log(f"MatrixScout: Updated tickers list with {len(self.tickers)} assets.", "SUCCESS")
             else:
-                log("MatrixScout: No assets found.", "WARNING")
+                raise ValueError("Pusta lista tickerów od giełdy")
 
         except Exception as e:
-            log(f"MatrixScout fetch_top_assets Error: {e}", "ERROR")
+            from src.utils.logger import log
+            log(f"⚠️ Błąd pobierania Top rynków: {e}. Używam hardkodowanego TOP 10 (Fallback).", "WARNING")
+            self.tickers = hardcoded_top_10
 
     def calculate_correlation_matrix(self):
         try:
@@ -160,60 +165,64 @@ class DeepScout:
             gems = []
 
             for ticker in self.tickers:
-                df = self.data_provider.fetch_candles(ticker, timeframe='4h', limit=100)
+                try:
+                    df = self.data_provider.fetch_candles(ticker, timeframe='4h', limit=100)
 
-                # Validation check to prevent NoneType crash
-                if df is None or df.empty:
+                    # Validation check to prevent NoneType crash
+                    if df is None or df.empty:
+                        continue
+
+                    # Indicators
+                    # ADX
+                    adx_df = ta.adx(df['high'], df['low'], df['close'])
+                    adx = adx_df['ADX_14'].iloc[-1] if adx_df is not None and 'ADX_14' in adx_df.columns else 0
+                    pos_di = adx_df['DMP_14'].iloc[-1] if adx_df is not None and 'DMP_14' in adx_df.columns else 0
+                    neg_di = adx_df['DMN_14'].iloc[-1] if adx_df is not None and 'DMN_14' in adx_df.columns else 0
+
+                    # Sanitize ADX
+                    if np.isnan(adx) or np.isinf(adx): adx = 0
+                    if np.isnan(pos_di) or np.isinf(pos_di): pos_di = 0
+                    if np.isnan(neg_di) or np.isinf(neg_di): neg_di = 0
+
+                    # RSI
+                    rsi_series = ta.rsi(df['close'])
+                    rsi = rsi_series.iloc[-1] if rsi_series is not None and not rsi_series.empty else 0
+                    if np.isnan(rsi) or np.isinf(rsi): rsi = 0
+
+                    # Trend
+                    trend = "NEUTRAL"
+                    if adx > 25:
+                        trend = "BULLISH" if pos_di > neg_di else "BEARISH"
+                    else:
+                        trend = "RANGE"
+
+                    # Volatility (ATR / Price)
+                    atr_series = ta.atr(df['high'], df['low'], df['close'])
+                    atr = atr_series.iloc[-1] if atr_series is not None and not atr_series.empty else 0
+                    price = df['close'].iloc[-1]
+                    volatility = (atr / price) * 100 if price > 0 else 0
+
+                    # Volume Change
+                    vol_ma = df['volume'].rolling(20).mean().iloc[-1]
+                    curr_vol = df['volume'].iloc[-1]
+                    vol_status = "HIGH" if curr_vol > vol_ma * 1.5 else "NORMAL"
+
+                    # Ensure all floats are valid
+                    price = 0.0 if np.isnan(price) or np.isinf(price) else price
+                    volatility = 0.0 if np.isnan(volatility) or np.isinf(volatility) else volatility
+
+                    gems.append({
+                        "ticker": ticker,
+                        "price": float(price),
+                        "trend": trend,
+                        "adx": float(round(adx, 2)),
+                        "rsi": float(round(rsi, 2)),
+                        "volatility": float(round(volatility, 2)),
+                        "volume": vol_status
+                    })
+                except Exception as e:
+                    log(f"DeepScout Error while scanning {ticker}: {e}", "WARNING")
                     continue
-
-                # Indicators
-                # ADX
-                adx_df = ta.adx(df['high'], df['low'], df['close'])
-                adx = adx_df['ADX_14'].iloc[-1] if adx_df is not None and 'ADX_14' in adx_df.columns else 0
-                pos_di = adx_df['DMP_14'].iloc[-1] if adx_df is not None and 'DMP_14' in adx_df.columns else 0
-                neg_di = adx_df['DMN_14'].iloc[-1] if adx_df is not None and 'DMN_14' in adx_df.columns else 0
-
-                # Sanitize ADX
-                if np.isnan(adx) or np.isinf(adx): adx = 0
-                if np.isnan(pos_di) or np.isinf(pos_di): pos_di = 0
-                if np.isnan(neg_di) or np.isinf(neg_di): neg_di = 0
-
-                # RSI
-                rsi_series = ta.rsi(df['close'])
-                rsi = rsi_series.iloc[-1] if rsi_series is not None and not rsi_series.empty else 0
-                if np.isnan(rsi) or np.isinf(rsi): rsi = 0
-
-                # Trend
-                trend = "NEUTRAL"
-                if adx > 25:
-                    trend = "BULLISH" if pos_di > neg_di else "BEARISH"
-                else:
-                    trend = "RANGE"
-
-                # Volatility (ATR / Price)
-                atr_series = ta.atr(df['high'], df['low'], df['close'])
-                atr = atr_series.iloc[-1] if atr_series is not None and not atr_series.empty else 0
-                price = df['close'].iloc[-1]
-                volatility = (atr / price) * 100 if price > 0 else 0
-
-                # Volume Change
-                vol_ma = df['volume'].rolling(20).mean().iloc[-1]
-                curr_vol = df['volume'].iloc[-1]
-                vol_status = "HIGH" if curr_vol > vol_ma * 1.5 else "NORMAL"
-
-                # Ensure all floats are valid
-                price = 0.0 if np.isnan(price) or np.isinf(price) else price
-                volatility = 0.0 if np.isnan(volatility) or np.isinf(volatility) else volatility
-
-                gems.append({
-                    "ticker": ticker,
-                    "price": float(price),
-                    "trend": trend,
-                    "adx": float(round(adx, 2)),
-                    "rsi": float(round(rsi, 2)),
-                    "volatility": float(round(volatility, 2)),
-                    "volume": vol_status
-                })
 
             # --- WRAPPER TRANSFORMATION ---
             result = {

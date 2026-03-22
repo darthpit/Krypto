@@ -1,7 +1,8 @@
 {
-  "last_training_time": "2026-03-10T11:40:06.190101+00:00",
+  "last_training_time": "2026-03-20T22:09:19.731774+00:00",
   "training_count": 1,
   "data_months": 1,
-  "pid": 3022,
-  "status": "running"
+  "pid": 454568,
+  "status": "failed",
+  "completed_at": "2026-03-20T22:57:27.012971"
 }

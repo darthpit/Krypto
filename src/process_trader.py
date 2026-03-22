@@ -16,6 +16,8 @@ from src.logic.risk_oracle import RiskOracle
 from src.logic.liquidity_guard import LiquidityGuard
 from src.logic.scout import MatrixScout, DeepScout
 from src.intelligence.psnd_engine import PSNDEngine
+from src.logic.behavioral_guard import BehavioralGuard
+from src.logic.anti_fomo import AntiFOMOModule
 from src.utils.models import load_model
 from src.utils.data_provider import MarketDataProvider
 from src.utils.logger import log
@@ -42,7 +44,7 @@ class TraderProcess(multiprocessing.Process):
         # NOWE: Scheduling dla różnych operacji
         self.data_fetch_interval = 60      # Co 1 minutę: Fetch nowych świeczek
         self.gap_check_interval = 300      # Co 5 minut: Gap detection & filling
-        self.lstm_retrain_interval = 1800  # Co 30 minut: Re-train LSTM only (quick update)
+        self.lstm_retrain_interval = 21600 # Co 6 godzin: Re-train LSTM only (quick update)
         # RL Agent: Train OFFLINE, raz w tygodniu (process_rl_trainer.py)
         
         # Timeframe dla świeczek (ZMIENIONE Z 15m NA 1m)
@@ -73,6 +75,17 @@ class TraderProcess(multiprocessing.Process):
         self.liquidity_guard = LiquidityGuard(self.data_provider)
         self.scout = MatrixScout(self.data_provider) # Correlations
         self.deep_scout = DeepScout(self.data_provider) # Market Breadth
+
+        # ═══════════════ BEHAVIORAL SAFETY GUARDS ═══════════════
+        self.behavioral_guard = BehavioralGuard(self.db)
+        self.anti_fomo = AntiFOMOModule(self.db)
+        log("🛡️ BehavioralGuard + AntiFOMO ACTIVE", "SUCCESS")
+
+        # Daily Circuit Breaker
+        self._daily_loss_limit_pct = 5.0
+        self._circuit_breaker_triggered = False
+        self._last_cb_reset_day = None
+        self._last_psnd_score = 0.5  # Cache PSND score dla BehavioralGuard
 
         # Load Model
         self._load_latest_model()
@@ -147,6 +160,13 @@ class TraderProcess(multiprocessing.Process):
                         # Save fresh candles to database
                         self._save_candles(df, timeframe=self.timeframe)
                         
+                        # PSND Update
+                        try:
+                            psnd_result = self.psnd_engine.analyze(self.ticker, df)
+                            self._last_psnd_score = psnd_result.get('confidence', 0.5)
+                        except Exception as e:
+                            pass
+
                         # C. Predykcja AI
                         signal, confidence, prediction = self._get_ai_prediction(df)
                         # cache for fast loop publishing
@@ -285,43 +305,28 @@ class TraderProcess(multiprocessing.Process):
                 # ═══════════════════════════════════════════════════════════════
                 # RL Agent: Trained OFFLINE, raz w tygodniu (process_rl_trainer.py)
                 # 
-                # ⚠️ CRITICAL: Block LSTM update if PPO is training (OOM protection)
+                # ⚠️ NO LONGER CRITICAL: Allow LSTM update if PPO is training
                 # ═══════════════════════════════════════════════════════════════
                 if current_time - last_lstm_retrain_time > self.lstm_retrain_interval:
                     last_lstm_retrain_time = current_time
                     
-                    # Check if PPO training is active (lockfile exists)
-                    ppo_is_training = os.path.exists(self.rl_training_lockfile)
-                    self._ppo_training_mode = ppo_is_training
-                    
-                    if ppo_is_training:
-                        # PPO is training, SKIP LSTM update to prevent OOM
-                        if current_time - self._last_ppo_warning > 600:  # Log every 10 min
-                            log("⏸️ PAUZA: Trening PPO Agent w toku - LSTM update postponed (memory protection)", "WARNING")
-                            log("💡 Bot kontynuuje zarządzanie istniejącymi pozycjami (TP/SL/Trailing)", "INFO")
-                            self._last_ppo_warning = current_time
+                    log("🔄 LSTM quick update (6-hour cycle)...", "INFO")
+                    try:
+                        self._lstm_quick_update()  # Only LSTM, NOT RL!
                         
-                        # Update UI status
-                        self._update_ppo_pause_status()
-                    else:
-                        # Normal operation
-                        log("🔄 LSTM quick update (30-minute cycle)...", "INFO")
-                        try:
-                            self._lstm_quick_update()  # Only LSTM, NOT RL!
-                            
-                            # Update pulse_30m with normal status
-                            now_utc = datetime.datetime.now(datetime.timezone.utc)
-                            normal_status = {
-                                "status": "running",
-                                "details": {"action": "LSTM Model Updated"},
-                                "last_run": now_utc.isoformat()
-                            }
-                            self.db.execute(
-                                "INSERT INTO system_status (key, value, updated_at) VALUES ('pulse_30m', ?, ?) ON CONFLICT (key) DO UPDATE SET value=EXCLUDED.value, updated_at=EXCLUDED.updated_at",
-                                (json.dumps(normal_status), now_utc.isoformat())
-                            )
-                        except Exception as e:
-                            log(f"LSTM update error: {e}", "ERROR")
+                        # Update pulse_30m with normal status
+                        now_utc = datetime.datetime.now(datetime.timezone.utc)
+                        normal_status = {
+                            "status": "running",
+                            "details": {"action": "LSTM Model Updated"},
+                            "last_run": now_utc.isoformat()
+                        }
+                        self.db.execute(
+                            "INSERT INTO system_status (key, value, updated_at) VALUES ('pulse_30m', ?, ?) ON CONFLICT (key) DO UPDATE SET value=EXCLUDED.value, updated_at=EXCLUDED.updated_at",
+                            (json.dumps(normal_status), now_utc.isoformat())
+                        )
+                    except Exception as e:
+                        log(f"LSTM update error: {e}", "ERROR")
                 
                 # ═══════════════════════════════════════════════════════════════
                 # 6. RL PREDICTIONS (CO 30 MINUT) - Inference only!
@@ -870,146 +875,128 @@ class TraderProcess(multiprocessing.Process):
     def _execute_strategy(self, df, signal, confidence, prediction, global_bias):
         current_price = float(df['close'].iloc[-1])
         ticker = self.ticker
-        
-        # ═══════════════════════════════════════════════════════════════
-        # KROK 1: SPRAWDŹ I ZAMKNIJ OTWARTE POZYCJE (TP/SL/Trailing/Reversal)
-        # ═══════════════════════════════════════════════════════════════
-        # ZAWSZE wykonuj, nawet podczas PPO training (zarządzanie pozycjami!)
-        self._check_and_close_positions(df, signal, confidence, current_price)
-        
-        # ═══════════════════════════════════════════════════════════════
-        # KROK 1.5: PPO TRAINING MODE - Block new entries
-        # ═══════════════════════════════════════════════════════════════
-        if self._ppo_training_mode:
-            # PPO training is active, SKIP new entries (but keep managing positions!)
-            log("⏸️ PAUZA: PPO Training aktywny - brak nowych wejść, tylko zarządzanie pozycjami", "INFO")
-            self._save_live_context(
-                current_price, 
-                prediction, 
-                "PPO_PAUSE", 
-                confidence, 
-                "MONITORING"
-            )
-            return  # Exit early, don't open new positions
 
-        # ═══════════════════════════════════════════════════════════════
-        # KROK 2: VETO SYSTEM (Matrix Bias Check) - Z OVERRIDE DLA WYSOKIEGO CONFIDENCE
-        # ═══════════════════════════════════════════════════════════════
-        # IMPORTANT: Przy confidence > 85%, AI override'uje Matrix Bias!
-        # Powód: AI z 85%+ confidence jest bardziej wiarygodny niż Market Breadth
-        
-        veto_threshold = 0.85  # Override VETO powyżej tego confidence
-        
+        # KROK 1: ZARZĄDZANIE OTWARTYMI POZYCJAMI
+        self._check_and_close_positions(df, signal, confidence, current_price)
+
+        # KROK 1.5: PPO TRAINING MODE
+        if getattr(self, '_ppo_training_mode', False):
+            log("⏸️ PAUZA: PPO Training aktywny — brak nowych wejść", "INFO")
+            self._save_live_context(current_price, prediction, "PPO_PAUSE", confidence, "MONITORING")
+            return
+
+        # KROK 2: VETO SYSTEM (Matrix Bias Check)
+        veto_threshold = 0.85
         if confidence <= veto_threshold:
-            # Logika VETO (tylko dla confidence <= 85%)
             if signal == "LONG" and global_bias == "BEARISH":
-                log(f"⛔ Matrix Bias BEARISH -> Vetoing LONG (Conf: {confidence:.2%} <= {veto_threshold:.0%})", "INFO")
+                log(f"⛔ Matrix Bias BEARISH → Vetoing LONG (Conf: {confidence:.2%})", "INFO")
                 self._save_live_context(current_price, prediction, "VETO_LONG", confidence, "NEUTRAL")
                 return
-
             if signal == "SHORT" and global_bias == "BULLISH":
-                log(f"⛔ Matrix Bias BULLISH -> Vetoing SHORT (Conf: {confidence:.2%} <= {veto_threshold:.0%})", "INFO")
+                log(f"⛔ Matrix Bias BULLISH → Vetoing SHORT (Conf: {confidence:.2%})", "INFO")
                 self._save_live_context(current_price, prediction, "VETO_SHORT", confidence, "NEUTRAL")
                 return
         else:
-            # HIGH CONFIDENCE OVERRIDE - ignoruj Matrix Bias
             if (signal == "LONG" and global_bias == "BEARISH") or (signal == "SHORT" and global_bias == "BULLISH"):
-                log(f"💪 HIGH CONFIDENCE OVERRIDE! {signal} @ {confidence:.2%} > {veto_threshold:.0%} - ignoring Bias={global_bias}", "SUCCESS")
-                # Kontynuuj mimo przeciwnego bias
-        
-        # ═══════════════════════════════════════════════════════════════════
-        # KROK 3: RL AGENT DECISION (FAZA 4) - Optional Final Layer
-        # ═══════════════════════════════════════════════════════════════════
-        # Jeśli RL Agent jest dostępny, używamy go jako finalnego decision layera
-        # RL Agent dostaje:
-        # - Technical indicators (19 features)
-        # - LSTM prediction & confidence
-        # - Portfolio state
-        # I decyduje: 0=HOLD, 1=LONG, 2=SHORT, 3=CLOSE
-        
-        if self.use_rl and self.rl_agent is not None:
+                log(f"💪 HIGH CONFIDENCE OVERRIDE! {signal} @ {confidence:.2%} > {veto_threshold:.0%} — ignoruję Bias", "SUCCESS")
+
+        # KROK 3: RL AGENT DECISION
+        if getattr(self, 'use_rl', False) and getattr(self, 'rl_agent', None) is not None:
             try:
-                # Prepare observation for RL Agent
                 observation = self._prepare_rl_observation(df, prediction, confidence)
-                
-                # Get RL decision
                 rl_action = self.rl_agent.predict(observation)
-                
-                # Map action to signal
                 rl_actions = {0: "HOLD", 1: "LONG", 2: "SHORT", 3: "CLOSE"}
-                rl_signal = rl_actions.get(int(rl_action), "HOLD")
-                
-                log(f"🧠 RL Agent Decision: {rl_signal} (LSTM suggested: {signal} @ {confidence:.2%})", "INFO")
-                
-                # RL overrides LSTM signal
+                # Handle tuple returned by SB3 predict()
+                rl_action_val = rl_action[0] if isinstance(rl_action, tuple) else rl_action
+                rl_signal = rl_actions.get(int(rl_action_val), "HOLD")
+
+                log(f"🧠 RL Agent Decision: {rl_signal} (LSTM: {signal} @ {confidence:.2%})", "INFO")
+
                 if rl_signal == "HOLD":
-                    log(f"🛑 RL Agent: HOLD - Skipping trade despite LSTM signal", "INFO")
                     self._save_live_context(current_price, prediction, "RL_HOLD", confidence, signal)
                     return
                 elif rl_signal == "CLOSE":
-                    # RL wants to close position
                     current_position = self.exec_manager.get_position(ticker)
                     if current_position and current_position.get('amount', 0) != 0:
                         side = "LONG" if current_position['amount'] > 0 else "SHORT"
-                        amount = abs(current_position['amount'])
-                        log(f"🧠 RL Agent: CLOSE {side} position", "INFO")
-                        self.exec_manager.execute_order(f"CLOSE_{side.upper()}", ticker, amount, current_price)
+                        self.exec_manager.execute_order(f"CLOSE_{side.upper()}", ticker, abs(current_position['amount']), current_price)
                     return
                 else:
-                    # RL wants to LONG or SHORT
-                    signal = rl_signal  # Override LSTM signal
-                    log(f"🧠 RL Agent: Opening {signal} (overriding LSTM if different)", "SUCCESS")
-                    
-            except Exception as e:
-                log(f"⚠️ RL Agent error: {e}, falling back to LSTM signal", "WARNING")
-                traceback.print_exc()
+                    signal = rl_signal
 
-        # Trading Logic - FUTURES (LONG/SHORT)
-        if confidence > 0.60:  # Threshold for entry (increased to 60% for better quality)
-            log(f"🎯 AI Intent: {signal} (Conf: {confidence:.2%}) | Bias: {global_bias}", "INFO")
-            
-            # Check current position
-            current_position = self.exec_manager.get_position(ticker)
-            
-            # Calculate position size (10% of balance with leverage)
+            except Exception as e:
+                log(f"⚠️ RL Agent error: {e}, fallback to LSTM", "WARNING")
+
+        # KROK 3.5: BEHAVIORAL GUARD + ANTI-FOMO (NOWA WARSTWA)
+        if self._check_daily_circuit_breaker():
+            log(f"🛑 CIRCUIT BREAKER: Dzienny limit straty ({self._daily_loss_limit_pct}%) osiągnięty.", "ERROR")
+            self._save_live_context(current_price, prediction, "CIRCUIT_BREAKER", confidence, "HALTED")
+            return
+
+        signal_type = "BUY" if signal == "LONG" else ("SELL" if signal == "SHORT" else "NEUTRAL")
+        psnd_val = getattr(self, '_last_psnd_score', 0.5)
+
+        guard_ok, guard_reason, guard_modifier = self.behavioral_guard.check_all(
+            ticker=ticker, df=df, signal_type=signal_type, psnd_score=psnd_val
+        )
+
+        if not guard_ok:
+            log(f"🛡️ BehavioralGuard BLOKUJE: {guard_reason}", "WARNING")
+            self._save_live_context(current_price, prediction, f"GUARD_{signal}", confidence, "BLOCKED")
+            return
+
+        if signal == "LONG":
+            pump_check = self.anti_fomo.check_pump_dump(ticker, df)
+            if pump_check.get('status') == 'HALT':
+                log(f"🚫 AntiFOMO: {pump_check.get('reason', 'Pump detected')} — blokuję LONG", "WARNING")
+                self._save_live_context(current_price, prediction, "ANTI_FOMO", confidence, "BLOCKED")
+                return
+        elif signal == "SHORT":
+            #TODO: Replace fear_greed_index with real API data
+            panic_check = self.anti_fomo.check_panic_sell(ticker, df, fear_greed_index=50)
+            if panic_check.get('status') == 'HALT':
+                log(f"🚫 AntiFOMO: {panic_check.get('reason', 'Panic detected')} — blokuję SHORT", "WARNING")
+                self._save_live_context(current_price, prediction, "ANTI_PANIC", confidence, "BLOCKED")
+                return
+
+        _size_modifier = guard_modifier.get('size_mult', 1.0)
+        if _size_modifier < 1.0:
+            log(f"⚠️ Revenge Guard: pozycja zmniejszona do {_size_modifier*100:.0f}%", "WARNING")
+
+        # KROK 4: TRADING LOGIC (EGZEKUCJA)
+        if confidence > 0.60:
+            current_position_val = self.exec_manager.get_position(ticker)
+            if isinstance(current_position_val, dict):
+                current_position = current_position_val.get('amount', 0)
+            else:
+                current_position = current_position_val
+
             balance = self.exec_manager.get_balance("USDT")
-            trade_allocation = 0.10  # 10% per trade
-            margin = balance * trade_allocation
-            amount = (margin * self.exec_manager.leverage) / current_price
-            amount = round(amount, 6)  # Round to 6 decimals
-            
-            if amount < 0.001:  # Minimum amount check
-                log(f"⚠️ Position size too small: {amount}", "WARNING")
+            trade_allocation = 0.10
+            margin = balance * trade_allocation * _size_modifier
+            amount = round((margin * getattr(self.exec_manager, 'leverage', 1)) / current_price, 6)
+
+            if amount < 0.001:
                 self._save_live_context(current_price, prediction, signal, confidence, "WAITING")
                 return
-            
-            # Execute trade logic
+
             executed = False
-            
             if signal == "LONG":
-                if current_position < 0:  # Close SHORT first
-                    log(f"📤 Closing SHORT position before LONG", "INFO")
+                if current_position < 0:
                     self.exec_manager.execute_order("CLOSE_SHORT", ticker, abs(current_position), current_price)
                     current_position = 0
-                
-                if current_position == 0:  # Open LONG
-                    log(f"📈 Opening LONG: {amount} @ ${current_price:.2f} (Margin: ${margin:.2f}, Leverage: {self.exec_manager.leverage}x)", "SUCCESS")
+                if current_position == 0:
                     executed = self.exec_manager.execute_order("LONG", ticker, amount, current_price)
-                    
             elif signal == "SHORT":
-                if current_position > 0:  # Close LONG first
-                    log(f"📤 Closing LONG position before SHORT", "INFO")
+                if current_position > 0:
                     self.exec_manager.execute_order("CLOSE_LONG", ticker, abs(current_position), current_price)
                     current_position = 0
-                
-                if current_position == 0:  # Open SHORT
-                    log(f"📉 Opening SHORT: {amount} @ ${current_price:.2f} (Margin: ${margin:.2f}, Leverage: {self.exec_manager.leverage}x)", "SUCCESS")
+                if current_position == 0:
                     executed = self.exec_manager.execute_order("SHORT", ticker, amount, current_price)
-            
-            position_state = "IN_POSITION" if executed else "WAITING"
-            self._save_live_context(current_price, prediction, signal, confidence, position_state)
+
+            state = "IN_POSITION" if executed else "WAITING"
+            self._save_live_context(current_price, prediction, signal, confidence, state)
         else:
-            log(f"⏸️ Signal {signal} (Conf: {confidence:.2%}) below threshold (60%)", "INFO")
             self._save_live_context(current_price, prediction, signal, confidence, "WAITING")
 
     def _prepare_rl_observation(self, df: pd.DataFrame, lstm_prediction: float, lstm_confidence: float) -> np.ndarray:
@@ -2609,3 +2596,45 @@ class TraderProcess(multiprocessing.Process):
                 'predicted_price': current_price,
                 'direction': 0
             }
+
+    def _check_daily_circuit_breaker(self) -> bool:
+        try:
+            import datetime as dt
+            today = dt.datetime.utcnow().date()
+
+            if self._last_cb_reset_day != today:
+                self._last_cb_reset_day = today
+                self._circuit_breaker_triggered = False
+                log(f"🔄 Circuit Breaker: Reset na nowy dzień ({today})", "INFO")
+
+            if self._circuit_breaker_triggered:
+                return True
+
+            query = """
+                SELECT COALESCE(SUM(pnl), 0) AS daily_pnl
+                FROM trades
+                WHERE action IN ('CLOSE_LONG', 'CLOSE_SHORT', 'SELL', 'SHORT_CLOSE')
+                  AND timestamp >= CURRENT_DATE
+            """
+            rows = self.db.query(query)
+            if not rows or rows[0][0] is None:
+                return False
+
+            daily_pnl_usdt = float(rows[0][0])
+            balance = self.exec_manager.get_balance("USDT")
+            if balance <= 0: return False
+
+            daily_pnl_pct = (daily_pnl_usdt / balance) * 100
+            warning_threshold = self._daily_loss_limit_pct * 0.70
+
+            if daily_pnl_pct <= -warning_threshold and daily_pnl_pct > -self._daily_loss_limit_pct:
+                log(f"⚠️ Circuit Breaker OSTRZEŻENIE: Dzienny PnL = {daily_pnl_pct:+.2f}%", "WARNING")
+
+            if daily_pnl_pct <= -self._daily_loss_limit_pct:
+                self._circuit_breaker_triggered = True
+                log(f"🛑 CIRCUIT BREAKER WYZWOLONY! PnL: {daily_pnl_pct:+.2f}%. Trading zatrzymany do 00:00 UTC.", "ERROR")
+                return True
+            return False
+        except Exception as e:
+            log(f"Circuit Breaker error: {e}", "ERROR")
+            return False

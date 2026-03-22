@@ -395,9 +395,10 @@ class TradingEnv(gym.Env):
         # ═══════════════════════════════════════════════════════════════════
         # BANKRUPTCY CHECK (Balance ≤ 0 = GAME OVER)
         # ═══════════════════════════════════════════════════════════════════
-        if self.balance <= 0:  # Bankruptcy: 0 kapitału lub mniej
-            terminated = True
-            reward -= 200  # ❌ DUŻA KARA za bankructwo (GAME OVER!)
+        # Jeśli saldo spadnie poniżej 20% początkowego kapitału:
+        if self.balance < (self.initial_balance * 0.20):
+            reward -= 100.0  # Masywna kara za bankructwo
+            terminated = True      # Natychmiastowe przerwanie epizodu
             log(f"💀 RL Episode TERMINATED: Bankructwo! Balance={self.balance:.2f}", "ERROR")
         
         # Koniec danych lub limit kroków epizodu

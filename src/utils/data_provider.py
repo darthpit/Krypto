@@ -28,8 +28,18 @@ class MarketDataProvider:
             # Load config
             exchange_config = self.config.get('exchange', {})
             exchange_id = exchange_config.get('id', 'mexc')
+
+            import os
+            from dotenv import load_dotenv
+            load_dotenv()
+
             api_key = exchange_config.get('api_key', None)
+            if api_key == "ENV_MEXC_API_KEY":
+                api_key = os.getenv('MEXC_API_KEY')
+
             secret = exchange_config.get('secret_key', None)
+            if secret == "ENV_MEXC_API_SECRET":
+                secret = os.getenv('MEXC_API_SECRET')
 
             # Initialize CCXT Class
             if not hasattr(ccxt, exchange_id):

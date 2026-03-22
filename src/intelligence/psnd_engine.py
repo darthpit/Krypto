@@ -217,9 +217,19 @@ class SentimentAnalyzer:
             'signal': self._classify_sentiment(composite)
         }
 
-    def _fetch_fear_greed(self):
-        # Placeholder: Simulate or Return Neutral 50
-        return 50
+    def _fetch_fear_greed(self) -> int:
+        """Pobiera aktualny index Fear & Greed z API."""
+        try:
+            import requests
+            response = requests.get("https://api.alternative.me/fng/?limit=1", timeout=5)
+            response.raise_for_status()
+            data = response.json()
+            fng_value = int(data['data'][0]['value'])
+            logger.info(f"📊 Fear & Greed Index pobrany: {fng_value}")
+            return fng_value
+        except Exception as e:
+            logger.warning(f"⚠️ Błąd pobierania Fear & Greed API: {e}. Fallback = 50")
+            return 50  # Fallback w przypadku padnięcia API
 
     def _analyze_social_media(self, ticker):
         # Placeholder: Return 0.0 (Neutral)

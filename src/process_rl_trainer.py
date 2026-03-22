@@ -649,30 +649,6 @@ class RLTrainer:
         log(f"{'='*80}", "INFO")
         
         # ═══════════════════════════════════════════════════════════════════════
-        # NOWA HIERARCHIA PRIORYTETÓW: Sprawdź czy LSTM się nie trenuje
-        # ═══════════════════════════════════════════════════════════════════════
-        if self.lstm_lockfile.exists():
-            log(f"⏸️ BLOKADA: LSTM Ensemble v3.4 training in progress (Priority 2 > 3)", "WARNING")
-            log(f"   PPO Agent training postponed. LSTM must complete first.", "WARNING")
-            log(f"   Waiting for LSTM to finish... (checking every 60s)", "INFO")
-            
-            # Wait for LSTM to complete (check every 60 seconds)
-            import time
-            waited_seconds = 0
-            while self.lstm_lockfile.exists():
-                time.sleep(60)
-                waited_seconds += 60
-                log(f"⏳ Still waiting for LSTM... ({waited_seconds//60} minutes elapsed)", "INFO")
-                
-                # Safety: Don't wait forever (max 2 hours)
-                if waited_seconds > 7200:
-                    log(f"⚠️ WARNING: LSTM training taking too long (>2h). Proceeding with PPO...", "WARNING")
-                    break
-            
-            log(f"✅ LSTM training complete. Proceeding with PPO Agent training...", "SUCCESS")
-        # ═══════════════════════════════════════════════════════════════════════
-        
-        # ═══════════════════════════════════════════════════════════════════════
         # OOM RETRY WRAPPER
         # ═══════════════════════════════════════════════════════════════════════
         import gc
@@ -840,7 +816,7 @@ class RLTrainer:
         # - Long enough to capture multi-day patterns
         # - Short enough to complete multiple episodes per training run
         # - Allows PPO to properly calculate episode rewards and convergence
-        episode_steps = 8192  # 5.7 days (optimal balance for PPO)
+        episode_steps = 2048  # 5.7 days (optimal balance for PPO)
         
         if episode_steps:
             log(f"🎯 Episode Length: {episode_steps} steps ({episode_steps/1440:.1f} days)", "INFO")

@@ -164,13 +164,19 @@ class LSTMAdapter:
                     gc.collect()  # Force garbage collection
                     tf.keras.backend.clear_session()  # Clear TF session cache
             
-            logger.info(f"Training LSTM for {epochs} epochs with memory optimization...")
+            from sklearn.utils.class_weight import compute_class_weight
+            classes = np.unique(y_np)
+            class_weights_array = compute_class_weight(class_weight='balanced', classes=classes, y=y_np)
+            class_weights_dict = dict(zip(classes, class_weights_array))
+
+            logger.info(f"Training LSTM for {epochs} epochs with memory optimization and balanced class weights...")
             self.model.fit(
                 X_reshaped, y_np,
                 epochs=epochs,
                 batch_size=batch_size,
                 verbose=0,
-                callbacks=[early_stop, MemoryCleanupCallback()]
+                callbacks=[early_stop, MemoryCleanupCallback()],
+                class_weight=class_weights_dict
             )
             
             # Final cleanup after training
