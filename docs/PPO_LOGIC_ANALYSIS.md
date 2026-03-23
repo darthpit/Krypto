@@ -74,41 +74,29 @@ if steps_in_position == 1:
 - Nagroda natychmiastowa (+10) vs kara mniejsza (-5) = asymetria pozytywna
 - Agent uczy się czekać na dobry moment
 
-#### 3. ZAMKNIĘCIE POZYCJI
+#### 3. ZAMKNIĘCIE POZYCJI (System Ciągły)
 ```python
 Action: CLOSE (3)
 
+# 1. Bazowa Nagroda PnL (Ciągła)
+reward = PnL * 10.0   # np. 1% zysku = +10 pkt, -2% straty = -20 pkt
+
+# 2. Bonus za "Home Runs" (Duże Zyski)
 if PnL > 2.5%:
-    +150 punktów    # 💰 DUŻA NAGRODA! (doskonały trade)
-elif PnL > 0%:
-    0 punktów       # Za mały zysk, brak nagrody
-else:
-    # Strata - kara proporcjonalna:
-    if PnL >= -2.0%:
-        -30 punktów     # Mała strata
-    elif PnL >= -5.0%:
-        -80 punktów     # Średnia strata
-    else:
-        -150 punktów    # DUŻA STRATA!
+    reward += 50.0    # Ekstra bonus za cel główny! 💰
+
+# 3. Mnożnik Kary za Straty (Asymetria)
+if PnL < 0:
+    reward = PnL * 15.0 # Straty bolą 1.5x bardziej niż zyski!
+
+# 4. Surowa Kara za Hard Stop Loss
+if forced and PnL < -2.0%:
+    reward -= 50.0    # Ekstra kara za twardy stop lub likwidację!
 ```
 
-**MATEMATYKA RENTOWNOŚCI:**
-
-Przy 55% accuracy LSTM:
-```
-Scenariusz A (agent doskonały):
-- 55% transakcji: +2.5% = +150 punktów × 0.55 = +82.5 pkt średnio
-- 45% transakcji: -2% = -30 punktów × 0.45 = -13.5 pkt średnio
-- SUMA: +69 punktów średnio na transakcję ✅ ZYSK!
-```
-
-Przy 90% accuracy (cel):
-```
-Scenariusz B (agent doskonały z 90% LSTM):
-- 90% transakcji: +2.5% = +150 punktów × 0.90 = +135 pkt
-- 10% transakcji: -2% = -30 punktów × 0.10 = -3 pkt
-- SUMA: +132 punkty średnio na transakcję ✅ WIELKI ZYSK!
-```
+**ZALETY SYSTEMU CIĄGŁEGO:**
+- **Brak martwych stref:** Każdy ułamek procenta zysku lub straty jest poprawnie nagradzany/karany (eliminacja martwej strefy 0-2.5%).
+- **Skalping:** Agent potrafi realizować mniejsze, ale pewne zyski.
 
 #### 4. KARY ZA DRAWDOWN (Ochrona Kapitału)
 ```python
@@ -132,14 +120,14 @@ if balance > peak_balance:
 
 **CEL:** Motywuje agenta do długoterminowego wzrostu kapitału
 
-#### 6. BANKRUPTCY (Balance ≤ 0)
+#### 6. BANKRUPTCY (Balance < 20% kapitału początkowego)
 ```python
-if balance <= 0:
+if balance < (initial_balance * 0.20):
     Episode TERMINATED
-    -200 punktów    # ❌ GAME OVER!
+    -100 punktów    # ❌ GAME OVER!
 ```
 
-**Definicja bankructwa:** Posiadanie 0 kapitału lub mniej
+**Definicja bankructwa:** Spadek kapitału poniżej 20% kapitału początkowego (zabezpiecza to przed całkowitą utratą środków)
 
 ---
 
@@ -212,26 +200,18 @@ EV = (0.55 × +2.5%) + (0.45 × -2%) = +1.375% - 0.9% = +0.475% per trade
 # JEST: +2.0 punktów (większa motywacja)
 ```
 
-**6. Zwiększona kara za bankruptcy (linia 338)**
+**6. Zachowano karę za bankruptcy jako -100**
 ```python
-# BYŁO: -100 punktów
-# JEST: -200 punktów (silniejsza ochrona)
+# Kara to -100 punktów, ale weryfikowana wcześniej (<20% kapitału początkowego)
 ```
 
-**7. Nowa logika nagród za zamknięcie (linie 485-503)**
+**7. Zmiana na ciągłą logikę nagród za zamknięcie**
 ```python
-if pnl_pct > 2.5:
-    reward = 150.0      # DUŻA NAGRODA (było 100)
-elif pnl_pct > 0:
-    reward = 0.0        # Brak nagrody dla małych zysków
-else:
-    # Proporcjonalne kary za straty (było -20 flat)
-    if pnl_pct >= -2.0:
-        reward = -30.0
-    elif pnl_pct >= -5.0:
-        reward = -80.0
-    else:
-        reward = -150.0  # DUŻA KARA
+# Zastosowano continuous reward function
+reward = pnl_pct * 10.0
+if pnl_pct > 2.5: reward += 50.0
+if pnl_pct < 0: reward = pnl_pct * 15.0
+if forced and pnl_pct < -2.0: reward -= 50.0
 ```
 
 ### Plik: `src/process_rl_trainer.py`
@@ -321,13 +301,11 @@ cat models/rl_training_results.json
 | **Lookback Window** | 4 dni (w bazie) | 180 dni (pełne) | ✅ NAPRAWIONE |
 | **Budget per Trade** | 10% | 10% | ✅ OK (bez zmian) |
 | **Immediate Direction** | +10/-5 | +10/-5 | ✅ OK (poprawiono timing) |
-| **Reward >2.5%** | +100 | +150 | ✅ ZWIĘKSZONE |
-| **Reward 0-2.5%** | 0 | 0 | ✅ OK |
-| **Penalty Loss** | -20 flat | -30/-80/-150 | ✅ PROPORCJONALNE |
+| **Nagroda za zamknięcie** | Dyskretyzowana | Ciągła (10.0 * PnL) z bonusami | ✅ NOWA ZDROWA LOGIKA |
 | **Drawdown Penalty** | Agresywne | Umiarkowane | ✅ ZMNIEJSZONE |
 | **New Peak Bonus** | +1.0 | +2.0 | ✅ ZWIĘKSZONE |
-| **Bankruptcy** | ≤0 kapitału | ≤0 kapitału | ✅ OK |
-| **Bankruptcy Penalty** | -100 | -200 | ✅ ZWIĘKSZONE |
+| **Bankruptcy** | ≤0 kapitału | <20% kapitału początkowego | ✅ OK |
+| **Bankruptcy Penalty** | -100 | -100 | ✅ OK |
 | **Win Rate** | 0% | Cel: 55%+ | ⏳ DO WERYFIKACJI |
 
 ---

@@ -700,7 +700,7 @@ class TraderProcess(multiprocessing.Process):
         min_profit_to_lock = risk_config.get('min_profit_to_lock', 6.0)
         trailing_activation = risk_config.get('trailing_activation', 3.0)
         emergency_exit_threshold = risk_config.get('emergency_exit_threshold', -3.0)
-        hard_liquidation_buffer = risk_config.get('hard_liquidation_buffer', 0.85)
+        hard_liquidation_buffer = risk_config.get('hard_liquidation_buffer', 0.04) # Zoptymalizowane dla 20x leverage.
         recovery_ai_confidence = risk_config.get('recovery_ai_confidence_threshold', 0.75)
         profit_snatcher_enabled = risk_config.get('profit_snatcher_enabled', True)
         
@@ -760,7 +760,7 @@ class TraderProcess(multiprocessing.Process):
             
             # Scenario A: AI sees hope (confidence > 75%)
             if ai_prediction_30m['favorable'] and ai_prediction_30m['confidence'] >= recovery_ai_confidence:
-                # Calculate hard stop at -85% ROI (safe buffer before liquidation)
+                # Calculate hard stop at -4% ROI (safe buffer before liquidation)
                 hard_stop_roi = -hard_liquidation_buffer * 100
                 
                 if pnl_pct <= hard_stop_roi:
@@ -952,8 +952,17 @@ class TraderProcess(multiprocessing.Process):
                 self._save_live_context(current_price, prediction, "ANTI_FOMO", confidence, "BLOCKED")
                 return
         elif signal == "SHORT":
-            #TODO: Replace fear_greed_index with real API data
-            panic_check = self.anti_fomo.check_panic_sell(ticker, df, fear_greed_index=50)
+            # Pobranie prawdziwego F&G Index przed sprawdzeniem paniki
+            current_fng = 50
+            try:
+                import requests
+                resp = requests.get("https://api.alternative.me/fng/?limit=1", timeout=3)
+                if resp.status_code == 200:
+                    current_fng = int(resp.json()['data'][0]['value'])
+            except Exception:
+                pass
+
+            panic_check = self.anti_fomo.check_panic_sell(ticker, df, fear_greed_index=current_fng)
             if panic_check.get('status') == 'HALT':
                 log(f"🚫 AntiFOMO: {panic_check.get('reason', 'Panic detected')} — blokuję SHORT", "WARNING")
                 self._save_live_context(current_price, prediction, "ANTI_PANIC", confidence, "BLOCKED")
@@ -1435,14 +1444,13 @@ class TraderProcess(multiprocessing.Process):
                 if self.model is None:
                     log("❌ No model available, skipping re-training", "ERROR")
                     return
-            
-            # Partial fit (incremental learning)
-            # Note: This is a simplified version. Full re-training would require more data.
-            log("🔄 Performing incremental update on model...", "INFO")
-            
-            # Quick update: Reload latest model from disk
-            # (Full training happens offline in process_trainer.py)
-            self._load_latest_model()  # Reload latest LSTM model
+            else:
+                # Partial fit (incremental learning)
+                # Note: This is a simplified version. Full re-training would require more data.
+                log("🔄 Performing incremental update on model...", "INFO")
+
+                # Quick update: Reload latest model from disk
+                # (Full training happens offline in process_trainer.py)
             
             log("✅ LSTM quick update complete!", "SUCCESS")
             
