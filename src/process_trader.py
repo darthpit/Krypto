@@ -640,7 +640,7 @@ class TraderProcess(multiprocessing.Process):
         ────────────────────────────────────────────────────────────────
         1. Detekcja Kryzysu: Pozycja wpada w stratę < -3%
         2. Konsultacja AI (Horyzont 30 min): Sprawdza przewidywaną cenę
-        3. Scenariusz A (Nadzieja): AI > 75% confidence → trzymaj do -85%
+        3. Scenariusz A (Nadzieja): AI > 75% confidence → trzymaj do Hard Stopa
         4. Scenariusz B (Potwierdzenie błędu): AI widzi dalszy spadek → zamknij natychmiast
         
         STANDARD CHECKS:
@@ -699,84 +699,10 @@ class TraderProcess(multiprocessing.Process):
         recovery_mode_enabled = risk_config.get('recovery_mode', True)
         min_profit_to_lock = risk_config.get('min_profit_to_lock', 6.0)
         trailing_activation = risk_config.get('trailing_activation', 3.0)
-        emergency_exit_threshold = risk_config.get('emergency_exit_threshold', -3.0)
-        hard_liquidation_buffer = risk_config.get('hard_liquidation_buffer', 0.04) # Zoptymalizowane dla 20x leverage.
+        emergency_exit_threshold = risk_config.get('emergency_exit_threshold', -1.5)  # (Spadek ceny -1.5% = -30% ROI na 20x)
+        hard_liquidation_buffer = risk_config.get('hard_liquidation_buffer', 0.025) # (Spadek ceny -2.5% = -50% ROI na 20x)
         recovery_ai_confidence = risk_config.get('recovery_ai_confidence_threshold', 0.75)
         profit_snatcher_enabled = risk_config.get('profit_snatcher_enabled', True)
-        
-        # ═══════════════════════════════════════════════════════════════
-        # 🎯 MODUŁ 1: PROFIT GUARDIAN (Intelligent Exit)
-        # ═══════════════════════════════════════════════════════════════
-        
-        # 1A. PROFIT SNATCHER (6% Cap with AI Confirmation)
-        if profit_snatcher_enabled and pnl_pct >= min_profit_to_lock:
-            log(f"💰 PROFIT SNATCHER: ROI at {pnl_pct:+.2f}% (target: {min_profit_to_lock}%). Checking AI momentum...", "INFO")
-            
-            # Get AI prediction for next 30 minutes
-            ai_prediction_30m = self._get_ai_prediction_30m(df, current_price)
-            
-            if ai_prediction_30m['weakening']:
-                log(f"✅ PROFIT SNATCHER TRIGGERED! AI detects weakening momentum (Conf: {ai_prediction_30m['confidence']:.2%}). Locking profit at {pnl_pct:+.2f}%!", "SUCCESS")
-                self.exec_manager.execute_order(f"CLOSE_{side.upper()}", ticker, amount, current_price)
-                return
-            else:
-                log(f"📈 Momentum still strong (Conf: {ai_prediction_30m['confidence']:.2%}). Holding position for more gains...", "INFO")
-        
-        # 1B. ANTI-SPIKE (Protection from +3% -> 0% drops)
-        if pnl_pct >= 0.5 and pnl_pct < trailing_activation:  # Between 0.5% and 3%
-            # Check if we were in profit before
-            if 'peak_pnl_history' not in pos_data:
-                pos_data['peak_pnl_history'] = []
-            
-            pos_data['peak_pnl_history'].append(pnl_pct)
-            # Keep only last 10 readings (10 minutes of history)
-            if len(pos_data['peak_pnl_history']) > 10:
-                pos_data['peak_pnl_history'] = pos_data['peak_pnl_history'][-10:]
-            
-            # Check if we had profit > 3% in the last 10 minutes
-            had_good_profit = any(p >= trailing_activation for p in pos_data['peak_pnl_history'])
-            
-            if had_good_profit:
-                log(f"🛡️ ANTI-SPIKE: Position dropped from +3% to {pnl_pct:+.2f}%. Checking AI for recovery potential...", "WARNING")
-                
-                ai_prediction_30m = self._get_ai_prediction_30m(df, current_price)
-                
-                if not ai_prediction_30m['favorable']:
-                    log(f"❌ ANTI-SPIKE TRIGGERED! AI sees no recovery (Conf: {ai_prediction_30m['confidence']:.2%}). Closing at {pnl_pct:+.2f}% to prevent loss!", "WARNING")
-                    self.exec_manager.execute_order(f"CLOSE_{side.upper()}", ticker, amount, current_price)
-                    return
-                else:
-                    log(f"✅ AI predicts recovery (Conf: {ai_prediction_30m['confidence']:.2%}). Holding through spike...", "INFO")
-        
-        # ═══════════════════════════════════════════════════════════════
-        # 🆘 MODUŁ 2: RECOVERY MODE (Adaptive Hedge)
-        # ═══════════════════════════════════════════════════════════════
-        
-        if recovery_mode_enabled and pnl_pct <= emergency_exit_threshold:
-            log(f"🚨 RECOVERY MODE ACTIVATED! Position in loss: {pnl_pct:+.2f}%. Consulting AI...", "WARNING")
-            
-            # Get AI prediction for next 30 minutes
-            ai_prediction_30m = self._get_ai_prediction_30m(df, current_price)
-            
-            # Scenario A: AI sees hope (confidence > 75%)
-            if ai_prediction_30m['favorable'] and ai_prediction_30m['confidence'] >= recovery_ai_confidence:
-                # Calculate hard stop at -4% ROI (safe buffer before liquidation)
-                hard_stop_roi = -hard_liquidation_buffer * 100
-                
-                if pnl_pct <= hard_stop_roi:
-                    log(f"💥 HARD LIQUIDATION BUFFER HIT! ROI={pnl_pct:+.2f}% <= {hard_stop_roi:+.2f}%. Emergency exit!", "ERROR")
-                    self.exec_manager.execute_order(f"CLOSE_{side.upper()}", ticker, amount, current_price)
-                    return
-                else:
-                    log(f"✅ RECOVERY MODE: AI predicts recovery (Conf: {ai_prediction_30m['confidence']:.2%}). Holding position (Hard Stop: {hard_stop_roi:+.2f}%)", "INFO")
-                    # Allow position to breathe - don't close
-                    return
-            
-            # Scenario B: AI confirms mistake (low confidence or unfavorable)
-            else:
-                log(f"❌ RECOVERY MODE: AI confirms downtrend (Conf: {ai_prediction_30m['confidence']:.2%}). Emergency exit at {pnl_pct:+.2f}% to save capital!", "ERROR")
-                self.exec_manager.execute_order(f"CLOSE_{side.upper()}", ticker, amount, current_price)
-                return
         
         # ═══════════════════════════════════════════════════════════════
         # 1️⃣ TAKE PROFIT CHECK (TP = Entry ± 4×ATR)
@@ -813,22 +739,9 @@ class TraderProcess(multiprocessing.Process):
                 log(f"❌ STOP LOSS HIT! (SHORT) SL=${sl_price:.2f}, Current=${current_price:.2f}, Loss={pnl_pct:+.2f}%", "WARNING")
                 self.exec_manager.execute_order("CLOSE_SHORT", ticker, amount, current_price)
                 return
-        
+
         # ═══════════════════════════════════════════════════════════════
-        # 3️⃣ AI REVERSAL CHECK (Przeciwny sygnał z confidence > 70%)
-        # ═══════════════════════════════════════════════════════════════
-        if new_confidence > 0.70:
-            if side == "LONG" and new_signal == "SHORT":
-                log(f"🔄 AI REVERSAL! Closing LONG. AI now predicts SHORT (Conf: {new_confidence:.2%})", "INFO")
-                self.exec_manager.execute_order("CLOSE_LONG", ticker, amount, current_price)
-                return
-            elif side == "SHORT" and new_signal == "LONG":
-                log(f"🔄 AI REVERSAL! Closing SHORT. AI now predicts LONG (Conf: {new_confidence:.2%})", "INFO")
-                self.exec_manager.execute_order("CLOSE_SHORT", ticker, amount, current_price)
-                return
-        
-        # ═══════════════════════════════════════════════════════════════
-        # 4️⃣ TRAILING STOP CHECK (Aktywny gdy zysk > 3%)
+        # 3️⃣ TRAILING STOP CHECK (Aktywny gdy zysk > 3%)
         # ═══════════════════════════════════════════════════════════════
         
         # Inicjalizuj highest_pnl jeśli nie istnieje
@@ -868,7 +781,125 @@ class TraderProcess(multiprocessing.Process):
         elif pnl_pct > 2.0:
             # Informacja że zbliżamy się do aktywacji
             log(f"📈 Approaching Trailing Activation: Current={pnl_pct:+.2f}%, Need 3.0% to activate", "INFO")
+
+        # ═══════════════════════════════════════════════════════════════
+        # 🎯 MODUŁ 1: PROFIT GUARDIAN (Intelligent Exit)
+        # ═══════════════════════════════════════════════════════════════
         
+        # 1A. PROFIT SNATCHER (6% Cap with AI Confirmation)
+        if profit_snatcher_enabled and pnl_pct >= min_profit_to_lock:
+            log(f"💰 PROFIT SNATCHER: ROI at {pnl_pct:+.2f}% (target: {min_profit_to_lock}%). Checking AI momentum...", "INFO")
+
+            # Get AI prediction for next 30 minutes
+            ai_prediction_30m = self._get_ai_prediction_30m(df, current_price)
+
+            if ai_prediction_30m['weakening']:
+                log(f"✅ PROFIT SNATCHER TRIGGERED! AI detects weakening momentum (Conf: {ai_prediction_30m['confidence']:.2%}). Locking profit at {pnl_pct:+.2f}%!", "SUCCESS")
+                self.exec_manager.execute_order(f"CLOSE_{side.upper()}", ticker, amount, current_price)
+                return
+            else:
+                log(f"📈 Momentum still strong (Conf: {ai_prediction_30m['confidence']:.2%}). Holding position for more gains...", "INFO")
+
+        # 1B. ANTI-SPIKE (Protection from +3% -> 0% drops)
+        if pnl_pct >= 0.5 and pnl_pct < trailing_activation:  # Between 0.5% and 3%
+            # Check if we were in profit before
+            if 'peak_pnl_history' not in pos_data:
+                pos_data['peak_pnl_history'] = []
+
+            pos_data['peak_pnl_history'].append(pnl_pct)
+            # Keep only last 10 readings (10 minutes of history)
+            if len(pos_data['peak_pnl_history']) > 10:
+                pos_data['peak_pnl_history'] = pos_data['peak_pnl_history'][-10:]
+
+            # Check if we had profit > 3% in the last 10 minutes
+            had_good_profit = any(p >= trailing_activation for p in pos_data['peak_pnl_history'])
+
+            if had_good_profit:
+                log(f"🛡️ ANTI-SPIKE: Position dropped from +3% to {pnl_pct:+.2f}%. Checking AI for recovery potential...", "WARNING")
+
+                ai_prediction_30m = self._get_ai_prediction_30m(df, current_price)
+
+                if not ai_prediction_30m['favorable']:
+                    log(f"❌ ANTI-SPIKE TRIGGERED! AI sees no recovery (Conf: {ai_prediction_30m['confidence']:.2%}). Closing at {pnl_pct:+.2f}% to prevent loss!", "WARNING")
+                    self.exec_manager.execute_order(f"CLOSE_{side.upper()}", ticker, amount, current_price)
+                    return
+                else:
+                    log(f"✅ AI predicts recovery (Conf: {ai_prediction_30m['confidence']:.2%}). Holding through spike...", "INFO")
+
+        # ═══════════════════════════════════════════════════════════════
+        # 4️⃣ AI REVERSAL CHECK (Przeciwny sygnał z confidence > 70%)
+        # ═══════════════════════════════════════════════════════════════
+        if new_confidence > 0.70:
+            if side == "LONG" and new_signal == "SHORT":
+                log(f"🔄 AI REVERSAL! Closing LONG. AI now predicts SHORT (Conf: {new_confidence:.2%})", "INFO")
+                self.exec_manager.execute_order("CLOSE_LONG", ticker, amount, current_price)
+                return
+            elif side == "SHORT" and new_signal == "LONG":
+                log(f"🔄 AI REVERSAL! Closing SHORT. AI now predicts LONG (Conf: {new_confidence:.2%})", "INFO")
+                self.exec_manager.execute_order("CLOSE_SHORT", ticker, amount, current_price)
+                return
+
+        # ═══════════════════════════════════════════════════════════════
+        # 🆘 MODUŁ 2: RECOVERY MODE (Adaptive Hedge)
+        # ═══════════════════════════════════════════════════════════════
+
+        if recovery_mode_enabled and pnl_pct <= emergency_exit_threshold:
+            log(f"🚨 RECOVERY MODE ACTIVATED! Position in loss: {pnl_pct:+.2f}%. Consulting AI...", "WARNING")
+
+            # Inicjalizacja czasu i PnL dla Recovery Mode, zapis stanu
+            if 'rm_start_time' not in pos_data:
+                pos_data['rm_start_time'] = time.time()
+                pos_data['rm_start_pnl'] = pnl_pct
+                self.exec_manager._save_paper_state()
+
+            rm_duration = time.time() - pos_data['rm_start_time']
+
+            # Time Stop: 15 minut
+            if rm_duration > 900:
+                if pnl_pct < pos_data['rm_start_pnl']:
+                    log(f"⏱️ TIME STOP HIT! Position in Recovery Mode for >15 min without improvement. Start PnL: {pos_data['rm_start_pnl']:+.2f}%, Current: {pnl_pct:+.2f}%. Emergency exit!", "ERROR")
+                    self.exec_manager.execute_order(f"CLOSE_{side.upper()}", ticker, amount, current_price)
+                    return
+                else:
+                    log(f"⏳ Recovery Mode time >15m, but position is recovering (Start PnL: {pos_data['rm_start_pnl']:+.2f}%, Current: {pnl_pct:+.2f}%). Checking AI...", "INFO")
+
+            # Get AI prediction for next 30 minutes
+            ai_prediction_30m = self._get_ai_prediction_30m(df, current_price)
+
+            # Scenario A: AI sees hope (confidence > 75%)
+            if ai_prediction_30m['favorable'] and ai_prediction_30m['confidence'] >= recovery_ai_confidence:
+                # Calculate hard stop at -2.5% price (-50% ROI buffer before liquidation)
+                hard_stop_roi = -hard_liquidation_buffer * 100
+
+                current_vol = float(df['volume'].iloc[-1])
+                avg_vol = float(df['volume'].rolling(20).mean().iloc[-1] if len(df) >= 20 else current_vol)
+                volume_spike = current_vol > (avg_vol * 3.0)
+
+                if pnl_pct <= hard_stop_roi:
+                    log(f"💥 HARD LIQUIDATION BUFFER HIT! ROI={pnl_pct:+.2f}% <= {hard_stop_roi:+.2f}%. Emergency exit!", "ERROR")
+                    self.exec_manager.execute_order(f"CLOSE_{side.upper()}", ticker, amount, current_price)
+                    return
+                elif volume_spike:
+                    log("🐋 VOLUME SPIKE DETECTED (Wieloryb zrzuca)! Omijamy AI. Tniemy straty!", "ERROR")
+                    self.exec_manager.execute_order(f"CLOSE_{side.upper()}", ticker, amount, current_price)
+                    return
+                else:
+                    log(f"✅ RECOVERY MODE: AI predicts recovery (Conf: {ai_prediction_30m['confidence']:.2%}). Niski wolumen (Whipsaw). Holding position...", "INFO")
+                    # Allow position to breathe - don't close
+                    return
+
+            # Scenario B: AI confirms mistake (low confidence or unfavorable)
+            else:
+                log(f"❌ RECOVERY MODE: AI confirms downtrend (Conf: {ai_prediction_30m['confidence']:.2%}). Emergency exit at {pnl_pct:+.2f}% to save capital!", "ERROR")
+                self.exec_manager.execute_order(f"CLOSE_{side.upper()}", ticker, amount, current_price)
+                return
+        else:
+            # Czyszczenie stanu Recovery Mode, jeśli pozycja wyszła z zagrożenia
+            if 'rm_start_time' in pos_data:
+                del pos_data['rm_start_time']
+                del pos_data['rm_start_pnl']
+                self.exec_manager._save_paper_state()
+
         # Jeśli żaden warunek nie został spełniony, trzymamy pozycję
         log(f"⏳ Holding {side} position. TP=${tp_price:.2f}, SL=${sl_price:.2f}, Current PnL={pnl_pct:+.2f}%", "INFO")
 
@@ -2246,7 +2277,7 @@ class TraderProcess(multiprocessing.Process):
             # Get current spread from liquidity guard
             try:
                 # Fetch orderbook for spread calculation
-                order_book = self.exchange.fetch_order_book(self.ticker, limit=5)
+                order_book = self.exec_manager.exchange.fetch_order_book(self.ticker, limit=5)
                 
                 if order_book and 'bids' in order_book and 'asks' in order_book:
                     if order_book['bids'] and order_book['asks']:
@@ -2270,6 +2301,14 @@ class TraderProcess(multiprocessing.Process):
             except Exception:
                 spread_pct = 0.0
                 liquidity_status = "Checking..."
+
+            # 4. Volume Anomaly (Smart Volume Stop Indicator)
+            try:
+                current_vol = float(df['volume'].iloc[-1])
+                avg_vol = float(df['volume'].rolling(20).mean().iloc[-1] if len(df) >= 20 else current_vol)
+                vol_ratio = (current_vol / avg_vol) if avg_vol > 0 else 1.0
+            except Exception:
+                vol_ratio = 1.0
             
             # Save to database
             payload = {
@@ -2279,6 +2318,7 @@ class TraderProcess(multiprocessing.Process):
                 "triple_barrier_info": triple_barrier_info,
                 "spread_pct": round(spread_pct, 4),
                 "liquidity_status": liquidity_status,
+                "vol_ratio": round(vol_ratio, 2),
                 "timestamp": now_utc.isoformat()
             }
             
@@ -2287,7 +2327,7 @@ class TraderProcess(multiprocessing.Process):
                 ("quant_metrics", json.dumps(payload), now_utc.isoformat())
             )
             
-            log(f"Quant Metrics: FracDiff={fracdiff_score:.1f}%, Spread={spread_pct:.4f}%, Liquidity={liquidity_status}", "INFO")
+            log(f"Quant Metrics: FracDiff={fracdiff_score:.1f}%, Spread={spread_pct:.4f}%, Vol_Ratio={vol_ratio:.2f}x", "INFO")
         except Exception as e:
             log(f"Failed to update quant metrics: {e}", "ERROR")
 
