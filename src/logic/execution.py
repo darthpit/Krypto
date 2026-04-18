@@ -262,13 +262,16 @@ class ExecutionManager:
                      if base_curr in self.paper_balance:
                          del self.paper_balance[base_curr]
 
+        # Calculate actual pnl
+        trade_pnl = pnl if action in ['CLOSE_LONG', 'CLOSE_SHORT'] else 0.0
+
         # Log Trade
         self._log_trade_to_db(action, ticker, amount, {
             'price': price,
             'cost': cost if action in ['LONG', 'SHORT'] else 0,
             'fee': {'cost': fee},
             'average': price
-        })
+        }, pnl=trade_pnl)
 
         self._save_paper_state()
         return True
@@ -281,30 +284,55 @@ class ExecutionManager:
         try:
             symbol = ticker
             side = None
-            type = 'market'
+            type = 'limit'
 
             # Map Actions
             if action == 'LONG':
                 side = 'buy'
+                type = 'limit'
+                params['postOnly'] = True
             elif action == 'SHORT':
                 side = 'sell'
-            elif action == 'CLOSE_LONG':
-                side = 'sell'
+                type = 'limit'
+                params['postOnly'] = True
+            elif action in ['CLOSE_LONG', 'CLOSE_SHORT']:
+                # WYJŚCIE AWARYJNE (Take Profit lub Stop Loss)
+                side = 'sell' if action == 'CLOSE_LONG' else 'buy'
+                type = 'market' # Uciekamy agresywnie, poślizg wliczony w EV
                 params['reduceOnly'] = True
-            elif action == 'CLOSE_SHORT':
-                side = 'buy'
-                params['reduceOnly'] = True
+                if 'postOnly' in params:
+                    del params['postOnly'] # ABSOLUTNIE NIE Maker na ucieczce
 
             if not side:
                 logging.error(f"Unknown action: {action}")
                 return False
 
-            logging.info(f"Sending Order: {side.upper()} {amount} {symbol} ({type})")
+            if type == 'limit':
+                if price is None:
+                    try:
+                        ticker_data = self.exchange.fetch_ticker(symbol)
+                        if side == 'buy':
+                            price = float(ticker_data['bid'])
+                        else:
+                            price = float(ticker_data['ask'])
+                    except Exception as e:
+                        logging.error(f"Failed to fetch ticker for limit price: {e}")
+                        return False
+            else:
+                price = None # Brak określonej ceny dla zleceń market (uciekamy bez limitu)
 
+            logging.info(f"Sending Order: {side.upper()} {amount} {symbol} ({type}) @ {price}")
+
+            # Wykonanie zlecenia
             order = self.exchange.create_order(symbol, type, side, amount, price, params)
 
             # Log to DB
             self._log_trade_to_db(action, ticker, amount, order)
+            
+            # --- SMART CHASE LOGIC (Tylko dla wejść z Limitem) ---
+            if type == 'limit' and action in ['LONG', 'SHORT']:
+                self._chase_order_if_needed(order, action, symbol, side, amount, price, params)
+            # ----------------------------------------------------
 
             return True
 
@@ -312,16 +340,81 @@ class ExecutionManager:
             logging.error(f"Order Execution Failed: {e}")
             return False
 
-    def _log_trade_to_db(self, action, ticker, amount, order_data):
+    def _chase_order_if_needed(self, order, action, symbol, side, amount, original_price, params):
+        """
+        SMART CHASE: Wait 30 seconds for the Limit Post-Only order to fill. 
+        If not filled, cancel it and replace it with a slippage tolerance of 0.05%.
+        """
+        import threading
+        
+        def chase_task():
+            try:
+                order_id = order['id']
+                logging.info(f"Smart Chase: Monitoring order {order_id} for 30s...")
+                
+                # Czekamy 30 sekund
+                time.sleep(30)
+                
+                # Sprawdzamy status zlecenia
+                fetched_order = self.exchange.fetch_order(order_id, symbol)
+                status = fetched_order['status']
+                
+                if status == 'open':
+                    logging.info(f"Smart Chase: Order {order_id} not filled. Canceling and replacing with 0.05% slippage allowance.")
+                    
+                    # Anuluj oryginalne zlecenie
+                    self.exchange.cancel_order(order_id, symbol)
+                    
+                    # Czekaj na przetworzenie anulowania
+                    time.sleep(1)
+                    
+                    # Oblicz nową cenę z poślizgiem 0.05%
+                    slippage_tolerance = 0.0005
+                    
+                    if side == 'buy':
+                        # Chcemy kupić trochę drożej (wchodząc głębiej w orderbook)
+                        new_price = original_price * (1 + slippage_tolerance)
+                    else:
+                        # Chcemy sprzedać trochę taniej (wchodząc głębiej w orderbook)
+                        new_price = original_price * (1 - slippage_tolerance)
+                        
+                    # Formatuj cenę do poprawnego tick size (użyjemy formatu z giełdy, domyślnie round)
+                    try:
+                        new_price = float(self.exchange.price_to_precision(symbol, new_price))
+                    except:
+                        new_price = round(new_price, 6) # Fallback
+                        
+                    # Upewniamy się, że to nadal Maker, ale nie możemy używać Post-Only z gorszą ceną
+                    # bo PostOnly odrzuci zlecenie, jeśli miałoby wejść od razu. 
+                    # Smart Chase usuwa Post-Only, żeby wejść "prawie rynkowo" z twardym limitem ceny.
+                    chase_params = params.copy()
+                    if 'postOnly' in chase_params:
+                        del chase_params['postOnly']
+                        
+                    logging.info(f"Smart Chase: Re-Sending {side.upper()} {amount} {symbol} (limit) @ {new_price} (no post-only)")
+                    chase_order = self.exchange.create_order(symbol, 'limit', side, amount, new_price, chase_params)
+                    
+                    self._log_trade_to_db(action + "_CHASE", symbol, amount, chase_order)
+                else:
+                    logging.info(f"Smart Chase: Order {order_id} already filled or closed ({status}).")
+            except Exception as e:
+                logging.error(f"Smart Chase Error: {e}")
+
+        # Start monitoring in a background thread so we don't block the main trader loop
+        chase_thread = threading.Thread(target=chase_task)
+        chase_thread.daemon = True
+        chase_thread.start()
+
+    def _log_trade_to_db(self, action, ticker, amount, order_data, pnl=0.0):
         try:
             price = float(order_data.get('price', 0) or order_data.get('average', 0) or 0)
             cost = float(order_data.get('cost', 0) or 0)
             fee = float(order_data.get('fee', {}).get('cost', 0) or 0)
 
             self.db.execute("""
-                INSERT INTO trades (timestamp, action, ticker, price, amount, cost, fee, strategy, notes)
-                VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?)
-            """, (action, ticker, price, amount, cost, fee, 'FUTURES' if not self.paper_mode else 'PAPER', json.dumps(order_data)))
+                INSERT INTO trades (timestamp, action, ticker, price, amount, cost, fee, pnl, strategy, notes, raw_data)
+                VALUES (NOW(), ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (action, ticker, price, amount, cost, fee, pnl, 'FUTURES' if not self.paper_mode else 'PAPER', '', json.dumps(order_data)))
         except Exception as e:
             logging.error(f"DB Log Error: {e}")
 

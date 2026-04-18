@@ -439,8 +439,8 @@ class MarketDataProvider:
                                 'source': 'binance',
                                 'total_candles': total_candles_fetched,
                                 'current_date': current_date,
-                                'days_fetched': days_fetched,
-                                'target_days': target_days - 30,
+                                'days_fetched': days_fetched,  # Days from binance_start
+                                'target_days': target_days,    # Target days total
                                 'progress_pct': progress_pct
                             })
                         
@@ -534,11 +534,13 @@ class MarketDataProvider:
                     since = last_ts + 1
                     
                     current_date = df.index[-1]
-                    days_fetched = (current_date - mexc_start).days
-                    progress_pct = (days_fetched / 30) * 100
+                    # Calculate cumulative days_fetched from the very beginning (binance_start)
+                    days_fetched_total = (current_date - binance_start).days
+                    days_fetched_mexc = (current_date - mexc_start).days
+                    progress_pct = (days_fetched_mexc / 30) * 100
                     
                     if chunk_count % 10 == 0:
-                        logging.info(f"   📊 MEXC Progress: {days_fetched}/30 days ({progress_pct:.1f}%) | "
+                        logging.info(f"   📊 MEXC Progress: {days_fetched_mexc}/30 days ({progress_pct:.1f}%) | "
                                    f"Candles: {mexc_candles:,} | Date: {current_date.strftime('%Y-%m-%d')}")
                     
                     if callback:
@@ -546,8 +548,8 @@ class MarketDataProvider:
                             'source': 'mexc',
                             'total_candles': total_candles_fetched,
                             'current_date': current_date,
-                            'days_fetched': days_fetched,
-                            'target_days': 30,
+                            'days_fetched': days_fetched_total,  # Cumulative days for caller
+                            'target_days': target_days,         # Total target for caller
                             'progress_pct': progress_pct
                         })
                     
@@ -691,3 +693,128 @@ class MarketDataProvider:
         except Exception as e:
             logging.warning(f"Error fetching funding rate history: {e}")
             return None
+
+    def fetch_live_metrics(self, ticker):
+        """
+        Fetches live order flow metrics directly from Binance Futures endpoints.
+        This provides real-time data for the AI when historical archives are delayed.
+        
+        Args:
+            ticker: Trading pair symbol (e.g., 'BTC/USDT')
+            
+        Returns:
+            dict: Current metrics {open_interest, oi_value_usdt, top_trader_ls_ratio, taker_buy_sell_ratio, timestamp}
+        """
+        import requests
+        
+        try:
+            # Binance Futures uses symbols like 'BTCUSDT'
+            symbol = ticker.replace('/', '').replace(':', '')
+            if symbol.endswith('USDTUSDT'):
+                symbol = symbol.replace('USDTUSDT', 'USDT')
+                
+            metrics = {
+                'open_interest': 0.0,
+                'oi_value_usdt': 0.0,
+                'top_trader_ls_ratio': 1.0,
+                'taker_buy_sell_ratio': 1.0,
+                'timestamp': None
+            }
+            
+            # Fetch Open Interest
+            # GET /fapi/v1/openInterest
+            try:
+                oi_resp = requests.get(f"https://fapi.binance.com/fapi/v1/openInterest?symbol={symbol}", timeout=5)
+                if oi_resp.status_code == 200:
+                    oi_data = oi_resp.json()
+                    metrics['open_interest'] = float(oi_data.get('openInterest', 0))
+                    
+                    # Also need current price to calculate oi_value_usdt
+                    ticker_data = self.fetch_ticker(ticker)
+                    if ticker_data and 'last' in ticker_data:
+                        metrics['oi_value_usdt'] = metrics['open_interest'] * float(ticker_data['last'])
+            except Exception as e:
+                logging.warning(f"Error fetching live Open Interest: {e}")
+
+            # Fetch Long/Short Ratio (Top Traders)
+            # GET /futures/data/topLongShortAccountRatio
+            try:
+                ls_resp = requests.get(f"https://fapi.binance.com/futures/data/topLongShortAccountRatio?symbol={symbol}&period=5m&limit=1", timeout=5)
+                if ls_resp.status_code == 200:
+                    ls_data = ls_resp.json()
+                    if ls_data and len(ls_data) > 0:
+                        metrics['top_trader_ls_ratio'] = float(ls_data[0].get('longShortRatio', 1.0))
+            except Exception as e:
+                logging.warning(f"Error fetching live L/S Ratio: {e}")
+
+            # Fetch Taker Buy/Sell Volume
+            # GET /futures/data/takerbuySellVol
+            try:
+                taker_resp = requests.get(f"https://fapi.binance.com/futures/data/takerbuySellVol?symbol={symbol}&period=5m&limit=1", timeout=5)
+                if taker_resp.status_code == 200:
+                    taker_data = taker_resp.json()
+                    if taker_data and len(taker_data) > 0:
+                        buy_vol = float(taker_data[0].get('buyVol', 0))
+                        sell_vol = float(taker_data[0].get('sellVol', 0))
+                        
+                        if sell_vol > 0:
+                            metrics['taker_buy_sell_ratio'] = buy_vol / sell_vol
+                        else:
+                            metrics['taker_buy_sell_ratio'] = 1.0
+            except Exception as e:
+                logging.warning(f"Error fetching live Taker Buy/Sell Volume: {e}")
+                
+            # Set timestamp to current time (rounded down to minute)
+            import datetime
+            now_utc = datetime.datetime.now(datetime.timezone.utc).replace(second=0, microsecond=0)
+            metrics['timestamp'] = now_utc.isoformat()
+            
+            logging.info(f"✅ Fetched Live Metrics for {ticker}: OI={metrics['open_interest']}, L/S={metrics['top_trader_ls_ratio']:.2f}, Buy/Sell={metrics['taker_buy_sell_ratio']:.2f}")
+            return metrics
+            
+        except Exception as e:
+            logging.error(f"❌ Critical error in fetch_live_metrics: {e}")
+            return None
+
+    def save_live_metrics(self, ticker, metrics_dict, db):
+        """
+        Saves live metrics to the futures_metrics table with ON CONFLICT DO UPDATE.
+        
+        Args:
+            ticker: Trading pair symbol (e.g., 'BTC/USDT')
+            metrics_dict: Dictionary returned from fetch_live_metrics
+            db: Database connection instance
+        """
+        if not metrics_dict or not db:
+            return False
+            
+        try:
+            # Use standardized ticker format for futures_metrics table
+            standard_ticker = f"{ticker[:3]}/{ticker[4:]}" if 'USDT:USDT' in ticker else ticker
+            
+            query = """
+                INSERT INTO futures_metrics 
+                (ticker, timestamp, open_interest, oi_value_usdt, top_trader_ls_ratio, taker_buy_sell_ratio)
+                VALUES (?, ?, ?, ?, ?, ?)
+                ON CONFLICT (ticker, timestamp) DO UPDATE 
+                SET open_interest = EXCLUDED.open_interest,
+                    oi_value_usdt = EXCLUDED.oi_value_usdt,
+                    top_trader_ls_ratio = EXCLUDED.top_trader_ls_ratio,
+                    taker_buy_sell_ratio = EXCLUDED.taker_buy_sell_ratio
+            """
+            
+            db.execute(query, (
+                standard_ticker,
+                metrics_dict['timestamp'],
+                float(metrics_dict['open_interest']),
+                float(metrics_dict['oi_value_usdt']),
+                float(metrics_dict['top_trader_ls_ratio']),
+                float(metrics_dict['taker_buy_sell_ratio'])
+            ))
+            
+            logging.debug(f"Saved live metrics to DB for {standard_ticker} at {metrics_dict['timestamp']}")
+            return True
+            
+        except Exception as e:
+            logging.error(f"Error saving live metrics to database: {e}")
+            return False

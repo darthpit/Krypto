@@ -90,13 +90,14 @@ class ModelMonitor:
         except Exception as e:
             print(f"⚠️ Error saving model status: {e}")
 
-    def update_start(self, model_key, message="Rozpoczynam trening..."):
+    def update_start(self, model_key, message="Rozpoczynam trening...", data_days=None):
         """
         Oznacza start treningu modelu.
         
         Args:
             model_key: 'lstm' lub 'rl_agent'
             message: Wiadomość opisująca fazę treningu
+            data_days: Opcjonalnie aktualizuje ilość dni
         """
         data = self._load()
         if model_key in data:
@@ -104,6 +105,8 @@ class ModelMonitor:
             data[model_key]["progress"] = 0
             data[model_key]["message"] = message
             data[model_key]["training_started_at"] = datetime.now().isoformat()
+            if data_days is not None:
+                data[model_key]["data_days"] = data_days
             self._save(data)
             print(f"🚀 [{model_key}] Training started: {message}")
 
@@ -126,7 +129,7 @@ class ModelMonitor:
             if percent % 10 == 0 or percent >= 95:
                 print(f"📊 [{model_key}] Progress: {percent}% - {message}")
 
-    def update_finish(self, model_key, accuracy, data_days=180):
+    def update_finish(self, model_key, accuracy, data_days=None):
         """
         Oznacza zakończenie treningu.
         
@@ -135,6 +138,8 @@ class ModelMonitor:
             accuracy: Skuteczność modelu (0.0 - 1.0)
             data_days: Ilość dni danych użytych do treningu
         """
+        if data_days is None:
+            data_days = 180
         data = self._load()
         if model_key in data:
             now = datetime.now()
@@ -281,16 +286,18 @@ def get_monitor():
 
 
 # Quick access functions (dla ułatwienia integracji)
-def start_training(model_key, message="Rozpoczynam trening..."):
+def start_training(model_key, message="Rozpoczynam trening...", data_days=None):
     """Szybki dostęp: Oznacz start treningu"""
-    get_monitor().update_start(model_key, message)
+    get_monitor().update_start(model_key, message, data_days=data_days)
 
 def update_progress(model_key, percent, message):
     """Szybki dostęp: Zaktualizuj postęp"""
     get_monitor().update_progress(model_key, percent, message)
 
-def finish_training(model_key, accuracy, data_days=180):
+def finish_training(model_key, accuracy, data_days=None):
     """Szybki dostęp: Oznacz zakończenie treningu"""
+    if data_days is None:
+        data_days = 180
     get_monitor().update_finish(model_key, accuracy, data_days)
 
 def mark_error(model_key, error_message):

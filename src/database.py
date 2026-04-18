@@ -454,6 +454,17 @@ class Database:
                 model_version TEXT,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
+            """,
+            """
+            CREATE TABLE IF NOT EXISTS futures_metrics (
+                ticker VARCHAR(20),
+                timestamp TIMESTAMP,
+                open_interest DOUBLE PRECISION,
+                oi_value_usdt DOUBLE PRECISION,
+                top_trader_ls_ratio DOUBLE PRECISION,
+                taker_buy_sell_ratio DOUBLE PRECISION,
+                PRIMARY KEY (ticker, timestamp)
+            );
             """
         ]
 

@@ -18,6 +18,7 @@ from src.logic.scout import MatrixScout, DeepScout
 from src.intelligence.psnd_engine import PSNDEngine
 from src.logic.behavioral_guard import BehavioralGuard
 from src.logic.anti_fomo import AntiFOMOModule
+from src.logic.market_memory import MarketMemory
 from src.utils.models import load_model
 from src.utils.data_provider import MarketDataProvider
 from src.utils.logger import log
@@ -42,13 +43,16 @@ class TraderProcess(multiprocessing.Process):
         self._last_matrix_dump = 0
         
         # NOWE: Scheduling dla różnych operacji
-        self.data_fetch_interval = 60      # Co 1 minutę: Fetch nowych świeczek
+        self.data_fetch_interval = 60      # Co 1 minutę: Fetch nowych świeczek (but will use 15m)
         self.gap_check_interval = 300      # Co 5 minut: Gap detection & filling
         self.lstm_retrain_interval = 21600 # Co 6 godzin: Re-train LSTM only (quick update)
         # RL Agent: Train OFFLINE, raz w tygodniu (process_rl_trainer.py)
         
-        # Timeframe dla świeczek (ZMIENIONE Z 15m NA 1m)
-        self.timeframe = '1m'  # WAŻNE: 1-minutowe świeczki dla lepszej accuracy!
+        # Timeframe dla świeczek 
+        self.timeframe = '1m'  # Zmieniono na 15m w celu redukcji szumu i kosztów
+        
+        # Ostrzeżenie na dashboard:
+        self._tf_warning = "1m"
         
         # RL Agent initialization (to avoid AttributeError)
         self.rl_agent = None
@@ -57,14 +61,27 @@ class TraderProcess(multiprocessing.Process):
         
         # PPO Training lockfile path
         self.rl_training_lockfile = os.path.join(os.path.dirname(__file__), '..', 'models', '.rl_training.lock')
-        self._ppo_training_mode = False  # Track if PPO training is active
         self._last_ppo_warning = 0  # Throttle warnings
+
+        # EV Backtester scheduling
+        self.last_ev_backtest_run = 0
+        self.active_positions_state = {}
 
     def run(self):
         log("Trader Process Started (BTC Futures Sniper Mode)", "INFO")
 
         # Initialize Logic Modules
         self.db = Database()
+
+        # Initialize Data Collectors (Order Flow / Metrics)
+        try:
+            from src.utils.metrics_collector import MetricsCollector
+            # Ticker is like "BTC/USDT", metrics collector uses "BTCUSDT"
+            metrics_symbol = self.ticker.replace("/", "").replace(":", "")
+            self.metrics_collector = MetricsCollector(db=self.db, symbol=metrics_symbol)
+            self.metrics_collector.start()
+        except Exception as e:
+            log(f"⚠️ Failed to start MetricsCollector: {e}", "WARNING")
         self.data_provider = MarketDataProvider()
         self.exec_manager = ExecutionManager(self.db, self.data_provider.exchange)
         self.regime_engine = MarketRegime()
@@ -79,7 +96,8 @@ class TraderProcess(multiprocessing.Process):
         # ═══════════════ BEHAVIORAL SAFETY GUARDS ═══════════════
         self.behavioral_guard = BehavioralGuard(self.db)
         self.anti_fomo = AntiFOMOModule(self.db)
-        log("🛡️ BehavioralGuard + AntiFOMO ACTIVE", "SUCCESS")
+        self.market_memory = MarketMemory(self.db)
+        log("🛡️ BehavioralGuard + AntiFOMO + MarketMemory ACTIVE", "SUCCESS")
 
         # Daily Circuit Breaker
         self._daily_loss_limit_pct = 5.0
@@ -97,10 +115,39 @@ class TraderProcess(multiprocessing.Process):
         last_rl_prediction_time = 0      # Track RL predictions (co 30 min)
         last_rl_stats_update = 0        # Track RL brain stats updates (co 60s)
         last_model_check = 0             # Track model reloads (co 5 min) ← FIX!
+        last_ev_check_time = 0           # Track EV background runner check
 
         while self.running:
             try:
                 current_time = time.time()
+
+                # --- 0. HISTORICAL STATS AUTO-UPDATE (24h Cycle) ---
+                if current_time - last_ev_check_time > 60:
+                    last_ev_check_time = current_time
+                    try:
+                        res = self.db.query("SELECT key FROM system_status WHERE key = 'historical_ev_stats'")
+                        data_missing = not res or len(res) == 0
+
+                        if data_missing or (current_time - self.last_ev_backtest_run > 86400):
+                            log("🔄 Automatyczna aktualizacja statystyk historycznych (ev_backtester)...", "INFO")
+
+                            # Uruchomienie w osobnym wątku, aby nie mrozić Tradera
+                            import threading
+                            import subprocess
+
+                            def run_ev_backtester():
+                                try:
+                                    # Szukamy skryptu relatywnie do głównego procesu
+                                    script_path = os.path.join(os.path.dirname(__file__), '..', 'ev_backtester.py')
+                                    script_path = os.path.abspath(script_path)
+                                    subprocess.Popen([sys.executable, script_path], cwd=os.path.dirname(script_path))
+                                except Exception as e:
+                                    log(f"Nie udało się uruchomić ev_backtester: {e}", "ERROR")
+
+                            threading.Thread(target=run_ev_backtester, daemon=True).start()
+                            self.last_ev_backtest_run = current_time
+                    except Exception as e:
+                        log(f"Błąd sprawdzania harmonogramu ev_backtester: {e}", "WARNING")
 
                 # --- 1. SZYBKI PULS (HEARTBEAT & PRICE) - CO 10 SEKUND ---
                 # To ożywi Dashboard (ONLINE) i wykres, nawet jak AI liczy
@@ -138,28 +185,60 @@ class TraderProcess(multiprocessing.Process):
                     last_rl_stats_update = current_time
                 
                 # ═══════════════════════════════════════════════════════════════
-                # 3. GŁÓWNA ANALIZA AI (CO 1 MINUTĘ) - 1-MINUTOWE ŚWIECZKI!
+                # 3. GŁÓWNA ANALIZA AI (CO 1 MINUTĘ) - Używając bazowego timeframe (15m)
                 # ═══════════════════════════════════════════════════════════════
                 if current_time - last_analysis_time > self.data_fetch_interval:
-                    log(f"Starting analysis cycle for {self.ticker}...", "INFO")
+                    log(f"Starting analysis cycle for {self.ticker} (TF: {self.timeframe})...", "INFO")
                     self._update_pulse('pulse_5m', 'AI Analysis')
                     last_analysis_time = current_time
 
                     # A. Aktualizacja Global Bias (Matrix)
                     global_bias = self._update_global_bias()
 
-                    # B. Pobranie danych do predykcji (1-MINUTOWE ŚWIECZKI!)
-                    # Zwiększamy limit do 1500 (1500 minut = 25h danych) dla metryk 24h
+                    # B. Pobranie danych do predykcji
+                    # Pobieramy mniejszą ilość dla wyższych interwałów, ale starczy 1500
                     df = self.data_provider.fetch_candles(
                         self.ticker, 
-                        timeframe=self.timeframe,  # '1m'
-                        limit=1500  # 1500 świeczek 1-min = 25h danych
+                timeframe=self.timeframe,
+                limit=1500
                     )
 
                     if df is not None and not df.empty:
                         # Save fresh candles to database
                         self._save_candles(df, timeframe=self.timeframe)
                         
+                        # Fetch Live Metrics if needed
+                        try:
+                            # Use standardized ticker format
+                            standard_ticker = f"{self.ticker[:3]}/{self.ticker[4:]}" if 'USDT:USDT' in self.ticker else self.ticker
+
+                            # Check if we have recent metrics (within last 10 minutes)
+                            now_utc = datetime.datetime.now(datetime.timezone.utc)
+                            recent_cutoff = now_utc - datetime.timedelta(minutes=10)
+
+                            metrics_query = """
+                                SELECT timestamp
+                                FROM futures_metrics
+                                WHERE ticker = ? AND timestamp >= ?
+                                ORDER BY timestamp DESC LIMIT 1
+                            """
+                            metrics_rows = self.db.query(metrics_query, (standard_ticker, recent_cutoff.isoformat()))
+
+                            if not metrics_rows or len(metrics_rows) == 0:
+                                log(f"🔄 Live Metrics missing for {standard_ticker}, fetching from Binance...", "INFO")
+                                live_metrics = self.data_provider.fetch_live_metrics(self.ticker)
+                                if live_metrics:
+                                    self.data_provider.save_live_metrics(self.ticker, live_metrics, self.db)
+                                    # Update UI state for Live Metrics (Real-time OK)
+                                    self._update_metrics_sync_status("LIVE", "Real-time OK")
+                            else:
+                                # We have historical/archive data that is fresh enough
+                                self._update_metrics_sync_status("ARCHIVE", "Archive OK")
+
+                        except Exception as e:
+                            log(f"⚠️ Failed to check/fetch live metrics: {e}", "WARNING")
+                            self._update_metrics_sync_status("ERROR", "No Connection")
+
                         # PSND Update
                         try:
                             psnd_result = self.psnd_engine.analyze(self.ticker, df)
@@ -480,6 +559,42 @@ class TraderProcess(multiprocessing.Process):
                     df['stoch_k'] = df['STOCHk_14_3_3']
                     df['stoch_d'] = df['STOCHd_14_3_3']
             
+        # --- ORDER FLOW METRICS (BINANCE VISION) ---
+            try:
+                # We fetch all metrics for this ticker and merge them
+                # Metrics are typically daily/5min, we ffill them onto 1m candles
+                standard_ticker = f"{self.ticker[:3]}/{self.ticker[4:]}" if 'USDT:USDT' in self.ticker else self.ticker
+                metrics_query = """
+                    SELECT timestamp, open_interest, oi_value_usdt, top_trader_ls_ratio, taker_buy_sell_ratio
+                    FROM futures_metrics
+                    WHERE ticker = ? AND timestamp >= ?
+                    ORDER BY timestamp ASC
+                """
+            
+                # Get metrics from a bit before the first candle to ffill properly
+                start_date = df.index[0] - pd.Timedelta(days=1)
+                metrics_rows = self.db.query(metrics_query, (standard_ticker, start_date.isoformat()))
+            
+                if metrics_rows and len(metrics_rows) > 0:
+                    metrics_df = pd.DataFrame(metrics_rows, columns=['timestamp', 'open_interest', 'oi_value_usdt', 'top_trader_ls_ratio', 'taker_buy_sell_ratio'])
+                    metrics_df['timestamp'] = pd.to_datetime(metrics_df['timestamp'])
+                    metrics_df.set_index('timestamp', inplace=True)
+                
+                    # Merge with forward fill
+                    df = df.join(metrics_df, how='left').ffill()
+                else:
+                    # Fill with defaults if no data
+                    df['open_interest'] = 0.0
+                    df['oi_value_usdt'] = 0.0
+                    df['top_trader_ls_ratio'] = 1.0
+                    df['taker_buy_sell_ratio'] = 1.0
+            except Exception as e:
+                log(f"⚠️ Failed to merge order flow metrics: {e}", "WARNING")
+                df['open_interest'] = 0.0
+                df['oi_value_usdt'] = 0.0
+                df['top_trader_ls_ratio'] = 1.0
+                df['taker_buy_sell_ratio'] = 1.0
+
             # --- FUNDING RATE FEATURES (FAZA 3.1) - CRITICAL FOR FUTURES! ---
             try:
                 funding_data = self._get_funding_rate_features()
@@ -515,6 +630,7 @@ class TraderProcess(multiprocessing.Process):
                 'atr_pct', 'bb_width',
                 'roc',
                 'funding_rate', 'funding_rate_trend',
+                'open_interest', 'oi_value_usdt', 'top_trader_ls_ratio', 'taker_buy_sell_ratio',
                 'dist_4h', 'dist_daily', 'volatility_24h',
                 'price_change_pct', 'volatility'
             ]
@@ -665,28 +781,65 @@ class TraderProcess(multiprocessing.Process):
             side = "SHORT"
             amount = abs(position_size)
         
-        # Pobierz dane pozycji z paper_positions
-        if not self.exec_manager.paper_mode:
-            log("Live trading not fully implemented for position tracking", "WARNING")
-            return
+        # In Live mode, pos_data will be fetched directly inside execution manager or fetched
+        if self.exec_manager.paper_mode:
+            pos_data = self.exec_manager.paper_positions.get(ticker)
+            if not pos_data:
+                log(f"Position data not found for {ticker}", "WARNING")
+                return
+            entry_price = pos_data['entry_price']
+        else:
+            # Live tracking fallback: fetch from exchange
+            try:
+                positions = self.exec_manager.exchange.fetch_positions([ticker])
+                if not positions:
+                    positions = self.exec_manager.exchange.fetch_positions()
+
+                base_symbol = ticker.split(':')[0] if ':' in ticker else ticker
+                pos_data = None
+                for p in positions:
+                    p_sym = p['symbol']
+                    p_base = p_sym.split(':')[0] if ':' in p_sym else p_sym
+                    if p_base == base_symbol and float(p['contracts']) != 0:
+                        pos_data = p
+                        break
+                        
+                if not pos_data:
+                    # Clean state if position was closed
+                    if ticker in self.active_positions_state:
+                        del self.active_positions_state[ticker]
+                    return
+
+                entry_price = float(pos_data['entryPrice'])
+            except Exception as e:
+                log(f"Live trading position tracking error: {e}", "WARNING")
+                return
         
-        pos_data = self.exec_manager.paper_positions.get(ticker)
-        if not pos_data:
-            log(f"Position data not found for {ticker}", "WARNING")
-            return
+        # Initialize active position state
+        if ticker not in self.active_positions_state:
+            current_atr = float(df['atr'].iloc[-1]) if 'atr' in df.columns else (current_price * 0.01)
+            macro_atr = current_atr * 4.0
+            self.active_positions_state[ticker] = {
+                'entry_atr': macro_atr,
+                'highest_price': current_price,
+                'scaled_out': False
+            }
+            
+        state = self.active_positions_state[ticker]
+        atr = state['entry_atr'] # This is now macro_atr
         
-        entry_price = pos_data['entry_price']
-        
-        # Oblicz ATR
-        atr = float(df['atr'].iloc[-1]) if 'atr' in df.columns else (current_price * 0.01)
-        
-        # Oblicz PnL %
+        # Oblicz PnL % (ROE) z uwzględnieniem dźwigni 20x
+        # WAŻNE: pnl_pct to ROE (Return on Equity/Margin), nie ruch ceny.
+        # Ruch ceny o 1% na 20x dźwigni = +/-20% ROE.
+        # Wszystkie progi (Profit Snatcher 6%, Trailing 3%, Anti-Spike 0.5%)
+        # są definiowane w procentach ROE, więc mnożnik jest tu WYMAGANY.
+        LEVERAGE = 20.0
         if side == "LONG":
-            pnl_pct = ((current_price - entry_price) / entry_price) * 100
+            pnl_pct = ((current_price - entry_price) / entry_price) * 100 * LEVERAGE
         else:  # SHORT
-            pnl_pct = ((entry_price - current_price) / entry_price) * 100
+            pnl_pct = ((entry_price - current_price) / entry_price) * 100 * LEVERAGE
         
-        log(f"📊 Open {side} Position: Entry=${entry_price:.2f}, Current=${current_price:.2f}, PnL={pnl_pct:+.2f}%, ATR=${atr:.2f}", "INFO")
+        log(f"📊 Open {side} Position: Entry=${entry_price:.2f}, Current=${current_price:.2f}, ROE={pnl_pct:+.2f}% (20x), ATR=${atr:.2f}", "INFO")
         
         # Load risk management config
         try:
@@ -697,98 +850,122 @@ class TraderProcess(multiprocessing.Process):
             risk_config = {}
         
         recovery_mode_enabled = risk_config.get('recovery_mode', True)
-        min_profit_to_lock = risk_config.get('min_profit_to_lock', 6.0)
-        trailing_activation = risk_config.get('trailing_activation', 3.0)
+        min_profit_to_lock = risk_config.get('min_profit_to_lock', 40.0)
+        trailing_activation = risk_config.get('trailing_activation', 10.0) # Relaxed anti-spike check
         emergency_exit_threshold = risk_config.get('emergency_exit_threshold', -1.5)  # (Spadek ceny -1.5% = -30% ROI na 20x)
         hard_liquidation_buffer = risk_config.get('hard_liquidation_buffer', 0.025) # (Spadek ceny -2.5% = -50% ROI na 20x)
         recovery_ai_confidence = risk_config.get('recovery_ai_confidence_threshold', 0.75)
         profit_snatcher_enabled = risk_config.get('profit_snatcher_enabled', True)
         
         # ═══════════════════════════════════════════════════════════════
-        # 1️⃣ TAKE PROFIT CHECK (TP = Entry ± 4×ATR)
+        # 1️⃣ SCALE-OUT CHECK (Partial Take Profit = Entry ± 2×ATR)
         # ═══════════════════════════════════════════════════════════════
-        tp_distance = atr * 4.0
-        
-        if side == "LONG":
-            tp_price = entry_price + tp_distance
-            if current_price >= tp_price:
-                log(f"✅ TAKE PROFIT HIT! (LONG) Target=${tp_price:.2f}, Current=${current_price:.2f}, Profit={pnl_pct:+.2f}%", "SUCCESS")
-                self.exec_manager.execute_order("CLOSE_LONG", ticker, amount, current_price)
-                return
-        else:  # SHORT
-            tp_price = entry_price - tp_distance
-            if current_price <= tp_price:
-                log(f"✅ TAKE PROFIT HIT! (SHORT) Target=${tp_price:.2f}, Current=${current_price:.2f}, Profit={pnl_pct:+.2f}%", "SUCCESS")
-                self.exec_manager.execute_order("CLOSE_SHORT", ticker, amount, current_price)
-                return
-        
+        scale_out_distance = atr * 2.0 # macro_atr is passed in as atr
+                
+        if not state['scaled_out']:
+            if side == "LONG":
+                scale_out_price = entry_price + scale_out_distance
+                if current_price >= scale_out_price:
+                    log(f"⚖️ SCALE-OUT HIT! (LONG) Target=${scale_out_price:.2f}, Zamykam 50%.", "SUCCESS")
+                    # Zamknij połowę (50%)
+                    half_amount = amount * 0.5
+                    self.exec_manager.execute_order("CLOSE_LONG", ticker, half_amount, price=None)
+                    state['scaled_out'] = True
+                    
+            else:  # SHORT
+                scale_out_price = entry_price - scale_out_distance
+                if current_price <= scale_out_price:
+                    log(f"⚖️ SCALE-OUT HIT! (SHORT) Target=${scale_out_price:.2f}, Zamykam 50%.", "SUCCESS")
+                    half_amount = amount * 0.5
+                    self.exec_manager.execute_order("CLOSE_SHORT", ticker, half_amount, price=None)
+                    state['scaled_out'] = True
+                    
         # ═══════════════════════════════════════════════════════════════
-        # 2️⃣ STOP LOSS CHECK (SL = Entry ± 2×ATR)
+        # 2️⃣ STOP LOSS CHECK (SL = Entry ± 2×ATR) OR (Breakeven po Scale-Out)
         # ═══════════════════════════════════════════════════════════════
-        sl_distance = atr * 2.0
+        sl_distance = atr * 2.0 # macro_atr is passed in as atr
         
         if side == "LONG":
             sl_price = entry_price - sl_distance
+            
+            # Jeśli był scale-out, przesuwamy SL do punktu wejścia (Breakeven) z małym buforem
+            if state['scaled_out']:
+                sl_price = entry_price * 1.0005 
+
             if current_price <= sl_price:
                 log(f"❌ STOP LOSS HIT! (LONG) SL=${sl_price:.2f}, Current=${current_price:.2f}, Loss={pnl_pct:+.2f}%", "WARNING")
-                self.exec_manager.execute_order("CLOSE_LONG", ticker, amount, current_price)
+                # Exits default to Maker (limit with postOnly).
+                self.exec_manager.execute_order("CLOSE_LONG", ticker, amount, price=None)
+                del self.active_positions_state[ticker]
                 return
         else:  # SHORT
             sl_price = entry_price + sl_distance
+            
+            if state['scaled_out']:
+                sl_price = entry_price * 0.9995 
+
             if current_price >= sl_price:
                 log(f"❌ STOP LOSS HIT! (SHORT) SL=${sl_price:.2f}, Current=${current_price:.2f}, Loss={pnl_pct:+.2f}%", "WARNING")
-                self.exec_manager.execute_order("CLOSE_SHORT", ticker, amount, current_price)
+                self.exec_manager.execute_order("CLOSE_SHORT", ticker, amount, price=None)
+                del self.active_positions_state[ticker]
                 return
 
         # ═══════════════════════════════════════════════════════════════
-        # 3️⃣ TRAILING STOP CHECK (Aktywny gdy zysk > 3%)
+        # 3️⃣ TRAILING STOP CHECK (Dynamiczny Trailing Stop 2.0 * ATR)
         # ═══════════════════════════════════════════════════════════════
         
-        # Inicjalizuj highest_pnl jeśli nie istnieje
-        if 'highest_pnl' not in pos_data:
-            pos_data['highest_pnl'] = pnl_pct
+        # Aktualizuj cenę bazową do trailingu
+        if side == "LONG":
+            if current_price > state['highest_price']:
+                state['highest_price'] = current_price
+        else: # SHORT
+            if current_price < state['highest_price']:
+                state['highest_price'] = current_price
         
-        # Aktualizuj highest_pnl jeśli obecny jest wyższy
-        if pnl_pct > pos_data['highest_pnl']:
-            pos_data['highest_pnl'] = pnl_pct
-            self.exec_manager._save_paper_state()
+        highest_price = state['highest_price']
         
-        highest_pnl = pos_data['highest_pnl']
+        # Odległość Trailing Stopa = 2.0 * ATR
+        trailing_distance = atr * 2.0
         
-        # Trailing Stop aktywuje się gdy highest_pnl > 3%
-        if highest_pnl > 3.0:
-            # Trailing distance w % (1.5% drop from peak)
-            trailing_drop_pct = 1.5
+        if side == "LONG":
+            trailing_stop_price = highest_price - trailing_distance
             
-            # Oblicz trailing stop level (% poniżej szczytu)
-            trailing_stop_level = highest_pnl - trailing_drop_pct
+            # Zapisujemy poziom traila do UI (przekazanie przez klasę)
+            self._last_trailing_stop_level = trailing_stop_price
             
-            if side == "LONG":
-                # Zamknij jeśli current PnL spadł poniżej trailing stop level
-                if pnl_pct <= trailing_stop_level:
-                    log(f"🛑 TRAILING STOP HIT! (LONG) Peak={highest_pnl:+.2f}%, Current={pnl_pct:+.2f}%, Secured={pnl_pct:+.2f}%", "INFO")
-                    self.exec_manager.execute_order("CLOSE_LONG", ticker, amount, current_price)
-                    return
-                else:
-                    log(f"🎯 Trailing Stop Active (LONG): Peak={highest_pnl:+.2f}%, Current={pnl_pct:+.2f}%, Stop at {trailing_stop_level:+.2f}%", "INFO")
-            else:  # SHORT
-                if pnl_pct <= trailing_stop_level:
-                    log(f"🛑 TRAILING STOP HIT! (SHORT) Peak={highest_pnl:+.2f}%, Current={pnl_pct:+.2f}%, Secured={pnl_pct:+.2f}%", "INFO")
-                    self.exec_manager.execute_order("CLOSE_SHORT", ticker, amount, current_price)
-                    return
-                else:
-                    log(f"🎯 Trailing Stop Active (SHORT): Peak={highest_pnl:+.2f}%, Current={pnl_pct:+.2f}%, Stop at {trailing_stop_level:+.2f}%", "INFO")
-        elif pnl_pct > 2.0:
-            # Informacja że zbliżamy się do aktywacji
-            log(f"📈 Approaching Trailing Activation: Current={pnl_pct:+.2f}%, Need 3.0% to activate", "INFO")
+            # Aktywacja (Trailing działa zawsze, niezależnie od progu 3%)
+            if current_price <= trailing_stop_price:
+                log(f"🛑 TRAILING STOP HIT! (LONG) Peak Price=${highest_price:.2f}, SL=${trailing_stop_price:.2f}, Current PnL={pnl_pct:+.2f}%", "INFO")
+                self.exec_manager.execute_order("CLOSE_LONG", ticker, amount, price=None)
+                del self.active_positions_state[ticker]
+                return
+            else:
+                log(f"🎯 Trailing Stop Active (LONG): Peak=${highest_price:.2f}, Trail SL=${trailing_stop_price:.2f}", "INFO")
+                
+        else:  # SHORT
+            trailing_stop_price = highest_price + trailing_distance
+            
+            # Zapisujemy poziom traila do UI
+            self._last_trailing_stop_level = trailing_stop_price
+            
+            # Aktywacja
+            if current_price >= trailing_stop_price:
+                log(f"🛑 TRAILING STOP HIT! (SHORT) Peak Price=${highest_price:.2f}, SL=${trailing_stop_price:.2f}, Current PnL={pnl_pct:+.2f}%", "INFO")
+                self.exec_manager.execute_order("CLOSE_SHORT", ticker, amount, price=None)
+                del self.active_positions_state[ticker]
+                return
+            else:
+                log(f"🎯 Trailing Stop Active (SHORT): Peak=${highest_price:.2f}, Trail SL=${trailing_stop_price:.2f}", "INFO")
 
         # ═══════════════════════════════════════════════════════════════
         # 🎯 MODUŁ 1: PROFIT GUARDIAN (Intelligent Exit)
+        # UWAGA: Ten blok musi być na poziomie OBOK Trailing Stop,
+        # NIE zagnieżdżony w gałęzi "else: # SHORT". Działa dla LONG i SHORT.
         # ═══════════════════════════════════════════════════════════════
-        
-        # 1A. PROFIT SNATCHER (6% Cap with AI Confirmation)
+
+        # 1A. PROFIT SNATCHER (6% ROE Cap with AI Confirmation)
         if profit_snatcher_enabled and pnl_pct >= min_profit_to_lock:
-            log(f"💰 PROFIT SNATCHER: ROI at {pnl_pct:+.2f}% (target: {min_profit_to_lock}%). Checking AI momentum...", "INFO")
+            log(f"💰 PROFIT SNATCHER: ROE at {pnl_pct:+.2f}% (target: {min_profit_to_lock}%). Checking AI momentum...", "INFO")
 
             # Get AI prediction for next 30 minutes
             ai_prediction_30m = self._get_ai_prediction_30m(df, current_price)
@@ -800,8 +977,8 @@ class TraderProcess(multiprocessing.Process):
             else:
                 log(f"📈 Momentum still strong (Conf: {ai_prediction_30m['confidence']:.2%}). Holding position for more gains...", "INFO")
 
-        # 1B. ANTI-SPIKE (Protection from +3% -> 0% drops)
-        if pnl_pct >= 0.5 and pnl_pct < trailing_activation:  # Between 0.5% and 3%
+        # 1B. ANTI-SPIKE (Protection from +10% ROE drops)
+        if pnl_pct >= 0.5 and pnl_pct < trailing_activation:  # Relaxed: Between 0.5% and 10% ROE
             # Check if we were in profit before
             if 'peak_pnl_history' not in pos_data:
                 pos_data['peak_pnl_history'] = []
@@ -811,11 +988,11 @@ class TraderProcess(multiprocessing.Process):
             if len(pos_data['peak_pnl_history']) > 10:
                 pos_data['peak_pnl_history'] = pos_data['peak_pnl_history'][-10:]
 
-            # Check if we had profit > 3% in the last 10 minutes
+            # Check if we had profit > 3% ROE in the last 10 minutes
             had_good_profit = any(p >= trailing_activation for p in pos_data['peak_pnl_history'])
 
             if had_good_profit:
-                log(f"🛡️ ANTI-SPIKE: Position dropped from +3% to {pnl_pct:+.2f}%. Checking AI for recovery potential...", "WARNING")
+                log(f"🛡️ ANTI-SPIKE: Position dropped from +3% to {pnl_pct:+.2f}% ROE. Checking AI for recovery potential...", "WARNING")
 
                 ai_prediction_30m = self._get_ai_prediction_30m(df, current_price)
 
@@ -839,69 +1016,77 @@ class TraderProcess(multiprocessing.Process):
                 self.exec_manager.execute_order("CLOSE_SHORT", ticker, amount, current_price)
                 return
 
-        # ═══════════════════════════════════════════════════════════════
-        # 🆘 MODUŁ 2: RECOVERY MODE (Adaptive Hedge)
-        # ═══════════════════════════════════════════════════════════════
-
-        if recovery_mode_enabled and pnl_pct <= emergency_exit_threshold:
-            log(f"🚨 RECOVERY MODE ACTIVATED! Position in loss: {pnl_pct:+.2f}%. Consulting AI...", "WARNING")
-
-            # Inicjalizacja czasu i PnL dla Recovery Mode, zapis stanu
-            if 'rm_start_time' not in pos_data:
-                pos_data['rm_start_time'] = time.time()
-                pos_data['rm_start_pnl'] = pnl_pct
-                self.exec_manager._save_paper_state()
-
-            rm_duration = time.time() - pos_data['rm_start_time']
-
-            # Time Stop: 15 minut
-            if rm_duration > 900:
-                if pnl_pct < pos_data['rm_start_pnl']:
-                    log(f"⏱️ TIME STOP HIT! Position in Recovery Mode for >15 min without improvement. Start PnL: {pos_data['rm_start_pnl']:+.2f}%, Current: {pnl_pct:+.2f}%. Emergency exit!", "ERROR")
-                    self.exec_manager.execute_order(f"CLOSE_{side.upper()}", ticker, amount, current_price)
-                    return
-                else:
-                    log(f"⏳ Recovery Mode time >15m, but position is recovering (Start PnL: {pos_data['rm_start_pnl']:+.2f}%, Current: {pnl_pct:+.2f}%). Checking AI...", "INFO")
-
-            # Get AI prediction for next 30 minutes
-            ai_prediction_30m = self._get_ai_prediction_30m(df, current_price)
-
-            # Scenario A: AI sees hope (confidence > 75%)
-            if ai_prediction_30m['favorable'] and ai_prediction_30m['confidence'] >= recovery_ai_confidence:
-                # Calculate hard stop at -2.5% price (-50% ROI buffer before liquidation)
-                hard_stop_roi = -hard_liquidation_buffer * 100
-
-                current_vol = float(df['volume'].iloc[-1])
-                avg_vol = float(df['volume'].rolling(20).mean().iloc[-1] if len(df) >= 20 else current_vol)
-                volume_spike = current_vol > (avg_vol * 3.0)
-
-                if pnl_pct <= hard_stop_roi:
-                    log(f"💥 HARD LIQUIDATION BUFFER HIT! ROI={pnl_pct:+.2f}% <= {hard_stop_roi:+.2f}%. Emergency exit!", "ERROR")
-                    self.exec_manager.execute_order(f"CLOSE_{side.upper()}", ticker, amount, current_price)
-                    return
-                elif volume_spike:
-                    log("🐋 VOLUME SPIKE DETECTED (Wieloryb zrzuca)! Omijamy AI. Tniemy straty!", "ERROR")
-                    self.exec_manager.execute_order(f"CLOSE_{side.upper()}", ticker, amount, current_price)
-                    return
-                else:
-                    log(f"✅ RECOVERY MODE: AI predicts recovery (Conf: {ai_prediction_30m['confidence']:.2%}). Niski wolumen (Whipsaw). Holding position...", "INFO")
-                    # Allow position to breathe - don't close
-                    return
-
-            # Scenario B: AI confirms mistake (low confidence or unfavorable)
-            else:
-                log(f"❌ RECOVERY MODE: AI confirms downtrend (Conf: {ai_prediction_30m['confidence']:.2%}). Emergency exit at {pnl_pct:+.2f}% to save capital!", "ERROR")
-                self.exec_manager.execute_order(f"CLOSE_{side.upper()}", ticker, amount, current_price)
-                return
-        else:
-            # Czyszczenie stanu Recovery Mode, jeśli pozycja wyszła z zagrożenia
-            if 'rm_start_time' in pos_data:
-                del pos_data['rm_start_time']
-                del pos_data['rm_start_pnl']
-                self.exec_manager._save_paper_state()
+        # RECOVERY MODE REMOVED. Strict adherence to Stop Loss only. 
+        # Sentiments, hope, and waiting are eliminated to preserve capital.
+        # Czyszczenie stanu Recovery Mode z ewentualnych starych pozycji
+        if 'rm_start_time' in pos_data:
+            del pos_data['rm_start_time']
+        if 'rm_start_pnl' in pos_data:
+            del pos_data['rm_start_pnl']
+        self.exec_manager._save_paper_state()
 
         # Jeśli żaden warunek nie został spełniony, trzymamy pozycję
-        log(f"⏳ Holding {side} position. TP=${tp_price:.2f}, SL=${sl_price:.2f}, Current PnL={pnl_pct:+.2f}%", "INFO")
+        # tp_price definition was removed/shifted, use a fallback info string
+        log(f"⏳ Holding {side} position. SL=${sl_price:.2f}, Current PnL={pnl_pct:+.2f}%", "INFO")
+
+    def _execute_astor_protocol(self):
+        """
+        ASTOR PROTOCOL (Sweep Protocol)
+        Ewakuacja gotówki: Jeśli saldo > 1200$, przetransferuj 50% zysku (np. 100$)
+        na bezpieczny portfel Spot. Kapitał na Futures to tylko amunicja.
+        """
+        try:
+            # Upewniamy się, że nie mamy otwartych pozycji, transfer może naruszyć margin
+            current_position = self.exec_manager.get_position(self.ticker)
+            if current_position:
+                return
+
+            balance = self.exec_manager.get_balance("USDT")
+            
+            # Pobieramy zakumulowany profit z bazy danych, żeby uniknąć wyciągania
+            # nieskończoną ilość razy. Używamy bazy system_status jako schowka stanu.
+            rows = self.db.query("SELECT value FROM system_status WHERE key = 'astor_base_capital'")
+            
+            if rows and rows[0] and rows[0][0]:
+                base_capital = float(rows[0][0])
+            else:
+                base_capital = 1000.0
+                
+            # Target to wzrost o 20%
+            target_balance_to_sweep = base_capital * 1.20
+
+            if balance >= target_balance_to_sweep:
+                profit = balance - base_capital
+                sweep_amount = profit * 0.50 # Sweep 50% of the profit
+
+                # Zapobiegawczo upewniamy się, że nie wyczyścimy konta z amunicji
+                if (balance - sweep_amount) >= base_capital:
+                    success = False
+                    if self.exec_manager.paper_mode:
+                        self.exec_manager.paper_balance["USDT"] -= sweep_amount
+                        log(f"💼 ASTOR PROTOCOL (PAPER): Zabezpieczono ${sweep_amount:.2f} (50% zysku) przenosząc na Spot. Saldo po: ${self.exec_manager.paper_balance['USDT']:.2f}", "SUCCESS")
+                        self.exec_manager._save_paper_state()
+                        success = True
+                    else:
+                        try:
+                            self.exec_manager.exchange.transfer('USDT', sweep_amount, 'future', 'spot')
+                            log(f"💼 ASTOR PROTOCOL (LIVE): Transfer ${sweep_amount:.2f} do Spot wykonany.", "SUCCESS")
+                            success = True
+                        except Exception as e:
+                            log(f"💼 ASTOR PROTOCOL (LIVE) Transfer failed: {e}", "ERROR")
+                    
+                    if success:
+                        # Aktualizujemy nowy base_capital (compounding effect)
+                        new_base = balance - sweep_amount
+                        now_utc = datetime.datetime.now(datetime.timezone.utc)
+                        self.db.execute(
+                            "INSERT INTO system_status (key, value, updated_at) VALUES (?, ?, ?) ON CONFLICT (key) DO UPDATE SET value=EXCLUDED.value, updated_at=EXCLUDED.updated_at",
+                            ("astor_base_capital", str(new_base), now_utc.isoformat())
+                        )
+                        log(f"📈 Nowy kapitał bazowy Astor: ${new_base:.2f}", "INFO")
+
+        except Exception as e:
+            log(f"Astor Protocol Error: {e}", "ERROR")
 
     def _execute_strategy(self, df, signal, confidence, prediction, global_bias):
         current_price = float(df['close'].iloc[-1])
@@ -910,11 +1095,127 @@ class TraderProcess(multiprocessing.Process):
         # KROK 1: ZARZĄDZANIE OTWARTYMI POZYCJAMI
         self._check_and_close_positions(df, signal, confidence, current_price)
 
-        # KROK 1.5: PPO TRAINING MODE
-        if getattr(self, '_ppo_training_mode', False):
-            log("⏸️ PAUZA: PPO Training aktywny — brak nowych wejść", "INFO")
-            self._save_live_context(current_price, prediction, "PPO_PAUSE", confidence, "MONITORING")
-            return
+        # KROK 1.1: ASTOR PROTOCOL (Sweep Profit to Spot)
+        self._execute_astor_protocol()
+
+        # --- UWOLNIONY HARD EV CALCULATOR (Zawsze liczy i publikuje EV) ---
+        current_position_val = self.exec_manager.get_position(ticker)
+        if isinstance(current_position_val, dict):
+            current_position = current_position_val.get('amount', 0)
+        else:
+            current_position = current_position_val
+
+        balance = self.exec_manager.get_balance("USDT")
+
+        # Position Sizing logic based on 2% risk and 2x ATR SL
+        from src.logic.position_sizer import PositionSizer
+        position_sizer = PositionSizer(self.db, self.risk_oracle)
+
+        # Opcjonalnie użyj 'ATRr_14' jeśli pandas_ta wygenerował z inną nazwą
+        if 'atr' in df.columns:
+            raw_atr = float(df['atr'].iloc[-1])
+        elif 'ATRr_14' in df.columns:
+            raw_atr = float(df['ATRr_14'].iloc[-1])
+        else:
+            raw_atr = current_price * 0.01
+
+        macro_atr = raw_atr * 4.0
+
+        # W celu ciągłego raportowania EV na dashboardzie, używamy hipotetycznego
+        # kierunku LONG gdy sygnał jest NEUTRAL (żeby position_size_usd nie było 0.0)
+        calc_signal = signal if signal in ["LONG", "SHORT"] else "LONG"
+
+        position_size_usd = position_sizer.calculate_size(
+            ticker=ticker,
+            capital=balance,
+            current_price=current_price,
+            atr=macro_atr,
+            side=calc_signal,
+            confidence_score=confidence
+        )
+
+        # Account for leverage. Margin used is position_size / leverage
+        amount = round(position_size_usd / current_price, 6)
+
+        # 0. SPREAD FILTER (Zawsze próbujemy sprawdzić)
+        try:
+            order_book = self.exec_manager.exchange.fetch_order_book(ticker, limit=5)
+            if order_book and order_book['bids'] and order_book['asks']:
+                bid = order_book['bids'][0][0]
+                ask = order_book['asks'][0][0]
+                spread_pct = ((ask - bid) / bid) * 100 if bid > 0 else 0.0
+
+                # Set to instance variable for UI Payload
+                self._last_spread_pct = spread_pct
+            else:
+                self._last_spread_pct = 0.0
+                bid = current_price
+                ask = current_price
+        except Exception as e:
+            log(f"⚠️ Nie można pobrać Order Booka dla {ticker}: {e}", "WARNING")
+            self._last_spread_pct = 0.0
+            bid = current_price
+            ask = current_price
+
+        fee_rate = getattr(self.exec_manager, 'trading_fee_percentage', 0.06) / 100.0
+        estimated_slippage = 0.0005 # 0.05%
+
+        # Pobranie Funding Rate z DataFrame, jeśli istnieje
+        funding_rate_cost = float(df['funding_rate'].iloc[-1]) if 'funding_rate' in df.columns else 0.0
+        if calc_signal == "LONG" and funding_rate_cost < 0:
+            funding_rate_cost = 0 # Otrzymujemy funding
+        elif calc_signal == "SHORT" and funding_rate_cost > 0:
+            funding_rate_cost = 0 # Otrzymujemy funding
+        else:
+            funding_rate_cost = abs(funding_rate_cost)
+
+        total_cost_rate = (fee_rate * 2) + estimated_slippage + funding_rate_cost
+        total_cost_usd = position_size_usd * total_cost_rate
+
+        # Planned TP/SL distances
+        sl_distance = 2.0 * macro_atr   # Stop Loss: 2 × macro_ATR
+        tp_distance = 6.0 * macro_atr   # Take Profit: 6 × macro_ATR (R/R 3:1 gross)
+
+        # USD PnL based on planned exits (notional position)
+        gross_profit_usd = position_size_usd * (tp_distance / current_price)
+        net_profit_usd   = gross_profit_usd - total_cost_usd
+        risk_usd         = position_size_usd * (sl_distance / current_price)
+
+        rr_ratio = 0.0
+        true_ev = 0.0
+        if risk_usd > 0:
+            rr_ratio = net_profit_usd / risk_usd
+            # True EV = (win_prob × net_profit) − (loss_prob × risk)
+            # Używamy uśrednionej pewności 0.5 jeśli confidence zbyt niskie, żeby nie psuć dashboardu dziwnymi odczytami
+            calc_conf = confidence if confidence > 0.0 else 0.5
+            true_ev = (calc_conf * net_profit_usd) - ((1.0 - calc_conf) * risk_usd)
+
+        # Zmiana z 1.5 na 0.8
+        MIN_RR  = 0.8   # Minimalny gross R/R (net TP / risk)
+        MIN_EV  = 0.0   # EV musi być dodatnie
+
+        # Save EV metrics to DB for dashboard display
+        try:
+            import datetime as _dt
+            _now = _dt.datetime.now(_dt.timezone.utc)
+            _ev_data = {
+                "rr_ratio": round(rr_ratio, 6),
+                "true_ev": round(true_ev, 6),
+                "net_profit_usd": round(net_profit_usd, 4),
+                "risk_usd": round(risk_usd, 4),
+                "macro_atr": round(macro_atr, 4),
+                "tp_distance": round(tp_distance, 4),
+                "sl_distance": round(sl_distance, 4),
+                "min_rr": MIN_RR,
+                "timestamp": _now.isoformat()
+            }
+            self.db.execute(
+                "INSERT INTO system_status (key, value, updated_at) VALUES (?, ?, ?) ON CONFLICT (key) DO UPDATE SET value=EXCLUDED.value, updated_at=EXCLUDED.updated_at",
+                ("ev_metrics", json.dumps(_ev_data), _now.isoformat())
+            )
+        except Exception:
+            pass
+
 
         # KROK 2: VETO SYSTEM (Matrix Bias Check)
         veto_threshold = 0.85
@@ -948,9 +1249,9 @@ class TraderProcess(multiprocessing.Process):
                     return
                 elif rl_signal == "CLOSE":
                     current_position = self.exec_manager.get_position(ticker)
-                    if current_position and current_position.get('amount', 0) != 0:
-                        side = "LONG" if current_position['amount'] > 0 else "SHORT"
-                        self.exec_manager.execute_order(f"CLOSE_{side.upper()}", ticker, abs(current_position['amount']), current_price)
+                    if current_position:
+                        side = "LONG" if current_position > 0 else "SHORT"
+                        self.exec_manager.execute_order(f"CLOSE_{side.upper()}", ticker, abs(current_position), current_price)
                     return
                 else:
                     signal = rl_signal
@@ -1002,37 +1303,96 @@ class TraderProcess(multiprocessing.Process):
         _size_modifier = guard_modifier.get('size_mult', 1.0)
         if _size_modifier < 1.0:
             log(f"⚠️ Revenge Guard: pozycja zmniejszona do {_size_modifier*100:.0f}%", "WARNING")
+            position_size_usd *= _size_modifier
+            amount = round(position_size_usd / current_price, 6)
 
         # KROK 4: TRADING LOGIC (EGZEKUCJA)
         if confidence > 0.60:
-            current_position_val = self.exec_manager.get_position(ticker)
-            if isinstance(current_position_val, dict):
-                current_position = current_position_val.get('amount', 0)
-            else:
-                current_position = current_position_val
-
-            balance = self.exec_manager.get_balance("USDT")
-            trade_allocation = 0.10
-            margin = balance * trade_allocation * _size_modifier
-            amount = round((margin * getattr(self.exec_manager, 'leverage', 1)) / current_price, 6)
-
-            if amount < 0.001:
+            if position_size_usd < 10.0 or amount <= 0:
                 self._save_live_context(current_price, prediction, signal, confidence, "WAITING")
                 return
 
+            if current_position == 0:
+                if self._last_spread_pct > 0.1:
+                    log(f"⛔ SPREAD FILTER: Odrzucono. Aktualny spread to {self._last_spread_pct:.3f}%, co przekracza limit 0.1%. Ryzyko poślizgu zbyt wysokie.", "WARNING")
+                    self._save_live_context(current_price, prediction, "SPREAD_REJECT", confidence, "WAITING")
+                    return
+
+                if risk_usd <= 0:
+                    log("⚠️ EV: risk_usd <= 0, pomijam sprawdzenie EV.", "WARNING")
+                    return
+
+                # ── MARKET MEMORY QUALITY GATE (opcjonalny) ─────────────
+                try:
+                    roc_14 = float(df['close'].pct_change(periods=14).iloc[-1] * 100) if len(df) > 14 else None
+                    vol_ratio = None
+                    if 'volume' in df.columns and len(df) > 14:
+                        vol_sma = df['volume'].rolling(window=14).mean().iloc[-1]
+                        if vol_sma > 0:
+                            vol_ratio = float(df['volume'].iloc[-1] / vol_sma)
+
+                    mfe, mae = self.market_memory.get_expected_excursions(
+                        self.ticker, self.timeframe, macro_atr, signal,
+                        current_roc=roc_14, current_vol_ratio=vol_ratio
+                    )
+
+                    if mfe is not None and mfe < (0.1 * macro_atr):
+                        log(f"⛔ EV Quality Gate: Historyczny MFE={mfe:.2f} < 0.1×ATR={0.1*macro_atr:.2f}. Warunki rynkowe za słabe.", "WARNING")
+                        self._save_live_context(current_price, prediction, "EV_QUALITY_REJECT", confidence, "WAITING")
+                        return
+                    elif mfe is not None:
+                        log(f"✅ EV Quality Gate: Historyczny MFE={mfe:.2f} (ATR={macro_atr:.2f}) — OK", "INFO")
+                    else:
+                        log("⚠️ EV Quality Gate: Brak danych Market Memory. Pomijam filtr jakości.", "WARNING")
+                except Exception as e_mm:
+                    log(f"⚠️ EV Quality Gate error: {e_mm}. Pomijam filtr.", "WARNING")
+
+                # ── GŁÓWNA DECYZJA EV ───────────────────────────────────
+                if rr_ratio < MIN_RR or true_ev <= MIN_EV:
+                    log(
+                        f"⛔ EV Calculator: Odrzucono. "
+                        f"Zysk Netto: ${net_profit_usd:.2f}, Ryzyko: ${risk_usd:.2f}, "
+                        f"R/R: {rr_ratio:.2f} (min {MIN_RR}), True EV: ${true_ev:.2f}, Macro ATR: ${macro_atr:.2f}",
+                        "WARNING"
+                    )
+                    self._save_live_context(current_price, prediction, "EV_REJECT", confidence, "WAITING")
+                    return
+                else:
+                    # POPRAWKA: Zmieniono atr_val na macro_atr
+                    log(
+                        f"✅ EV Calculator: ZAAKCEPTOWANO. "
+                        f"Zysk Netto: ${net_profit_usd:.2f}, Ryzyko: ${risk_usd:.2f}, "
+                        f"R/R: {rr_ratio:.2f}, True EV: ${true_ev:.2f}, ATR: ${macro_atr:.2f}",
+                        "SUCCESS"
+                    )
+            # --------------------------------------------------
+
             executed = False
+            # Fetch orderbook data from exchange to get bid/ask
+            bid = current_price
+            ask = current_price
+            if not self.exec_manager.paper_mode:
+                try:
+                    orderbook = self.exec_manager.exchange.fetch_order_book(ticker, limit=5)
+                    if orderbook['bids'] and len(orderbook['bids']) > 0:
+                        bid = float(orderbook['bids'][0][0])
+                    if orderbook['asks'] and len(orderbook['asks']) > 0:
+                        ask = float(orderbook['asks'][0][0])
+                except Exception as e:
+                    log(f"⚠️ Nie można pobrać Order Booka dla {ticker}: {e}. Używam current_price.", "WARNING")
+
             if signal == "LONG":
                 if current_position < 0:
-                    self.exec_manager.execute_order("CLOSE_SHORT", ticker, abs(current_position), current_price)
+                    self.exec_manager.execute_order("CLOSE_SHORT", ticker, abs(current_position))
                     current_position = 0
                 if current_position == 0:
-                    executed = self.exec_manager.execute_order("LONG", ticker, amount, current_price)
+                    executed = self.exec_manager.execute_order("LONG", ticker, amount, price=bid)
             elif signal == "SHORT":
                 if current_position > 0:
-                    self.exec_manager.execute_order("CLOSE_LONG", ticker, abs(current_position), current_price)
+                    self.exec_manager.execute_order("CLOSE_LONG", ticker, abs(current_position))
                     current_position = 0
                 if current_position == 0:
-                    executed = self.exec_manager.execute_order("SHORT", ticker, amount, current_price)
+                    executed = self.exec_manager.execute_order("SHORT", ticker, amount, price=ask)
 
             state = "IN_POSITION" if executed else "WAITING"
             self._save_live_context(current_price, prediction, signal, confidence, state)
@@ -1057,7 +1417,7 @@ class TraderProcess(multiprocessing.Process):
             np.ndarray: Observation vector for RL Agent
         """
         try:
-            # 1. Technical Indicators (19 features) - ostatni wiersz
+            # 1. Technical Indicators (23 features) - ostatni wiersz
             feature_cols = [
                 'rsi', 'MACD_12_26_9', 'MACDh_12_26_9', 'MACDs_12_26_9',
                 'market_correlation', 'bulls_bears_ratio', 'market_strength',
@@ -1065,6 +1425,7 @@ class TraderProcess(multiprocessing.Process):
                 'atr_pct', 'bb_width',
                 'roc', 'stoch_k', 'stoch_d',
                 'funding_rate', 'funding_rate_trend',
+                'open_interest', 'oi_value_usdt', 'top_trader_ls_ratio', 'taker_buy_sell_ratio',
                 'dist_4h', 'dist_daily', 'volatility_24h',
                 'price_change_pct', 'volatility'
             ]
@@ -1085,16 +1446,35 @@ class TraderProcess(multiprocessing.Process):
             current_price = float(df['close'].iloc[-1])
             current_position = self.exec_manager.get_position(self.ticker)
             
-            if current_position and current_position.get('amount', 0) != 0:
-                position_type = 1.0 if current_position['amount'] > 0 else -1.0
-                entry_price = current_position.get('entry_price', current_price)
-                position_size = abs(current_position['amount']) * current_price  # USDT value
+            if current_position:
+                position_type = 1.0 if current_position > 0 else -1.0
+                entry_price = current_price
+                if self.exec_manager.paper_mode:
+                    entry_price = self.exec_manager.paper_positions.get(self.ticker, {}).get('entry_price', current_price)
+                else:
+                    try:
+                        positions = self.exec_manager.exchange.fetch_positions([self.ticker])
+                        if not positions:
+                            positions = self.exec_manager.exchange.fetch_positions()
+                        base_symbol = self.ticker.split(':')[0] if ':' in self.ticker else self.ticker
+                        for p in positions:
+                            p_sym = p['symbol']
+                            p_base = p_sym.split(':')[0] if ':' in p_sym else p_sym
+                            if p_base == base_symbol and float(p['contracts']) != 0:
+                                entry_price = float(p['entryPrice'])
+                                break
+                    except:
+                        pass
+
+                position_size = abs(current_position) * current_price  # USDT value
                 
-                # Calculate PnL
+                # Calculate PnL (ROE z uwzględnieniem dźwigni 20x)
+                # RL Agent musi widzieć realny ROE, nie ruch ceny.
+                LEVERAGE = 20.0
                 if position_type > 0:  # LONG
-                    pnl_pct = ((current_price - entry_price) / entry_price) * 100
+                    pnl_pct = ((current_price - entry_price) / entry_price) * 100 * LEVERAGE
                 else:  # SHORT
-                    pnl_pct = ((entry_price - current_price) / entry_price) * 100
+                    pnl_pct = ((entry_price - current_price) / entry_price) * 100 * LEVERAGE
                 
             else:
                 position_type = 0.0
@@ -1199,10 +1579,39 @@ class TraderProcess(multiprocessing.Process):
                 log(f"⚠️ Failed to load RL Agent: {e}", "WARNING")
                 traceback.print_exc()
 
+    def _update_metrics_sync_status(self, mode, reason):
+        """
+        Updates the UI state for the Live Metrics indicator.
+        mode: ARCHIVE, LIVE, or ERROR.
+        reason: Descriptive reason.
+        """
+        try:
+            now_utc = datetime.datetime.now(datetime.timezone.utc)
+            payload = {
+                "mode": mode,
+                "reason": reason,
+                "timestamp": now_utc.isoformat()
+            }
+            self.db.execute(
+                "INSERT INTO system_status (key, value, updated_at) VALUES (?, ?, ?) ON CONFLICT (key) DO UPDATE SET value=EXCLUDED.value, updated_at=EXCLUDED.updated_at",
+                ("metrics_sync_live", json.dumps(payload), now_utc.isoformat())
+            )
+        except Exception as e:
+            pass
+
     def _push_dashboard_update(self, current_price):
         try:
             now_utc = datetime.datetime.now(datetime.timezone.utc)
             now_epoch = time.time()
+
+            # Fetch metrics sync status from the collector if available
+            metrics_sync_info = "N/A"
+            if hasattr(self, 'metrics_collector') and self.metrics_collector:
+                metrics_sync_info = {
+                    "days_downloaded": self.metrics_collector.days_downloaded,
+                    "total_days": self.metrics_collector.total_days_target,
+                    "status": self.metrics_collector.status
+                }
 
             # 1. Heartbeat (Status ONLINE)
             status_data = {
@@ -1211,7 +1620,8 @@ class TraderProcess(multiprocessing.Process):
                 "bias": getattr(self, 'global_bias', 'NEUTRAL'),
                 # UI/PHP rely on fresh timestamps. Provide both ISO (UTC) and epoch.
                 "last_update": now_utc.isoformat(),
-                "timestamp": now_epoch
+                "timestamp": now_epoch,
+                "metrics_sync": metrics_sync_info
             }
             # Zapisz heartbeat
             self.db.execute(
@@ -1316,7 +1726,10 @@ class TraderProcess(multiprocessing.Process):
                 "position": pos,
                 "global_bias": getattr(self, 'global_bias', 'NEUTRAL'),
                 "timestamp": now_utc.isoformat(),
-                "ppo_training_mode": self._ppo_training_mode  # NEW: PPO pause indicator
+                "ppo_training_mode": False,  # ZMIENIONE: PPO never pauses trader
+                "current_spread_pct": getattr(self, '_last_spread_pct', 0.0),
+                "trailing_stop_level": getattr(self, '_last_trailing_stop_level', None),
+                "timeframe": getattr(self, '_tf_warning', '15m')
             }
             # Zapisujemy jako 'trader_intent' żeby dashboard wiedział co robi AI
             self.db.execute(
@@ -1326,33 +1739,6 @@ class TraderProcess(multiprocessing.Process):
         except:
             pass
     
-    def _update_ppo_pause_status(self):
-        """
-        Update UI status when PPO training is active.
-        Shows "Pauza - obecnie trwa trening PPO" in dashboard.
-        """
-        try:
-            now_utc = datetime.datetime.now(datetime.timezone.utc)
-            
-            # Update pulse_30m with pause status
-            pause_status = {
-                "status": "paused",
-                "details": {
-                    "action": "PPO Training Active",
-                    "message": "Pauza - obecnie trwa trening PPO Agent",
-                    "info": "Bot kontynuuje zarządzanie istniejącymi pozycjami (TP/SL/Trailing)",
-                    "note": "Nowe wejścia zablokowane do czasu zakończenia treningu"
-                },
-                "last_run": now_utc.isoformat()
-            }
-            
-            self.db.execute(
-                "INSERT INTO system_status (key, value, updated_at) VALUES ('pulse_30m', ?, ?) ON CONFLICT (key) DO UPDATE SET value=EXCLUDED.value, updated_at=EXCLUDED.updated_at",
-                (json.dumps(pause_status), now_utc.isoformat())
-            )
-            
-        except Exception as e:
-            log(f"Failed to update PPO pause status: {e}", "ERROR")
 
     def _update_pulse(self, key, action):
         try:
@@ -1455,6 +1841,7 @@ class TraderProcess(multiprocessing.Process):
                 'atr_pct', 'bb_width',
                 'roc', 'stoch_k', 'stoch_d',
                 'funding_rate', 'funding_rate_trend',
+                'open_interest', 'oi_value_usdt', 'top_trader_ls_ratio', 'taker_buy_sell_ratio',
                 'price_change_pct', 'volatility'
             ]
             
@@ -1842,6 +2229,42 @@ class TraderProcess(multiprocessing.Process):
             df['funding_rate'] = 0.0001
             df['funding_rate_trend'] = 0.0
             
+            # --- ORDER FLOW METRICS (BINANCE VISION) ---
+            try:
+                # We fetch all metrics for this ticker and merge them
+                # Metrics are typically daily/5min, we ffill them onto 1m candles
+                standard_ticker = f"{self.ticker[:3]}/{self.ticker[4:]}" if 'USDT:USDT' in self.ticker else self.ticker
+                metrics_query = """
+                    SELECT timestamp, open_interest, oi_value_usdt, top_trader_ls_ratio, taker_buy_sell_ratio
+                    FROM futures_metrics
+                    WHERE ticker = ? AND timestamp >= ?
+                    ORDER BY timestamp ASC
+                """
+                
+                # Get metrics from a bit before the first candle to ffill properly
+                start_date = df.index[0] - pd.Timedelta(days=1)
+                metrics_rows = self.db.query(metrics_query, (standard_ticker, start_date.isoformat()))
+                
+                if metrics_rows and len(metrics_rows) > 0:
+                    metrics_df = pd.DataFrame(metrics_rows, columns=['timestamp', 'open_interest', 'oi_value_usdt', 'top_trader_ls_ratio', 'taker_buy_sell_ratio'])
+                    metrics_df['timestamp'] = pd.to_datetime(metrics_df['timestamp'])
+                    metrics_df.set_index('timestamp', inplace=True)
+                    
+                    # Merge with forward fill
+                    df = df.join(metrics_df, how='left').ffill()
+                else:
+                    # Fill with defaults if no data
+                    df['open_interest'] = 0.0
+                    df['oi_value_usdt'] = 0.0
+                    df['top_trader_ls_ratio'] = 1.0
+                    df['taker_buy_sell_ratio'] = 1.0
+            except Exception as e:
+                log(f"⚠️ Failed to merge order flow metrics: {e}", "WARNING")
+                df['open_interest'] = 0.0
+                df['oi_value_usdt'] = 0.0
+                df['top_trader_ls_ratio'] = 1.0
+                df['taker_buy_sell_ratio'] = 1.0
+
             # --- MACRO CONTEXT FEATURES (MICRO/MACRO STRATEGY) ---
             # Trend 4h (240 minut)
             df['trend_4h_sma'] = df['close'].rolling(window=240, min_periods=1).mean()
@@ -2124,19 +2547,19 @@ class TraderProcess(multiprocessing.Process):
     def _validate_predictions(self, current_price):
         """
         Referee System - Validates PENDING predictions
-        Checks if predicted price movement was correct after 30 minutes
+        Checks if predicted price movement was correct after 450 minutes
         Updates: PENDING → HIT or MISS
         """
         try:
             now_utc = datetime.datetime.now(datetime.timezone.utc)
             
-            # Get all PENDING predictions older than 30 minutes
+            # Get all PENDING predictions older than 450 minutes
             # Use PostgreSQL INTERVAL for proper timestamp comparison
             rows = self.db.query(
                 """
                 SELECT id, ticker, timestamp, predicted_price, entry_price, direction, confidence
                 FROM predictions
-                WHERE result = 'PENDING' AND timestamp < NOW() - INTERVAL '30 minutes'
+                WHERE result = 'PENDING' AND timestamp < NOW() - INTERVAL '450 minutes'
                 ORDER BY timestamp ASC
                 LIMIT 50
                 """
@@ -2188,7 +2611,7 @@ class TraderProcess(multiprocessing.Process):
         """
         Save validation result to referee_history for chart display
         Format: {"BTC/USDT": [{"t": timestamp_ms, "p": price, "result": "HIT/MISS"}]}
-        Automatically cleans old PENDING entries (>2 hours old)
+        Automatically cleans old PENDING entries (>10 hours old)
         """
         try:
             # Read existing referee history
@@ -2205,13 +2628,13 @@ class TraderProcess(multiprocessing.Process):
             if ticker not in history:
                 history[ticker] = []
             
-            # Clean old PENDING entries (older than 2 hours)
+            # Clean old PENDING entries (older than 10 hours)
             now_ms = int(datetime.datetime.now(datetime.timezone.utc).timestamp() * 1000)
-            two_hours_ago = now_ms - (2 * 60 * 60 * 1000)
+            ten_hours_ago = now_ms - (10 * 60 * 60 * 1000)
             
             history[ticker] = [
                 point for point in history[ticker]
-                if not (point.get('result') == 'PENDING' and point.get('t', 0) < two_hours_ago)
+                if not (point.get('result') == 'PENDING' and point.get('t', 0) < ten_hours_ago)
             ]
             
             # Convert timestamp to milliseconds
@@ -2352,20 +2775,27 @@ class TraderProcess(multiprocessing.Process):
                 risk_score -= int(confidence * 20)  # High confidence LONG reduces risk
                 mode = "GROWTH"
             elif signal == "SHORT":
-                risk_score += int(confidence * 20)  # High confidence SHORT increases risk
+                risk_score -= int(confidence * 20)  # High confidence SHORT reduces risk (SHORT is directional, not risky)
                 mode = "CAUTION"
             
             # 2. Adjust based on global bias (Matrix)
+            # POPRAWKA: Zgodność signal+bias ZMNIEJSZA ryzyko, rozbieżność ZWIĘKSZA
             if global_bias == "BULLISH":
-                risk_score -= 15
                 market_trend = 70
-                if mode == "GROWTH":
+                if signal == "LONG":
+                    risk_score -= 15   # Aligned: LONG + BULLISH = safer
                     mode = "ALT_SEASON"
+                else:
+                    risk_score += 20   # Misaligned: SHORT + BULLISH = risky counter-trend
             elif global_bias == "BEARISH":
-                risk_score += 15
                 market_trend = 30
-                if mode == "CAUTION":
-                    mode = "EXTREME_CAUTION"
+                if signal == "SHORT":
+                    risk_score -= 15   # Aligned: SHORT + BEARISH = safer
+                    mode = "BEARISH_TREND"
+                else:
+                    risk_score += 20   # Misaligned: LONG + BEARISH = risky counter-trend
+            else:
+                market_trend = 50      # NEUTRAL bias — no adjustment
             
             # 3. Check volatility (high volatility = higher risk)
             try:
@@ -2572,7 +3002,6 @@ class TraderProcess(multiprocessing.Process):
                 'favorable': bool,      # True if prediction is favorable for current position
                 'weakening': bool,      # True if momentum is weakening
                 'confidence': float,    # Confidence score (0-1)
-                'predicted_price': float,  # Predicted price in 30 minutes
                 'direction': int        # 1 = UP, -1 = DOWN, 0 = NEUTRAL
             }
         """
@@ -2583,25 +3012,19 @@ class TraderProcess(multiprocessing.Process):
                     'favorable': False,
                     'weakening': True,
                     'confidence': 0.5,
-                    'predicted_price': current_price,
                     'direction': 0
                 }
             
             # Get AI prediction
             signal, confidence, prediction = self._get_ai_prediction(df)
             
-            # Calculate predicted price based on recent volatility
-            volatility = float(df['close'].pct_change().rolling(20).std().iloc[-1] or 0.01)
-            
-            # Predicted move in 30 minutes (based on direction and volatility)
+            # Removed predicted_price based on rolling(20).std()
+            # LSTM ma działać wyłącznie jako klasyfikator (Kierunek i Prawdopodobieństwo)
             if signal == "LONG":
-                predicted_price = current_price * (1 + volatility * 2)  # 2x volatility upward
                 direction = 1
             elif signal == "SHORT":
-                predicted_price = current_price * (1 - volatility * 2)  # 2x volatility downward
                 direction = -1
             else:
-                predicted_price = current_price
                 direction = 0
             
             # Determine if prediction is favorable for current position
@@ -2621,13 +3044,12 @@ class TraderProcess(multiprocessing.Process):
                 favorable = confidence > 0.7
                 weakening = confidence < 0.5
             
-            log(f"🔮 AI 30-min Prediction: {signal} (Conf: {confidence:.2%}) | Predicted: ${predicted_price:.2f} | Favorable: {favorable}, Weakening: {weakening}", "INFO")
+            log(f"🔮 AI 30-min Prediction: {signal} (Conf: {confidence:.2%}) | Favorable: {favorable}, Weakening: {weakening}", "INFO")
             
             return {
                 'favorable': favorable,
                 'weakening': weakening,
                 'confidence': confidence,
-                'predicted_price': predicted_price,
                 'direction': direction
             }
             
@@ -2641,7 +3063,6 @@ class TraderProcess(multiprocessing.Process):
                 'favorable': False,
                 'weakening': True,
                 'confidence': 0.5,
-                'predicted_price': current_price,
                 'direction': 0
             }
 

@@ -33,6 +33,26 @@ try {
         send_error("Invalid database configuration", 500);
     }
 
+    // EARLY EXIT FOR FILES THAT DON'T NEED DB
+    $file = $_GET['file'] ?? '';
+    if ($file === 'config.json') {
+        header('Content-Type: application/json');
+        readfile($configPath);
+        exit;
+    }
+    if (strpos($file, 'logs/') === 0) {
+        // Prevent directory traversal
+        $requested_file = basename($file);
+        $logPath = __DIR__ . '/../logs/' . $requested_file;
+
+        if (file_exists($logPath)) {
+            header('Content-Type: text/plain');
+            readfile($logPath);
+            exit;
+        }
+        send_error("Log not found", 404);
+    }
+
     $dbConf = $config['database'];
     // Default to localhost/postgres if missing
     $host = $dbConf['host'] ?? 'localhost';
@@ -68,16 +88,48 @@ try {
 
         // Sortujemy od najstarszej do najnowszej (dla wykresu)
         $rows = array_reverse($rows);
-
+        
+        $metrics_out = [];
+        if (!empty($rows)) {
+            $start_time = $rows[0]['timestamp'];
+            $standard_ticker = preg_replace('/^([A-Z]+)(\/)(USDT)$/', '$1$2$3', $ticker); // BTC/USDT
+            
+            $metrics_stmt = $pdo->prepare("SELECT timestamp, open_interest, top_trader_ls_ratio FROM futures_metrics WHERE ticker = ? AND timestamp >= ? ORDER BY timestamp ASC");
+            $metrics_stmt->execute([$standard_ticker, $start_time]);
+            $m_rows = $metrics_stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            foreach ($m_rows as $m) {
+                // Bin timestamp to minute to match candles
+                $ts = floor(strtotime($m['timestamp']) / 60) * 60;
+                $metrics_out[$ts] = [
+                    'oi' => (float)$m['open_interest'],
+                    'ls' => (float)$m['top_trader_ls_ratio']
+                ];
+            }
+        }
+        
         $out = [];
+        $last_oi = null;
+        $last_ls = null;
+        
         foreach ($rows as $r) {
+            $ts = strtotime($r['timestamp']);
+            $ts_min = floor($ts / 60) * 60;
+            
+            if (isset($metrics_out[$ts_min])) {
+                $last_oi = $metrics_out[$ts_min]['oi'];
+                $last_ls = $metrics_out[$ts_min]['ls'];
+            }
+            
             $out[] = [
-                strtotime($r['timestamp']) * 1000,
+                $ts * 1000,
                 (float)$r['open'],
                 (float)$r['high'],
                 (float)$r['low'],
                 (float)$r['close'],
-                (float)$r['volume']
+                (float)$r['volume'],
+                $last_oi,
+                $last_ls
             ];
         }
         send_json($out);
@@ -165,7 +217,12 @@ try {
         // LITE = 2000 candles (~20 days), FULL = all available (increased for LSTM training)
         $limit = ($mode === 'FULL') ? 5000 : 2000;
         
-        // Fetch from database
+        // Fetch from database, join with futures_metrics
+        // Use a LEFT JOIN on the closest past metric timestamp, or just rely on ffill locally
+        // Easiest is to fetch metrics separately and merge them like in Python, or use a correlated subquery.
+        // For performance on 5000 rows, a correlated subquery or a simple LEFT JOIN on date_trunc could work, 
+        // but since we don't want to overcomplicate the SQL, we can fetch metrics for the date range and merge in PHP.
+        
         $stmt = $pdo->prepare("SELECT timestamp, open, high, low, close, volume FROM candles WHERE ticker = ? ORDER BY timestamp DESC LIMIT ?");
         $stmt->execute([$ticker, $limit]);
         $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -173,15 +230,48 @@ try {
         // Reverse to get oldest->newest for chart
         $rows = array_reverse($rows);
         
+        // Fetch metrics for the same range
+        $metrics_out = [];
+        if (!empty($rows)) {
+            $start_time = $rows[0]['timestamp'];
+            $standard_ticker = preg_replace('/^([A-Z]+)(\/)(USDT)$/', '$1$2$3', $ticker); // BTC/USDT
+            
+            $metrics_stmt = $pdo->prepare("SELECT timestamp, open_interest, top_trader_ls_ratio FROM futures_metrics WHERE ticker = ? AND timestamp >= ? ORDER BY timestamp ASC");
+            $metrics_stmt->execute([$standard_ticker, $start_time]);
+            $m_rows = $metrics_stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            foreach ($m_rows as $m) {
+                $ts = floor(strtotime($m['timestamp']) / 60) * 60;
+                $metrics_out[$ts] = [
+                    'oi' => (float)$m['open_interest'],
+                    'ls' => (float)$m['top_trader_ls_ratio']
+                ];
+            }
+        }
+        
         $out = [];
+        $last_oi = null;
+        $last_ls = null;
+        
         foreach ($rows as $r) {
+            $ts = strtotime($r['timestamp']);
+            $ts_min = floor($ts / 60) * 60;
+            
+            // Simple ffill logic
+            if (isset($metrics_out[$ts_min])) {
+                $last_oi = $metrics_out[$ts_min]['oi'];
+                $last_ls = $metrics_out[$ts_min]['ls'];
+            }
+            
             $out[] = [
-                strtotime($r['timestamp']) * 1000,  // timestamp in ms
+                $ts * 1000,  // timestamp in ms
                 (float)$r['open'],
                 (float)$r['high'],
                 (float)$r['low'],
                 (float)$r['close'],
-                (float)$r['volume']
+                (float)$r['volume'],
+                $last_oi,    // Open Interest
+                $last_ls     // L/S Ratio
             ];
         }
         send_json($out);
@@ -293,9 +383,9 @@ try {
                     if (!$tradeObj) $tradeObj = $t;
 
                     // Ensure numeric types
-                    $tradeObj['price'] = (float)($tradeObj['price'] ?? 0);
-                    $tradeObj['amount'] = (float)($tradeObj['amount'] ?? 0);
-                    $tradeObj['pnl'] = (float)($tradeObj['pnl'] ?? 0);
+                    $tradeObj['price'] = (float)($t['price'] ?? $tradeObj['price'] ?? 0);
+                    $tradeObj['amount'] = (float)($t['amount'] ?? $tradeObj['amount'] ?? 0);
+                    $tradeObj['pnl'] = (float)($t['pnl'] ?? $tradeObj['pnl'] ?? 0);
                     $tradeObj['fee'] = (float)($t['fee'] ?? 0); // Use raw column
 
                     $cleanTrades[] = $tradeObj;
@@ -303,9 +393,9 @@ try {
                     // Aggregates
                     $total_fees += $tradeObj['fee'];
 
-                    if ($t['action'] === 'BUY') {
+                    if ($t['action'] === 'BUY' || $t['action'] === 'LONG' || $t['action'] === 'SHORT') {
                         $vol_buy += $tradeObj['price'] * $tradeObj['amount'];
-                    } elseif ($t['action'] === 'SELL' || $t['action'] === 'SHORT_CLOSE') {
+                    } elseif ($t['action'] === 'SELL' || $t['action'] === 'SHORT_CLOSE' || $t['action'] === 'CLOSE_LONG' || $t['action'] === 'CLOSE_SHORT') {
                         $vol_sell += $tradeObj['price'] * $tradeObj['amount'];
                         $realized_pnl += $tradeObj['pnl'];
                     }
@@ -331,7 +421,7 @@ try {
             // PostgreSQL: to_char(timestamp, 'YYYY-MM-DD')
             $sql = "SELECT to_char(timestamp, 'YYYY-MM-DD') as date, SUM(pnl) as pnl
                     FROM trades
-                    WHERE action IN ('SELL', 'SHORT_CLOSE')
+                    WHERE action IN ('SELL', 'SHORT_CLOSE', 'CLOSE_LONG', 'CLOSE_SHORT')
                     GROUP BY date
                     ORDER BY date DESC
                     LIMIT 30";
@@ -341,7 +431,8 @@ try {
 
             // Return array of {date, pnl}
             foreach ($rows as &$r) {
-                $r['pnl'] = (float)$r['pnl'];
+                // Konwersja na PLN (USDT * 4.0)
+                $r['pnl'] = ((float)$r['pnl']) * 4.0;
             }
             $rows = array_reverse($rows);
 
@@ -377,6 +468,10 @@ try {
         case 'sync_status.json':
         case 'brain_stats.json':
         case 'quant_metrics.json':
+        case 'metrics_sync_live.json':
+        case 'metrics_sync.json':
+        case 'ev_metrics.json':
+        case 'historical_ev_stats.json':
             // Map file name to DB key
             $keyMap = [
                 'latest_results.json' => 'latest_results',
@@ -391,7 +486,11 @@ try {
                 'holistic_status.json' => 'holistic_status',
                 'sync_status.json' => 'sync_status',
                 'brain_stats.json' => 'brain_stats',
-                'quant_metrics.json' => 'quant_metrics'
+                'quant_metrics.json' => 'quant_metrics',
+                'metrics_sync_live.json' => 'metrics_sync_live',
+                'metrics_sync.json' => 'metrics_sync',
+                'ev_metrics.json' => 'ev_metrics',
+                'historical_ev_stats.json' => 'historical_ev_stats'
             ];
 
             $key = $keyMap[$file] ?? str_replace('.json', '', $file);
@@ -667,7 +766,8 @@ try {
                     $ticker = substr($base, 0, -4) . '/USDT';
                 }
 
-                $limit = (strpos($file, 'LITE') !== false) ? 200 : 5000;
+        // ZWIĘKSZAMY LIMIT DANYCH WYKRESU, ABY UŻYTKOWNIK WIDZIAŁ DŁUŻSZĄ HISTORIĘ 1-MINUTOWĄ W UCHART (APEXCHARTS)
+        $limit = (strpos($file, 'LITE') !== false) ? 2000 : 15000;
 
                 $stmt = $pdo->prepare("SELECT timestamp, open, high, low, close, volume FROM candles WHERE ticker = ? ORDER BY timestamp DESC LIMIT ?");
                 $stmt->execute([$ticker, $limit]);
@@ -675,16 +775,47 @@ try {
 
                 // Sort back to ASC for chart
                 $rows = array_reverse($rows);
+        
+        $metrics_out = [];
+        if (!empty($rows)) {
+            $start_time = $rows[0]['timestamp'];
+            $standard_ticker = preg_replace('/^([A-Z]+)(\/)(USDT)$/', '$1$2$3', $ticker); // BTC/USDT
+            
+            $metrics_stmt = $pdo->prepare("SELECT timestamp, open_interest, top_trader_ls_ratio FROM futures_metrics WHERE ticker = ? AND timestamp >= ? ORDER BY timestamp ASC");
+            $metrics_stmt->execute([$standard_ticker, $start_time]);
+            $m_rows = $metrics_stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            foreach ($m_rows as $m) {
+                $ts = floor(strtotime($m['timestamp']) / 60) * 60;
+                $metrics_out[$ts] = [
+                    'oi' => (float)$m['open_interest'],
+                    'ls' => (float)$m['top_trader_ls_ratio']
+                ];
+            }
+        }
 
                 $out = [];
+        $last_oi = null;
+        $last_ls = null;
+
                 foreach ($rows as $r) {
+            $ts = strtotime($r['timestamp']);
+            $ts_min = floor($ts / 60) * 60;
+            
+            if (isset($metrics_out[$ts_min])) {
+                $last_oi = $metrics_out[$ts_min]['oi'];
+                $last_ls = $metrics_out[$ts_min]['ls'];
+            }
+            
                     $out[] = [
-                        strtotime($r['timestamp']) * 1000,
+                $ts * 1000,
                         (float)$r['open'],
                         (float)$r['high'],
                         (float)$r['low'],
                         (float)$r['close'],
-                        (float)$r['volume']
+                (float)$r['volume'],
+                $last_oi,
+                $last_ls
                     ];
                 }
                 send_json($out);
@@ -716,6 +847,7 @@ try {
 
 } catch (PDOException $e) {
     // If DB fails, try to return a valid JSON structure for Wallet so dashboard doesn't die completely
+    $file = $_GET['file'] ?? '';
     if ($file === 'paper_wallet.json') {
          send_json([
             "USDT" => 100.0,

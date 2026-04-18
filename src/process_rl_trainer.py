@@ -10,9 +10,9 @@ HIERARCHIA PROCESÓW (NOWA):
 ─────────────────────────────────────────────────────────────────────────────
 Priorytet 1 (Krytyczny): Pobieranie świeżych świeczek (Data Sync)
 Priorytet 2 (Wysoki):    Trening LSTM Ensemble v3.4 (co 30 min)
-Priorytet 3 (Tło):       Trening PPO Agent (tylko gdy P1 i P2 nie są aktywne)
+Trening PPO Agent
 
-PPO może być pauzowany przez LSTM (Priority 2 > 3).
+Modele trenują się równolegle, brak blokad
 
 WORKFLOW:
 ─────────────────────────────────────────────────────────────────────────────
@@ -60,6 +60,7 @@ from src.ai.rl_agent import (
     TradingEnv,
     PPOTradingAgent,
     TradingCallback,
+    EntropyDecayCallback,
     backtest_agent
 )
 
@@ -164,9 +165,6 @@ class RLTrainer:
         self.lstm_model_path = self.models_dir / "ensemble_model"
         self.results_path = self.models_dir / "rl_training_results.json"
         
-        # LSTM lockfile path (to check if LSTM is training - Priority 2)
-        self.lstm_lockfile = self.models_dir / ".lstm_training.lock"
-        
         log(f"🚀 RL Trainer initialized for {ticker}", "SUCCESS")
     
     def _find_latest_checkpoint(self) -> str:
@@ -251,30 +249,31 @@ class RLTrainer:
                 for col in ['open', 'high', 'low', 'close', 'volume']:
                     df[col] = df[col].astype(float)
                 
-                # Check if we have enough data
-                # REQUIREMENT: At least 90% of requested days (e.g., 162 days for 180 day request)
                 # IDEAL: Full requested days = data_days × 1440 candles
-                MIN_PERCENTAGE_REQUIRED = 0.90  # Require at least 90% of requested data
                 IDEAL_CANDLES = self.data_days * 1440  # e.g., 180 days × 1440 = 259,200
-                MIN_CANDLES_REQUIRED = int(IDEAL_CANDLES * MIN_PERCENTAGE_REQUIRED)  # e.g., 233,280 for 90% of 180 days
+                MIN_CANDLES_REQUIRED = 1440 # Require at least 1 day of data
                 
                 if len(df) > 0:
                     days_available = len(df) // 1440
                     percentage_available = (len(df) / IDEAL_CANDLES) * 100
                     log(f"📊 Database: {len(df):,} candles ({days_available} days = {percentage_available:.1f}% of {self.data_days} days)", "INFO")
                     
-                    # Use database data ONLY if we have at least 90% of requested days
+                    # Use database data as long as we have at least 1 day, just like LSTM
                     if len(df) >= MIN_CANDLES_REQUIRED:
-                        log(f"✅ Using database data for PPO training: {len(df):,} candles ({days_available}/{self.data_days} days)", "SUCCESS")
+                        log(f"✅ Using database data for PPO training: {len(df):,} candles ({days_available} days)", "SUCCESS")
                         
                         if len(df) < IDEAL_CANDLES:
                             missing_days = self.data_days - days_available
                             log(f"ℹ️ Dataset has {days_available}/{self.data_days} days ({percentage_available:.1f}%). Missing {missing_days} days.", "INFO")
+
+                        # Update data_days to what we actually have so UI shows accurate depth
+                        self.data_days = days_available
+                        self.data_months = int(self.data_days / 30)
                         
                         return df
                     else:
                         log(f"⚠️ Database data insufficient: {len(df):,} candles ({days_available} days = {percentage_available:.1f}%)", "WARNING")
-                        log(f"   Required: {MIN_CANDLES_REQUIRED:,} candles ({int(MIN_CANDLES_REQUIRED/1440)} days minimum = {MIN_PERCENTAGE_REQUIRED*100:.0f}%)", "WARNING")
+                        log(f"   Required: {MIN_CANDLES_REQUIRED:,} candles (1 day minimum)", "WARNING")
                         log(f"   Attempting API fetch to get full {self.data_days} days...", "INFO")
                 else:
                     log(f"⚠️ No data in database for {self.ticker}, fetching from API...", "WARNING")
@@ -286,11 +285,17 @@ class RLTrainer:
         log(f"⏳ Using DUAL-EXCHANGE strategy (Binance for historical + MEXC for current data)", "INFO")
         log(f"⏳ This may take several minutes due to rate limits. Please wait...", "WARNING")
         
+        # For RL training limit fetch days to a safe amount to avoid rate limits / long hangs,
+        # unless user specifies a small data_days anyway. Or use max 60.
+        fetch_days = min(self.data_days, 60)
+        if fetch_days < self.data_days:
+            log(f"⚠️ Limiting API fetch from {self.data_days} to {fetch_days} days to prevent rate limit hangs.", "WARNING")
+
         # Use the new dual-exchange fetching method
         df = self.data_provider.fetch_dual_exchange_history(
             ticker=self.ticker,
             timeframe='1m',
-            target_days=self.data_days,
+            target_days=fetch_days,
             limit=1000,
             callback=None  # No callback needed, logging is handled internally
         )
@@ -387,6 +392,49 @@ class RLTrainer:
         df['funding_rate'] = 0.0001  # Placeholder
         df['funding_rate_trend'] = 0.0
         
+        # --- ORDER FLOW METRICS (BINANCE VISION) ---
+        try:
+            from src.database import Database
+            db = Database()
+            
+            # We fetch all metrics for this ticker and merge them
+            # Metrics are typically daily/5min, we ffill them onto 1m candles
+            standard_ticker = f"{self.ticker[:3]}/{self.ticker[4:]}" if 'USDT:USDT' in self.ticker else self.ticker
+            metrics_query = """
+                SELECT timestamp, open_interest, oi_value_usdt, top_trader_ls_ratio, taker_buy_sell_ratio
+                FROM futures_metrics
+                WHERE ticker = ? AND timestamp >= ?
+                ORDER BY timestamp ASC
+            """
+            
+            # Get metrics from a bit before the first candle to ffill properly
+            start_date = df.index[0] - pd.Timedelta(days=1)
+            metrics_rows = db.query(metrics_query, (standard_ticker, start_date.isoformat()))
+            
+            if metrics_rows and len(metrics_rows) > 0:
+                metrics_df = pd.DataFrame(metrics_rows, columns=['timestamp', 'open_interest', 'oi_value_usdt', 'top_trader_ls_ratio', 'taker_buy_sell_ratio'])
+                metrics_df['timestamp'] = pd.to_datetime(metrics_df['timestamp'])
+                metrics_df.set_index('timestamp', inplace=True)
+                
+                # Merge with forward fill, then fill remaining NaNs (backwards) with default values
+                df = df.join(metrics_df, how='left').ffill()
+                df['open_interest'] = df['open_interest'].fillna(0.0)
+                df['oi_value_usdt'] = df['oi_value_usdt'].fillna(0.0)
+                df['top_trader_ls_ratio'] = df['top_trader_ls_ratio'].fillna(1.0)
+                df['taker_buy_sell_ratio'] = df['taker_buy_sell_ratio'].fillna(1.0)
+            else:
+                # Fill with defaults if no data
+                df['open_interest'] = 0.0
+                df['oi_value_usdt'] = 0.0
+                df['top_trader_ls_ratio'] = 1.0
+                df['taker_buy_sell_ratio'] = 1.0
+        except Exception as e:
+            log(f"⚠️ Failed to merge order flow metrics: {e}", "WARNING")
+            df['open_interest'] = 0.0
+            df['oi_value_usdt'] = 0.0
+            df['top_trader_ls_ratio'] = 1.0
+            df['taker_buy_sell_ratio'] = 1.0
+
         # --- MACRO CONTEXT FEATURES (MICRO/MACRO STRATEGY) ---
         # Trend 4h (240 minut)
         df['trend_4h_sma'] = df['close'].rolling(window=240, min_periods=1).mean()
@@ -433,6 +481,7 @@ class RLTrainer:
             'atr_pct', 'bb_width',
             'roc', 'stoch_k', 'stoch_d',
             'funding_rate', 'funding_rate_trend',
+            'open_interest', 'oi_value_usdt', 'top_trader_ls_ratio', 'taker_buy_sell_ratio',
             'dist_4h', 'dist_daily', 'volatility_24h',
             'price_change_pct', 'volatility'
         ]
@@ -464,10 +513,61 @@ class RLTrainer:
         split_idx = int(len(X) * 0.8)
         X_train, X_test = X[:split_idx], X[split_idx:]
         y_train, y_test = y[:split_idx], y[split_idx:]
+
+        # Sample for training to avoid OOM and 60-minute hang on ~200k rows
+        MAX_TRAIN_SAMPLES = 50000
+        if len(X_train) > MAX_TRAIN_SAMPLES:
+            log(f"⚠️ Downsampling Ensemble training data from {len(X_train)} to {MAX_TRAIN_SAMPLES} to prevent OOM/hangs...", "WARNING")
+
+            # Stratified downsampling
+            try:
+                y_train_arr = y_train.values if hasattr(y_train, 'values') else y_train
+                class_0_idx = np.where(y_train_arr == 0)[0]
+                class_1_idx = np.where(y_train_arr == 1)[0]
+
+                n_samples_0 = int(MAX_TRAIN_SAMPLES * len(class_0_idx) / len(y_train_arr))
+                n_samples_1 = MAX_TRAIN_SAMPLES - n_samples_0
+
+                # Make sure we don't request more samples than available for a class
+                n_samples_0 = min(n_samples_0, len(class_0_idx))
+                n_samples_1 = min(n_samples_1, len(class_1_idx))
+
+                # Adjust if we fell short
+                while n_samples_0 + n_samples_1 < MAX_TRAIN_SAMPLES:
+                    if n_samples_0 < len(class_0_idx):
+                        n_samples_0 += 1
+                    elif n_samples_1 < len(class_1_idx):
+                        n_samples_1 += 1
+                    else:
+                        break # Cannot add more
+
+                idx_0 = np.random.choice(class_0_idx, n_samples_0, replace=False) if len(class_0_idx) > 0 else np.array([])
+                idx_1 = np.random.choice(class_1_idx, n_samples_1, replace=False) if len(class_1_idx) > 0 else np.array([])
+
+                indices = np.concatenate([idx_0, idx_1]).astype(int)
+                np.random.shuffle(indices)
+            except Exception as e:
+                log(f"⚠️ Stratified sampling failed: {e}. Falling back to random.", "WARNING")
+                indices = np.random.choice(len(X_train), min(MAX_TRAIN_SAMPLES, len(X_train)), replace=False)
+
+            if isinstance(X_train, np.ndarray):
+                X_train_sampled = X_train[indices]
+                y_train_sampled = y_train[indices]
+            else:
+                X_train_sampled = X_train.iloc[indices]
+                y_train_sampled = y_train.iloc[indices]
+
+            unique, counts = np.unique(y_train_sampled, return_counts=True)
+            class_counts = dict(zip(unique, counts))
+            log(f"📊 Class Balance after downsampling: {class_counts}", "INFO")
+        else:
+            X_train_sampled = X_train
+            y_train_sampled = y_train
+
         
         # Train model
         model = EnsembleModel(use_advanced=True)
-        model.fit(X_train, y_train)
+        model.fit(X_train_sampled, y_train_sampled)
         
         # Generate predictions for full dataset
         predictions = model.predict_proba(X)[:, 1]  # Probability of UP
@@ -528,6 +628,8 @@ class RLTrainer:
             max_episode_steps=max_episode_steps
         )
         
+        # Omit Monitor(env) here since it is wrapped inside PPOTradingAgent
+
         # Create or load agent
         if resume_from_checkpoint:
             log(f"🔄 Resuming training from checkpoint: {resume_from_checkpoint}", "INFO")
@@ -568,6 +670,15 @@ class RLTrainer:
                 resume_from_checkpoint = None
         
         if not resume_from_checkpoint:
+            import os
+            # Hard reset: Delete old zip model so we do not append or load older version implicitly
+            if os.path.exists(f"{self.rl_model_path}.zip"):
+                try:
+                    os.remove(f"{self.rl_model_path}.zip")
+                    log(f"🗑️ Removed old model file: {self.rl_model_path}.zip", "INFO")
+                except Exception as e:
+                    log(f"⚠️ Failed to remove old model: {e}", "WARNING")
+
             # Create fresh agent
             agent = PPOTradingAgent(
                 env=env,
@@ -576,10 +687,10 @@ class RLTrainer:
             )
         
         # Train with callback (with detailed PPO logging + checkpoints)
-        callback = TradingCallback(
-            total_timesteps=total_timesteps,
-            checkpoint_interval=checkpoint_interval
-        )
+        callback = [
+            TradingCallback(total_timesteps=total_timesteps, checkpoint_interval=checkpoint_interval),
+            EntropyDecayCallback(total_timesteps=total_timesteps)
+        ]
         
         log(f"🚀 Starting PPO Training for {total_timesteps} timesteps...", "INFO")
         log(f"   This may take several hours. Monitor progress in:", "INFO")
@@ -739,7 +850,7 @@ class RLTrainer:
             log(f"💡 TIP: Close other applications or reduce lookback_days in config.json", "INFO")
         
         # Mark training start in AI Control Center (only on first attempt)
-        self.model_monitor.update_start("rl_agent", "Inicjalizacja treningu RL Agent...")
+        self.model_monitor.update_start("rl_agent", "Inicjalizacja treningu RL Agent...", data_days=self.data_days)
         
         # ═══════════════════════════════════════════════════════════════════
         # STEP 1: Fetch Data
@@ -785,6 +896,7 @@ class RLTrainer:
             'atr_pct', 'bb_width',
             'roc', 'stoch_k', 'stoch_d',
             'funding_rate', 'funding_rate_trend',
+            'open_interest', 'oi_value_usdt', 'top_trader_ls_ratio', 'taker_buy_sell_ratio',
             'dist_4h', 'dist_daily', 'volatility_24h',
             'price_change_pct', 'volatility'
         ]].values
@@ -816,7 +928,7 @@ class RLTrainer:
         # - Long enough to capture multi-day patterns
         # - Short enough to complete multiple episodes per training run
         # - Allows PPO to properly calculate episode rewards and convergence
-        episode_steps = 2048  # 5.7 days (optimal balance for PPO)
+        episode_steps = 4096  # 5.7 days (optimal balance for PPO)
         
         if episode_steps:
             log(f"🎯 Episode Length: {episode_steps} steps ({episode_steps/1440:.1f} days)", "INFO")
@@ -904,8 +1016,8 @@ def main():
     parser.add_argument(
         '--timesteps',
         type=int,
-        default=100000,
-        help='Number of training timesteps (default: 100000)'
+        default=2000000,
+        help='Number of training timesteps (default: 2000000)'
     )
     
     parser.add_argument(

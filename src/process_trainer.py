@@ -39,20 +39,13 @@ class TrainerProcess(multiprocessing.Process):
         # • Wystarczająco krótkie dla day trading
         # • Model uczy się WZORCÓW, nie reakcji na szum
         # • Perfect dla 20x leverage (nie overtrading!)
-        self.PREDICTION_LOOKAHEAD = 30  # 30 minut do przodu ✅
+        self.PREDICTION_LOOKAHEAD = 450  # 7.5 godziny do przodu (450 minut) ✅
         
-        # ═══════════════════════════════════════════════════════════════════
-        # LSTM LOCKFILE (PRIORYTET 2 - Wysoki)
-        # ═══════════════════════════════════════════════════════════════════
-        # Ten lockfile blokuje PPO Agent (Priorytet 3) gdy LSTM się trenuje.
-        # LSTM Ensemble v3.4 to fundament decyzji handlowych i musi być
-        # aktualizowany co 30 minut bez przerw.
-        self.lstm_lockfile = os.path.join(os.path.dirname(__file__), '..', 'models', '.lstm_training.lock')
 
     def run(self):
         self.stop_event = threading.Event()
         log(f"Trainer Process Started (BTC Futures Mode) - PRIORYTET 2 (Wysoki)", "INFO")
-        log(f"📋 LSTM Ensemble v3.4 ma pierwszeństwo - PPO będzie czekać jeśli potrzebny update", "INFO")
+        log(f"📋 LSTM Ensemble v3.4 startuje.", "INFO")
 
         self.db = Database()
         self.data_provider = MarketDataProvider()
@@ -76,18 +69,6 @@ class TrainerProcess(multiprocessing.Process):
                 loop_start = time.time()
                 log(f"Starting training cycle for {target_ticker}...", "INFO")
 
-                # ═══════════════════════════════════════════════════════════════
-                # PRIORYTET 2: LSTM MA PIERWSZEŃSTWO! Tworzymy lockfile.
-                # ═══════════════════════════════════════════════════════════════
-                os.makedirs(os.path.dirname(self.lstm_lockfile), exist_ok=True)
-                with open(self.lstm_lockfile, 'w') as f:
-                    f.write(json.dumps({
-                        'started_at': datetime.datetime.now().isoformat(),
-                        'ticker': target_ticker,
-                        'priority': 2,  # Priorytet Wysoki
-                        'message': 'LSTM Ensemble v3.4 training in progress - PPO paused'
-                    }))
-                log(f"🔒 LSTM Training Lock created (Priority 2 - HIGH). PPO will pause if active.", "INFO", lstm_only=True)
 
                 # Mark training start in AI Control Center
                 self.model_monitor.update_start("lstm", "Inicjalizacja treningu...")
@@ -178,12 +159,6 @@ class TrainerProcess(multiprocessing.Process):
                     log(f"Not enough data for {target_ticker}", "WARNING")
                     self.model_monitor.update_error("lstm", "Niewystarczająca ilość danych")
 
-                # ═══════════════════════════════════════════════════════════════
-                # LSTM TRAINING COMPLETE - Usuwamy lockfile, PPO może wznowić
-                # ═══════════════════════════════════════════════════════════════
-                if os.path.exists(self.lstm_lockfile):
-                    os.remove(self.lstm_lockfile)
-                    log(f"🔓 LSTM Training Lock removed. PPO can resume.", "INFO", lstm_only=True)
 
                 elapsed = time.time() - loop_start
                 sleep_time = max(0, self.interval - elapsed)
@@ -201,10 +176,6 @@ class TrainerProcess(multiprocessing.Process):
                 log(f"Trainer Loop Error: {e}", "ERROR")
                 self.model_monitor.update_error("lstm", str(e)[:100])
                 
-                # Cleanup lockfile on error
-                if os.path.exists(self.lstm_lockfile):
-                    os.remove(self.lstm_lockfile)
-                    log(f"🔓 LSTM Training Lock removed (error cleanup).", "WARNING")
                 
                 time.sleep(60)
 
@@ -244,8 +215,7 @@ class TrainerProcess(multiprocessing.Process):
             else:
                 log(f"🔄 Starting fresh sync for {ticker} from {start_date} (Last {lookback_days} Days)", "INFO")
 
-            # Use timeframe='1m' and limit=500 (~8 hours of 1m candles) to trigger callback frequently
-            # CRITICAL FIX: Changed from 15m to 1m for proper training data
+            # Use timeframe='1m' to match Trader
             # ENABLE DUAL EXCHANGE FETCHING (Binance for history + MEXC for recent)
             
             if lookback_days > 30:
@@ -498,7 +468,7 @@ class TrainerProcess(multiprocessing.Process):
 
     def _fetch_candles_from_db(self, ticker, limit=2000):
         try:
-            # Postgres query - CRITICAL: Fetch 1m timeframe for training
+            # Postgres query - CRITICAL: Fetch 1m timeframe for training to match Trader
             rows = self.db.query("SELECT timestamp, open, high, low, close, volume FROM candles WHERE ticker = ? AND timeframe = '1m' ORDER BY timestamp DESC LIMIT ?", (ticker, limit))
             if rows:
                 df = pd.DataFrame(rows, columns=['timestamp', 'open', 'high', 'low', 'close', 'volume'])
@@ -623,6 +593,46 @@ class TrainerProcess(multiprocessing.Process):
                 df['funding_rate'] = 0.0
                 df['funding_rate_trend'] = 0.0
             
+            # --- ORDER FLOW METRICS (BINANCE VISION) ---
+            try:
+                # We fetch all metrics for this ticker and merge them
+                # Metrics are typically daily/5min, we ffill them onto 1m candles
+                standard_ticker = f"{self.current_ticker[:3]}/{self.current_ticker[4:]}" if 'USDT:USDT' in self.current_ticker else self.current_ticker
+                metrics_query = """
+                    SELECT timestamp, open_interest, oi_value_usdt, top_trader_ls_ratio, taker_buy_sell_ratio
+                    FROM futures_metrics
+                    WHERE ticker = ? AND timestamp >= ?
+                    ORDER BY timestamp ASC
+                """
+                
+                # Get metrics from a bit before the first candle to ffill properly
+                start_date = df.index[0] - pd.Timedelta(days=1)
+                metrics_rows = self.db.query(metrics_query, (standard_ticker, start_date.isoformat()))
+                
+                if metrics_rows and len(metrics_rows) > 0:
+                    metrics_df = pd.DataFrame(metrics_rows, columns=['timestamp', 'open_interest', 'oi_value_usdt', 'top_trader_ls_ratio', 'taker_buy_sell_ratio'])
+                    metrics_df['timestamp'] = pd.to_datetime(metrics_df['timestamp'])
+                    metrics_df.set_index('timestamp', inplace=True)
+                    
+                    # Merge with forward fill, then fill remaining NaNs (backwards) with default values
+                    df = df.join(metrics_df, how='left').ffill()
+                    df['open_interest'] = df['open_interest'].fillna(0.0)
+                    df['oi_value_usdt'] = df['oi_value_usdt'].fillna(0.0)
+                    df['top_trader_ls_ratio'] = df['top_trader_ls_ratio'].fillna(1.0)
+                    df['taker_buy_sell_ratio'] = df['taker_buy_sell_ratio'].fillna(1.0)
+                else:
+                    # Fill with defaults if no data
+                    df['open_interest'] = 0.0
+                    df['oi_value_usdt'] = 0.0
+                    df['top_trader_ls_ratio'] = 1.0
+                    df['taker_buy_sell_ratio'] = 1.0
+            except Exception as e:
+                log(f"⚠️ Failed to merge order flow metrics: {e}", "WARNING")
+                df['open_interest'] = 0.0
+                df['oi_value_usdt'] = 0.0
+                df['top_trader_ls_ratio'] = 1.0
+                df['taker_buy_sell_ratio'] = 1.0
+
             # --- NEW: MACRO CONTEXT FEATURES (MICRO/MACRO STRATEGY) ---
             # Wstrzykujemy wiedzę o trendach wyższych interwałów jako pojedyncze liczby
             # Zamiast dawać LSTM 1440 świeczek, dajemy gotową informację o trendzie
@@ -803,6 +813,8 @@ class TrainerProcess(multiprocessing.Process):
                 'roc',
                 # Funding Rate features (FAZA 3.1) - CRITICAL!
                 'funding_rate', 'funding_rate_trend',
+                # Order Flow Metrics
+                'open_interest', 'oi_value_usdt', 'top_trader_ls_ratio', 'taker_buy_sell_ratio',
                 # Macro Context features (MICRO/MACRO STRATEGY) - NEW!
                 'dist_4h', 'dist_daily', 'volatility_24h'
             ]

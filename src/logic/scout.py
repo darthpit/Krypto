@@ -1,9 +1,10 @@
+from src.utils.logger import log
 import pandas as pd
 import numpy as np
 import datetime
 import pandas_ta as ta
 from src.utils.data_provider import MarketDataProvider
-from src.utils.logger import log
+
 
 # Check for GPU acceleration
 try:
@@ -67,7 +68,7 @@ class MatrixScout:
                 raise ValueError("Pusta lista tickerów od giełdy")
 
         except Exception as e:
-            from src.utils.logger import log
+            
             log(f"⚠️ Błąd pobierania Top rynków: {e}. Używam hardkodowanego TOP 10 (Fallback).", "WARNING")
             self.tickers = hardcoded_top_10
 
